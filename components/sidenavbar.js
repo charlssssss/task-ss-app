@@ -1,11 +1,11 @@
 import Link from 'next/link'
 import { useState } from 'react'
-import { IconButton, SideNavButton, SideCategoryButton } from './buttons'
 import { FiInbox } from 'react-icons/fi'
-import { MdClose, MdListAlt } from 'react-icons/md'
-import { BiStar, BiCalendarCheck, BiCalendar, BiPlus } from 'react-icons/bi'
-import { TbReportAnalytics } from 'react-icons/tb'
 import { FiChevronDown } from 'react-icons/fi'
+import { TbReportAnalytics } from 'react-icons/tb'
+import { MdClose, MdListAlt } from 'react-icons/md'
+import { IconButton, SideNavButton, SideCategoryButton } from './buttons'
+import { BiStar, BiCalendarCheck, BiCalendar, BiPlus } from 'react-icons/bi'
 
 // side nav button data
 const sideNavTitle = [

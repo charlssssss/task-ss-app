@@ -1,5 +1,5 @@
-import Link from "next/link"
 import useSWR from 'swr'
+import Link from "next/link"
 
 const fetcher = (...args) => fetch(...args).then(res => res.json())
 

@@ -1,5 +1,5 @@
-import Link from 'next/link'
 import useSWR from 'swr'
+import Link from 'next/link'
 
 // component for buttons with icons, (for consistent design, reusable)
 export const IconButton = ({ icon, hover, event }) => {
