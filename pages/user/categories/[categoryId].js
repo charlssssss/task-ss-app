@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import TitleHeader from '../../components/titleheader'
+import TitleHeader from '../../../components/titleheader'
 
 // fetching all categories and single category
 export const getServerSideProps = async (context) => {
@@ -21,12 +21,10 @@ const CategoryDetail = ({ category }) => {
             <Head>
                 <title>{category.category_name}: Task SS</title>
             </Head>
-            <main className='container mx-auto px-10 py-5 lg:px-32 lg:py-14 '>
-                <TitleHeader title={category.category_name} />
 
-                {/* user's list of categories section */}
-                
-            </main>
+            <TitleHeader title={category.category_name} />
+
+            {/* user's list of categories section */}
         </>
     )
 }

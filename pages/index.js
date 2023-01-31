@@ -7,7 +7,7 @@ export default function Home() {
       <Head>
         <title>Task SS</title>
       </Head>
-      <Link href="/categories/" className='text-sm'>Category</Link>
+      <Link href="/user/categories/" className='text-sm'>Category</Link>
     </>
   )
 }

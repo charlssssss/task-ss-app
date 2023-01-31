@@ -9,12 +9,12 @@ import { BiStar, BiCalendarCheck, BiCalendar, BiPlus } from 'react-icons/bi'
 
 // side nav button data
 const sideNavTitle = [
-    {icon: FiInbox, title: 'Inbox', link: '/#'},
-    {icon: BiStar, title: 'Starred', link: '/#'},
-    {icon: MdListAlt, title: 'To Do List', link: '/#'},
-    {icon: BiCalendarCheck, title: 'To Be Done', link: '/#'},
-    {icon: BiCalendar, title: 'Calendar', link: '/#'},
-    {icon: TbReportAnalytics, title: 'Productivity Reports', link: '/#'},
+    {icon: FiInbox, title: 'Inbox', link: '/user/inbox'},
+    {icon: BiStar, title: 'Starred', link: '/user/starred'},
+    {icon: MdListAlt, title: 'To Do List', link: '/user/todolist'},
+    {icon: BiCalendarCheck, title: 'To Be Done', link: '/user/tobedone'},
+    {icon: BiCalendar, title: 'Calendar', link: '/user/calendar'},
+    {icon: TbReportAnalytics, title: 'Productivity Reports', link: '/user/reports'},
 ]
 
 const SideNavbar = ({ isToggled, toggleHandler }) => {
@@ -51,7 +51,7 @@ const SideNavbar = ({ isToggled, toggleHandler }) => {
             <div className='flex justify-between items-center '>
                 <div className=' bg-task-ss-white-200 w-2 h-10 rounded-r-xl scale-0'></div>
                 <div className='flex justify-between items-center w-11/12 text-task-ss-white-300 pr-5 py-3 cursor-pointer hover:bg-task-ss-dark-blue-200 hover:text-task-ss-white-100'>
-                    <Link href='/categories/'>
+                    <Link href='/user/categories/'>
                         <p className='ml-4 text-md font-light'>Categories</p>
                     </Link>
                     <div className='flex'>

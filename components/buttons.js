@@ -2,11 +2,21 @@ import useSWR from 'swr'
 import Link from 'next/link'
 
 // component for buttons with icons, (for consistent design, reusable)
-export const IconButton = ({ icon, hover, event }) => {
+export const IconButton = ({ icon, hover, event, link }) => {
+    
+    if(!link) {
+        return (
+            <button className={`p-2 mr-2 rounded-md ${hover ? 'hover:bg-task-ss-white-200' : null}`} onClick={event}>
+                {icon}
+            </button>
+        )
+    }
     return (
-        <button className={`p-2 mr-2 rounded-md ${hover ? 'hover:bg-task-ss-white-200' : null}`} onClick={event}>
-            {icon}
-        </button>
+        <Link href={link}>
+            <button className={`p-2 mr-2 rounded-md ${hover ? 'hover:bg-task-ss-white-200' : null}`}>
+                {icon}
+            </button>
+        </Link>
     )
 }
 
@@ -34,7 +44,7 @@ export const SideCategoryButton = () => {
     return (
         <>
             {data.data.map(category => (
-                <Link href={`/categories/${category.category_id}`} key={category.category_id} className='flex justify-between items-center'>
+                <Link href={`/user/categories/${category.category_id}`} key={category.category_id} className='flex justify-between items-center'>
                     <div className='bg-task-ss-white-200 w-2 h-10 rounded-r-xl scale-0'></div>
                     <div className='flex items-center w-11/12 text-task-ss-white-300 pl-5 py-3 cursor-pointer hover:bg-task-ss-dark-blue-200 hover:text-task-ss-white-100'>
                         <div className={`rounded-full w-3 h-3 mr-4 bg-task-ss-category-${category.color.toString()}`}></div>

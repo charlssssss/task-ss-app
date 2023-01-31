@@ -26,7 +26,9 @@ const Layout = ({ children }) => {
                 <div className={`w-full ${isToggled ? null : 'lg:w-[calc(100%-20rem)]' }`} >
                     <Topbar toggleHandler={toggleHandler} />
                     <div className='h-[calc(100vh-3.5rem)] overflow-y-auto'>
+                        <main className='container mx-auto px-10 py-5 lg:px-32 lg:py-14 '>
                         {children}
+                        </main>
                     </div>
                 </div>
                 </div>

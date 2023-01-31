@@ -1,6 +1,6 @@
 import Head from 'next/head'
-import TitleHeader from '../../components/titleheader'
-import CategoryList from '../../components/categorylist'
+import TitleHeader from '../../../components/titleheader'
+import CategoryList from '../../../components/categorylist'
 
 // category layout
 const Categories = () => {
@@ -31,12 +31,11 @@ const Categories = () => {
             <Head>
                 <title>Categories: Task SS</title>
             </Head>
-            <main className='container mx-auto px-10 py-5 lg:px-32 lg:py-14 '>
-                <TitleHeader title='Categories' />
+            
+            <TitleHeader title='Categories' />
 
-                {/* user's list of categories section */}
-                <CategoryList />
-            </main>            
+            {/* user's list of categories section */}
+            <CategoryList />
         </>
     );
 }

@@ -18,7 +18,7 @@ const Topbar = ({ toggleHandler }) => {
                         />
                         <IconButton 
                             icon={<ImHome className='text-task-ss-dark-blue-300' size={18} />}
-                            event={null}
+                            link='/user/inbox'
                             hover={true}
                         />
                     </div>
