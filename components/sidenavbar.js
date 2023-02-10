@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { useState } from 'react'
+import { useRouter } from "next/router"
 import { FiInbox } from 'react-icons/fi'
 import { FiChevronDown } from 'react-icons/fi'
 import { TbReportAnalytics } from 'react-icons/tb'
@@ -18,13 +19,15 @@ const sideNavTitle = [
 ]
 
 const SideNavbar = ({ isToggled, toggleHandler }) => {
+    const router = useRouter()
+    // close action variables
     const [isCatClosed, setIsCatClosed] = useState(false)
     const catCloseHandler = () => setIsCatClosed(!isCatClosed)
 
     return (
-        <div className={`bg-task-ss-dark-blue-300 drop-shadow-xl fixed w-80 h-full pb-10 lg:relative overflow-y-auto ${isToggled ? 'hidden' : null }`} >
+        <div className={`bg-task-ss-dark-blue-300 drop-shadow-xl fixed w-80 h-full transition-all pb-10 -translate-x-[100%] lg:relative overflow-y-auto ${isToggled ? null : 'translate-x-[0px]' }`} >
             {/* close button section */}
-            <div className='flex justify-end lg:hidden'>
+            <div className='flex justify-end sticky top-0 right-0 lg:hidden'>
                 <IconButton 
                     icon={<MdClose className='text-task-ss-white-100' size={18} />} 
                     event={toggleHandler}
@@ -44,20 +47,21 @@ const SideNavbar = ({ isToggled, toggleHandler }) => {
                     icon={<item.icon size={24}/>} 
                     title={item.title}
                     link={item.link}
+                    router={router}
                 />
             ))}
 
             {/* category add & dropdown section */}
             <div className='flex justify-between items-center '>
-                <div className=' bg-task-ss-white-200 w-2 h-10 rounded-r-xl scale-0'></div>
-                <div className='flex justify-between items-center w-11/12 text-task-ss-white-300 pr-5 py-3 cursor-pointer hover:bg-task-ss-dark-blue-200 hover:text-task-ss-white-100'>
+                <div className={`bg-task-ss-white-200 w-2 h-10 rounded-r-xl ${router.asPath == "/user/categories" ? 'scale-100' : 'scale-0'}`}></div>
+                <div className={`flex justify-between items-center w-11/12 text-task-ss-white-300 pr-5 py-3 cursor-pointer hover:bg-task-ss-dark-blue-200 hover:text-task-ss-white-100 ${router.asPath == "/user/categories" ? 'bg-task-ss-dark-blue-200' : '' }`}>
                     <Link href='/user/categories/'>
                         <p className='ml-4 text-md font-light'>Categories</p>
                     </Link>
                     <div className='flex'>
                         <i className='hover:text-task-ss-light-blue-200'><BiPlus /></i>
                         <i 
-                            className={`ml-2 hover:text-task-ss-light-blue-200 ${isCatClosed ? 'rotate-90' : null }`}
+                            className={`ml-2 hover:text-task-ss-light-blue-200 transition-all ${isCatClosed ? 'rotate-90' : null }`}
                             onClick={catCloseHandler}
                         ><FiChevronDown /></i>
                     </div>
@@ -66,7 +70,7 @@ const SideNavbar = ({ isToggled, toggleHandler }) => {
             
             {/* user's list of categories at sidenavbar section */}
             <div className={`${isCatClosed ? 'scale-y-0' : null }`}>
-                <SideCategoryButton />
+                <SideCategoryButton router={router} />
             </div>
         </div>
     )

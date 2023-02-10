@@ -1,5 +1,5 @@
 import '../styles/globals.css'
-import Layout from '../layouts/layout'
+import AppLayout from '../layouts/appLayout'
 
 export default function App({ Component, pageProps }) {
   if(Component.getLayout) {
@@ -7,8 +7,8 @@ export default function App({ Component, pageProps }) {
   }
 
   return (
-    <Layout>
-      <Component {...pageProps} />
-    </Layout>
+    <AppLayout>
+        <Component {...pageProps} />
+    </AppLayout>
   )
 }

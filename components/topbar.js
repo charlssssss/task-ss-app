@@ -1,7 +1,8 @@
 import { FaBars } from 'react-icons/fa'
 import { ImHome } from 'react-icons/im'
-import { BiBell } from 'react-icons/bi'
-import { BsGear } from 'react-icons/bs'
+import { BsBellFill } from 'react-icons/bs'
+import { BsGearFill } from 'react-icons/bs'
+import { GrAdd } from 'react-icons/gr'
 import { IconButton } from './buttons'
 
 // component for top bar
@@ -25,12 +26,17 @@ const Topbar = ({ toggleHandler }) => {
                     
                     <div>
                         <IconButton 
-                            icon={<BiBell className='text-task-ss-dark-blue-300' size={18} />}
+                            icon={<GrAdd className='text-task-ss-dark-blue-300' size={18} />}
                             event={null}
                             hover={true}
                         />
                         <IconButton 
-                            icon={<BsGear className='text-task-ss-dark-blue-300 ' size={18} />}
+                            icon={<BsBellFill className='text-task-ss-dark-blue-300' size={18} />}
+                            event={null}
+                            hover={true}
+                        />
+                        <IconButton 
+                            icon={<BsGearFill className='text-task-ss-dark-blue-300 ' size={18} />}
                             event={null}
                             hover={true}
                         />

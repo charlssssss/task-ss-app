@@ -25,9 +25,12 @@ module.exports = {
         100: '#ffffff',
         200: '#eeeeee',
         300: '#dedede',
+        400: '#777777',
+        500: '#333333',
 
       },
-      'task-ss-purple': '#040323',
+      'task-ss-purple': '#401AE1',
+      'task-ss-yellow': '#F5D04F',
       'task-ss-red': '#e4545',
       'task-ss-category': {
         100: '#f5774f',
@@ -35,6 +38,10 @@ module.exports = {
         300: '#4ff5a9',
         400: '#f5dc4f',
         500: '#f5534f',
+      },
+      'soc-med': {
+        'fb': '#3B4998',
+        'google': '#BBBBBB',
       }
     },
     extend: {},

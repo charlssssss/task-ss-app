@@ -7,7 +7,7 @@ import SideNavbar from "../components/sidenavbar"
 // If loading a variable font, you don't need to specify the font weight
 const rubik = Rubik({ subsets: ['latin'] })
 
-const Layout = ({ children }) => {
+const AppLayout = ({ children }) => {
     // frontend variables
     const [isToggled, setIsToggled] = useState(false)
     const toggleHandler = () => setIsToggled(!isToggled)
@@ -23,7 +23,7 @@ const Layout = ({ children }) => {
             <div className={rubik.className}>
                 <div className='flex w-screen h-screen'>
                 <SideNavbar isToggled={isToggled} toggleHandler={toggleHandler} />
-                <div className={`w-full ${isToggled ? null : 'lg:w-[calc(100%-20rem)]' }`} >
+                <div className={`w-full transition-all ${isToggled ? null : 'lg:w-[calc(100%-20rem)]' }`} >
                     <Topbar toggleHandler={toggleHandler} />
                     <div className='h-[calc(100vh-3.5rem)] overflow-y-auto'>
                         <main className='container mx-auto px-10 py-5 lg:px-32 lg:py-14 '>
@@ -38,4 +38,4 @@ const Layout = ({ children }) => {
     
 }
  
-export default Layout;
+export default AppLayout
