@@ -2,14 +2,21 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { useRouter } from "next/router"
 import { FiInbox } from 'react-icons/fi'
+import { useSession } from 'next-auth/react'
 import { FiChevronDown } from 'react-icons/fi'
 import { TbReportAnalytics } from 'react-icons/tb'
-import { MdClose, MdListAlt } from 'react-icons/md'
+import { MdClose, MdListAlt, MdOutlineSpaceDashboard } from 'react-icons/md'
 import { IconButton, SideNavButton, SideCategoryButton } from './buttons'
 import { BiStar, BiCalendarCheck, BiCalendar, BiPlus } from 'react-icons/bi'
 
+// data fetcher (with token)
+const fetcher = ([url, token]) => 
+    axios.get(url, { headers: { 'Authorization': 'Bearer ' + token }
+   }).then(res => res.data)
+
 // side nav button data
 const sideNavTitle = [
+    {icon: MdOutlineSpaceDashboard, title: 'Dashboard', link: '/user/dashboard'},
     {icon: FiInbox, title: 'Inbox', link: '/user/inbox'},
     {icon: BiStar, title: 'Starred', link: '/user/starred'},
     {icon: MdListAlt, title: 'To Do List', link: '/user/todolist'},
@@ -38,7 +45,7 @@ const SideNavbar = ({ isToggled, toggleHandler }) => {
             <img src='/task_ss_logo.png' className='w-28 mx-auto my-8'/>
 
             {/* user side nav profile section */}
-            <SideNavProfile username='Sample Name' />
+            <SideNavProfile />
             
             {/* side navs buttons (mapping/looping) */}
             {sideNavTitle.map((item, index) => (
@@ -77,13 +84,25 @@ const SideNavbar = ({ isToggled, toggleHandler }) => {
 }
 
 // component for user side profile
-export const SideNavProfile = ({ img, username }) => (
-    <div className='flex justify-between items-center bg-task-ss-white-100 max-w-max p-2 my-6 mx-auto rounded-full'>
-        <div className=' bg-task-ss-dark-blue-200 w-10 h-10 rounded-full'>
-
+export const SideNavProfile = () => {
+    const { data: session, status } = useSession()
+    let userName
+    if(session) {
+        userName = `${session.user.firstname} ${session.user.lastname}`
+    }
+    
+    return (
+        <div className='flex justify-between items-center bg-task-ss-white-100 max-w-max p-2 my-6 mx-auto rounded-full'>
+            <div className=' bg-task-ss-dark-blue-200 w-10 h-10 rounded-full'>
+    
+            </div>
+            {status == 'loading' ? (
+                <p className='ml-4 mr-6 text-lg font-medium'>loading...</p>
+            ) : (
+                <p className='ml-4 mr-6 text-lg font-medium'>{userName}</p>
+            )}
         </div>
-        <p className='ml-4 mr-6 text-lg font-medium'>{username}</p>
-    </div>
-)
+    )
+}
  
 export default SideNavbar

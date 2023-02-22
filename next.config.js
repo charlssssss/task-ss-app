@@ -5,10 +5,18 @@ const nextConfig = {
     return [
       {
         source: '/user',
-        destination: '/user/inbox',
+        destination: '/user/dashboard',
+        permanent: true,
+      },
+      {
+        source: '/admin',
+        destination: '/admin/dashboard',
         permanent: true,
       },
     ]
+  },
+  env: {
+    NEXTAUTH_SECRET: 'tasksssecret'
   },
 }
 

@@ -1,5 +1,7 @@
 import useSWR from 'swr'
+import axios from 'axios'
 import Link from 'next/link'
+import { useSession } from 'next-auth/react'
 import { FailedToLoad, Loading } from './errors'
 
 // component for buttons with icons, (for consistent design, reusable)
@@ -32,11 +34,23 @@ export const SideNavButton = ({ icon, title, link, router }) => (
     </Link>
 )
 
-const fetcher = (...args) => fetch(...args).then(res => res.json())
+// const fetcher = (...args) => fetch(...args).then(res => res.json())
+const fetcher = ([url, token]) => 
+    axios.get(url, { headers: { 'Authorization': 'Bearer ' + token }
+   }).then(res => res.data)
+
 // component for category buttons at sidebar (for consistent design)
 export const SideCategoryButton = ({ router }) => {
+    // get tokken
+    const { data: session } = useSession()
+    let userToken
+    if(session) {
+        userToken = session.user.token
+    }
+    
     // fetch data
-    const { data, error, isLoading } = useSWR('http://localhost:8000/api/categories', fetcher)
+    const { data, error, isLoading } = useSWR(['http://localhost:8000/api/user/categories', userToken], fetcher)
+    
     // handle errors
     if (error) return <FailedToLoad color='text-task-ss-white-100' />
     if (isLoading) return <Loading color='text-task-ss-white-100' />

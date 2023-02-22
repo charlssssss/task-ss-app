@@ -1,6 +1,7 @@
 import { VscLoading } from 'react-icons/vsc'
 import { MdSmsFailed } from 'react-icons/md'
 
+// fail to load error component
 export const FailedToLoad = ({ color }) => {
     return (
         <div className={`flex items-center justify-center mt-10 ${color}`}>
@@ -10,6 +11,7 @@ export const FailedToLoad = ({ color }) => {
     )
 }
 
+// loading error component
 export const Loading = ({ color }) => {
     return (
         <div className={`flex items-center justify-center mt-10 ${color}`}>
