@@ -1,8 +1,8 @@
 import Head from 'next/head'
-import TaskList from '../../components/tasklist'
-import TitleHeader from '../../components/titleheader'
+import TaskList from '../../components/user/tasklist'
+import TitleHeader from '../../components/user/titleheader'
 import { useSession } from 'next-auth/react'
-import { Loading } from '../../components/errors'
+import { Loading } from '../../components/user/errors'
 
 const Starred = () => {
     // get user token
@@ -22,7 +22,11 @@ const Starred = () => {
 
             <TitleHeader title='Starred' />
 
-            <TaskList api={'http://localhost:8000/api/user/tasks/allstarred'} token={userToken}/>
+            <TaskList 
+                api={'http://localhost:8000/api/user/tasks/starred'} 
+                token={userToken}
+                url='starred'
+            />
         </>
     )
 }

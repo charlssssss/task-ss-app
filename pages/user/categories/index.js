@@ -1,6 +1,6 @@
 import Head from 'next/head'
-import TitleHeader from '../../../components/titleheader'
-import CategoryList from '../../../components/categorylist'
+import TitleHeader from '../../../components/user/titleheader'
+import CategoryList from '../../../components/user/categorylist'
 
 // category layout
 const Categories = () => {

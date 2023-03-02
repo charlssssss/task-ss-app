@@ -1,8 +1,8 @@
 import Axios from 'axios'
 import Head from 'next/head'
 import { getSession } from 'next-auth/react'
-import TaskList from '../../../../components/tasklist'
-import TitleHeader from '../../../../components/titleheader'
+import TaskList from '../../../../components/user/tasklist'
+import TitleHeader from '../../../../components/user/titleheader'
 
 // fetching all categories and single category
 export const getServerSideProps = async (context) => {
@@ -50,7 +50,11 @@ const CategoryDetail = ({ category, userToken }) => {
             <TitleHeader title={category.category_name} />
 
             {/* user's list of tasks section */}
-            <TaskList api={`http://localhost:8000/api/user/tasks/all/${category.id}`} token={userToken}/>
+            <TaskList 
+                api={`http://localhost:8000/api/user/tasks/category/${category.id}`} 
+                token={userToken} 
+                url={`${category.id}`}
+            />
         </>
     )
 }

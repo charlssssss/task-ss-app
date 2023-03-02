@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import TitleHeader from '../../components/titleheader'
+import TitleHeader from '../../components/user/titleheader'
 
 const Dashboard = () => {
     return (

@@ -6,8 +6,6 @@ const TopNavbar = () => {
     // get session
     const { data: session } = useSession()
 
-    // console.log(session)
-
     return (
         <div className='bg-task-ss-white-100 flex items-center drop-shadow-xl w-full h-14 fixed z-10'>
             <div className='mx-8 w-screen'>
@@ -20,16 +18,16 @@ const TopNavbar = () => {
                         {!session ? (
                             <>
                                 <Link href="/signup" className='text-task-ss-dark-blue-500 mr-5'>
-                                    <p className='text-sm font-medium'>Sign up</p>
+                                    <p className='text-sm font-medium'>Sign Up</p>
                                 </Link>
-                                <Link href='/auth/login' 
-                                    className='bg-task-ss-purple text-task-ss-white-100 px-7 py-2 rounded-full'
+                                <Link href='/login' 
+                                    className='bg-task-ss-purple text-task-ss-white-100 px-7 py-2 rounded-full active:scale-[0.98]'
                                 >
                                     <p className='text-sm font-medium'>Log In</p>
                                 </Link>
                             </>
                         ) : (
-                            <Link href='/auth/login' className='bg-task-ss-purple text-task-ss-white-100 px-7 py-2 rounded-full'>
+                            <Link href='/login' className='bg-task-ss-purple text-task-ss-white-100 px-7 py-2 rounded-full active:scale-[0.98]'>
                                 <p className='text-sm font-medium'>Open App</p>
                             </Link>
                         )}

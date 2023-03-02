@@ -1,17 +1,19 @@
+import Link from 'next/link'
 import Head from 'next/head'
 import { useState } from 'react'
-import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { signIn } from 'next-auth/react'
 import { ImGoogle3 } from 'react-icons/im'
 import { BsFacebook } from 'react-icons/bs'
-import GeneralLayout from '../../layouts/generalLayout'
-import { useRouter } from 'next/router'
 import { getSession } from 'next-auth/react'
+import GeneralLayout from '../layouts/generalLayout'
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 
 export const getServerSideProps = async (context) => {
   const session = await getSession(context)
   
-  if (session && session.user.role == 1) {
+  // redirect to user pages after successful login
+  if (session && session.user.role_id == 1) {
     return {
       redirect: {
         destination: "/user/dashboard",
@@ -20,7 +22,8 @@ export const getServerSideProps = async (context) => {
     }
   }
 
-  if (session && session.user.role == 2) {
+  // redirect to admin pages after successful login
+  if (session && session.user.role_id == 2) {
     return {
       redirect: {
         destination: "/admin/dashboard",
@@ -33,11 +36,13 @@ export const getServerSideProps = async (context) => {
 }
 
 const LogIn = () => {
+  // for redirecting
   const router = useRouter()
+
   // credentials variables
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  console.log(username, password)
+  const [viewPass, setViewPass] = useState(false)
 
   // error variable
   const [isError, setIsError] = useState(false)
@@ -49,10 +54,9 @@ const LogIn = () => {
       username: username,
       password: password,
       redirect: false
-    })
-    .then(res => {
+    }).then(res => {
       if (res.ok) {
-        router.push('/auth/login')
+        router.push('/login')
       }
       else {
         setIsError(true)
@@ -80,14 +84,14 @@ const LogIn = () => {
             </div>
 
             {/* other login options button */}
-            <button className='px-10 py-2 mb-2 border rounded-full w-full bg-soc-med-facebook text-task-ss-white-100 border-soc-med-facebook'>
+            <button className='px-10 py-2 mb-2 border rounded-full w-full bg-soc-med-facebook text-task-ss-white-100 border-soc-med-facebook transition-all active:scale-[0.98]'>
               <div className='flex items-center justify-center'>
                   <BsFacebook size={13} />
                   <p className='text-xs ml-2'>CONTINUE WITH FACEBOOK</p>
               </div>
             </button>
 
-            <button className='px-10 py-2 mb-2 border rounded-full w-full bg-task-ss-white-100 text-soc-med-google border-soc-med-google transition-all hover:bg-soc-med-google hover:text-task-ss-white-100'>
+            <button className='px-10 py-2 mb-2 border rounded-full w-full bg-task-ss-white-100 text-soc-med-google border-soc-med-google hover:bg-soc-med-google hover:text-task-ss-white-100 transition-all active:scale-[0.98]'>
               <div className='flex items-center justify-center'>
                   <ImGoogle3 size={13} />
                   <p className='text-xs ml-2'>CONTINUE WITH GOOGLE</p>
@@ -103,9 +107,9 @@ const LogIn = () => {
 
             {/* error message */}
             <div 
-              className={`flex relative justify-center rounded-md cursor-pointer bg-task-ss-red-100 ${isError ? 'flex' : 'hidden'}`}
+              className={`flex relative justify-center rounded-md bg-task-ss-red-100 ${isError ? 'flex' : 'hidden'}`}
             >
-              <span className='absolute top-1 right-2 text-task-ss-red-200 text-xs' onClick={() => setIsError(!isError)} >x</span>
+              <span className='absolute top-1 right-2 cursor-pointer text-task-ss-red-200 text-xs' onClick={() => setIsError(!isError)} >x</span>
               <p className='text-xs py-2 text-task-ss-red-200'>Username and/or password is incorrect.</p>
             </div>
 
@@ -121,21 +125,27 @@ const LogIn = () => {
                 />
               </div>
 
-              <div className='flex flex-col my-2'>
+              <div className='flex flex-col my-2 relative'>
                 <label htmlFor='password' className='text-sm font-medium'>Password</label>
-                <input type="password" id="password" required
-                      className={`px-3 py-1 border outline-none border-soc-med-google rounded-md transition-all ${isError ? 'border-task-ss-red-200' : 'focus:border-task-ss-purple'}`}
+                <input type={viewPass ? 'text' : 'password'} id="password" required
+                      className={`px-3 py-1 border outline-none border-soc-med-google rounded-md transition-all ${isError ? 'border-task-ss-red-200' : ' input_pass focus:border-task-ss-purple'}`}
                       name='password'
                       value={password}
                       onChange={e => setPassword(e.target.value)}
                 />
+                <label htmlFor='password' 
+                      className={`absolute top-7 right-3 text-soc-med-google cursor-pointer focus:text-task-ss-purple ${isError ? 'text-task-ss-red-200' : 'focus:text-task-ss-purple'}`}
+                      onClick={() => setViewPass(!viewPass)}
+                >
+                  {viewPass ? <AiOutlineEye /> : <AiOutlineEyeInvisible /> }
+                </label>
               </div>
 
               <p className='text-task-ss-purple text-xs underline'>Forgot your password?</p>
 
               <button 
                 type='submit'
-                className='bg-task-ss-purple text-task-ss-white-100 px-10 py-2 rounded-full w-auto mb-5 float-right'
+                className='bg-task-ss-purple text-task-ss-white-100 px-10 py-2 rounded-full w-auto mb-5 float-right transition-all active:scale-[0.98]'
               >
                 <p className='text-xs'>Log In</p>
               </button>
@@ -147,7 +157,7 @@ const LogIn = () => {
 
             {/* sign up button */}
             <Link href='/signup'>
-              <button className='px-10 py-2 mb-2 border rounded-full w-full bg-task-ss-white-100 text-task-ss-purple border-task-ss-purple transition-all hover:bg-task-ss-purple hover:text-task-ss-white-100'>
+              <button className='px-10 py-2 mb-2 border rounded-full w-full bg-task-ss-white-100 text-task-ss-purple border-task-ss-purple hover:bg-task-ss-purple hover:text-task-ss-white-100 transition-all active:scale-[0.98]'>
                 <p className='text-xs ml-2 align-middle'>SIGN UP FOR TASK SS</p>
               </button>
             </Link>

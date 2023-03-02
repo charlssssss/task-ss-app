@@ -20,3 +20,15 @@ export const Loading = ({ color }) => {
         </div>
     )
 }
+
+export const Empty = ({ user, title, img }) => {
+    return (
+        <div className='pt-16'>
+            <div className='flex flex-col justify-center items-center'>
+                <img src={img} className='w-32 mb-2' />
+                <h3 className='font-medium text-md text-task-ss-dark-blue-500'>Have a great day, {user}!</h3>
+                <p className='text-xs text-task-ss-white-400'>You are free from {title}. Nice one!</p>
+            </div>
+        </div>
+    )
+}

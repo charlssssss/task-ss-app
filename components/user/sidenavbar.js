@@ -9,11 +9,6 @@ import { MdClose, MdListAlt, MdOutlineSpaceDashboard } from 'react-icons/md'
 import { IconButton, SideNavButton, SideCategoryButton } from './buttons'
 import { BiStar, BiCalendarCheck, BiCalendar, BiPlus } from 'react-icons/bi'
 
-// data fetcher (with token)
-const fetcher = ([url, token]) => 
-    axios.get(url, { headers: { 'Authorization': 'Bearer ' + token }
-   }).then(res => res.data)
-
 // side nav button data
 const sideNavTitle = [
     {icon: MdOutlineSpaceDashboard, title: 'Dashboard', link: '/user/dashboard'},
@@ -25,8 +20,10 @@ const sideNavTitle = [
     {icon: TbReportAnalytics, title: 'Productivity Reports', link: '/user/reports'},
 ]
 
-const SideNavbar = ({ isToggled, toggleHandler }) => {
+const SideNavbar = ({ isToggled, toggleHandler, catMdlCloseHandler }) => {
+    // for redirecting
     const router = useRouter()
+
     // close action variables
     const [isCatClosed, setIsCatClosed] = useState(false)
     const catCloseHandler = () => setIsCatClosed(!isCatClosed)
@@ -66,11 +63,18 @@ const SideNavbar = ({ isToggled, toggleHandler }) => {
                         <p className='ml-4 text-md font-light'>Categories</p>
                     </Link>
                     <div className='flex'>
-                        <i className='hover:text-task-ss-light-blue-200'><BiPlus /></i>
+                        {/* add new category */}
+                        <i className='hover:text-task-ss-light-blue-200' onClick={catMdlCloseHandler}>
+                            <BiPlus />
+                        </i>
+                        
+                        {/* hide/show category */}
                         <i 
                             className={`ml-2 hover:text-task-ss-light-blue-200 transition-all ${isCatClosed ? 'rotate-90' : null }`}
                             onClick={catCloseHandler}
-                        ><FiChevronDown /></i>
+                        >
+                            <FiChevronDown />
+                        </i>
                     </div>
                 </div>
             </div>
@@ -93,9 +97,7 @@ export const SideNavProfile = () => {
     
     return (
         <div className='flex justify-between items-center bg-task-ss-white-100 max-w-max p-2 my-6 mx-auto rounded-full'>
-            <div className=' bg-task-ss-dark-blue-200 w-10 h-10 rounded-full'>
-    
-            </div>
+            <div className=' bg-task-ss-dark-blue-200 w-10 h-10 rounded-full'></div>
             {status == 'loading' ? (
                 <p className='ml-4 mr-6 text-lg font-medium'>loading...</p>
             ) : (

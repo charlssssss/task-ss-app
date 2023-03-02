@@ -1,20 +1,20 @@
-import axios from 'axios'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { getCsrfToken } from 'next-auth/react'
 import GeneralLayout from '../layouts/generalLayout'
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 
+// get csrftoken
 export const getServerSideProps = async (context) => {
-  return {
-    props: { csrfToken: await getCsrfToken(context) }
-  };
+  return { props: { csrfToken: await getCsrfToken(context) } }
 }
 
 const SignUp = () => {
+  // for redirecting
   const router = useRouter()
-  // console.log(csrfToken)
+
   // credentials variables
   const [firstname, setFirstname] = useState('')
   const [lastname, setLastname] = useState('')
@@ -22,32 +22,32 @@ const SignUp = () => {
   const [phone, setPhone] = useState('')
   const [password, setPassword] = useState('')
   const [cnfrmpassword, setCnfrmpassword] = useState('')
+  const [viewPass, setViewPass] = useState(false)
+  const [viewCnfrmPass, setViewCnfrmPass] = useState(false)
 
   // error variables
   const [errorMsg, setErrorMsg] = useState({})
   const [isError, setIsError] = useState(false)
 
-  console.log(firstname, lastname, email, phone, password, cnfrmpassword)
-
   // signup function
   const handleSignup = async (e) => {
     e.preventDefault()
     const res = await fetch('http://127.0.0.1:8000/api/user/auth/register', {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json', 
-            'Content-Type': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest',
-          },
-          body: JSON.stringify({ 
-            role_id: 1,
-            firstname: firstname,
-            lastname: lastname,
-            email: email,
-            phone: phone,
-            password: password,
-            password_confirmation: cnfrmpassword,
-          }),
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json', 
+          'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+        },
+        body: JSON.stringify({ 
+          role_id: 1,
+          firstname: firstname,
+          lastname: lastname,
+          email: email,
+          phone: phone,
+          password: password,
+          password_confirmation: cnfrmpassword,
+        }),
       })
 
       const data = await res.json()
@@ -55,10 +55,10 @@ const SignUp = () => {
       setIsError(true)
 
       if(data.success) {
-        router.push('/auth/login?signup=success')
+        router.push('/login?signup=success')
       }
   }
-  console.log(errorMsg)
+  
   return (
     <div className='flex justify-center items-center w-screen h-screen overflow-y-auto'>
       
@@ -75,9 +75,9 @@ const SignUp = () => {
             {/* login button */}
             <div className='flex justify-end items-center mb-4'>
               <p className='text-[10px] text-task-ss-white-400 mr-2'>Already have an account?</p>
-              <Link href='/auth/login'>
+              <Link href='/login'>
                 <button className='bg-task-ss-white-100 text-soc-med-google px-5 py-1 border border-soc-med-google rounded-full w-auto transition-all hover:bg-soc-med-google hover:text-task-ss-white-100'>
-                    <p className='text-[10px]'>Log in</p>
+                    <p className='text-[10px]'>Log In</p>
                 </button>
               </Link>
             </div>
@@ -162,25 +162,38 @@ const SignUp = () => {
                     {(isError && errorMsg.errors) && <p className='text-xs text-task-ss-red-200'>{errorMsg.errors.phone}</p>}
                   </div>
 
-                  <div className='flex flex-col my-2 h-16'>
+                  <div className='flex flex-col my-2 h-16 relative'>
                     <label htmlFor='password' className='text-sm font-medium'>Password</label>
-                    <input type="password" id="password"
-                          className={`px-3 py-1 outline-none transition-all border border-soc-med-google rounded-md ${(isError && errorMsg.errors) ? (errorMsg.errors.password ? 'border-task-ss-red-200' : '') : ('focus:border-task-ss-purple')}`}
+                    <input type={viewPass ? 'text' : 'password'} id="password"
+                          className={`px-3 py-1 outline-none transition-all border border-soc-med-google rounded-md ${(isError && errorMsg.errors) ? (errorMsg.errors.password ? 'border-task-ss-red-200' : '') : (' input_pass focus:border-task-ss-purple')}`}
                           name='password'
                           value={password}
                           onChange={e => setPassword(e.target.value)}
                     />
+                    <label htmlFor='password' 
+                          className={`absolute top-7 right-3 text-soc-med-google cursor-pointer ${(isError && errorMsg.errors) ? (errorMsg.errors.password ? 'text-task-ss-red-200' : '') : ('focus:text-task-ss-purple')}`} 
+                          onClick={() => setViewPass(!viewPass)}
+                    >
+                      {viewPass ? <AiOutlineEye /> : <AiOutlineEyeInvisible /> }
+                    </label>
+
                     {(isError && errorMsg.errors) && <p className='text-xs text-task-ss-red-200'>{errorMsg.errors.password[0]}</p>}
                   </div>
 
-                  <div className='flex flex-col my-2 h-16'>
+                  <div className='flex flex-col my-2 h-16 relative'>
                     <label htmlFor='cnfrmpassword' className='text-sm font-medium'>Confirm Password</label>
-                    <input type="password" id="cnfrmpassword"
-                          className={`px-3 py-1 outline-none transition-all border border-soc-med-google rounded-md ${(isError && errorMsg.errors) ? (errorMsg.errors.password ? 'border-task-ss-red-200' : '') : ('focus:border-task-ss-purple')}`}
+                    <input type={viewCnfrmPass ? 'text' : 'password'} id="cnfrmpassword"
+                          className={`px-3 py-1 outline-none transition-all border border-soc-med-google rounded-md ${(isError && errorMsg.errors) ? (errorMsg.errors.password ? 'border-task-ss-red-200' : '') : ('input_pass focus:border-task-ss-purple')}`}
                           name='cnfrmpassword'
                           value={cnfrmpassword}
                           onChange={e => setCnfrmpassword(e.target.value)}
                     />
+                    <label htmlFor='cnfrmpassword' 
+                          className={`absolute top-7 right-3 text-soc-med-google cursor-pointer ${(isError && errorMsg.errors) ? (errorMsg.errors.password ? 'text-task-ss-red-200' : '') : ('focus:text-task-ss-purple')}`} 
+                          onClick={() => setViewCnfrmPass(!viewCnfrmPass)}
+                    >
+                      {viewCnfrmPass ? <AiOutlineEye /> : <AiOutlineEyeInvisible /> }
+                    </label>
                   </div>
                 </div>
               </div>

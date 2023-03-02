@@ -16,6 +16,12 @@ body {
   overflow: hidden;
 }
 
+@layer components {
+  .input_pass:focus + * {
+    @apply transition-all text-task-ss-purple;
+  }
+}
+
 /* @layer components {
   .sidenav-button {
     @apply ;

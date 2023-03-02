@@ -1,4 +1,4 @@
-import TopNavbar from '../components/topnavbar'
+import TopNavbar from '../components/user/topnavbar'
 import GeneralLayout from '../layouts/generalLayout'
 export default function Home() {
   return (

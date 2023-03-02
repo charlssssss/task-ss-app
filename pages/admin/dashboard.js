@@ -1,5 +1,6 @@
 import Head from 'next/head'
-import TitleHeader from '../../components/titleheader'
+import TitleHeader from '../../components/user/titleheader'
+import AdminLayout from '../../layouts/adminLayout'
 
 const Dashboard = () => {
     return (
@@ -14,3 +15,12 @@ const Dashboard = () => {
 }
  
 export default Dashboard
+
+Dashboard.getLayout = function PageLayout(page) {
+    return (
+        <AdminLayout>
+            {page}
+        </AdminLayout>
+    )
+  }
+  
