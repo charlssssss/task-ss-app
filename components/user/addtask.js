@@ -7,16 +7,17 @@ import { useSession } from 'next-auth/react'
 import { AiFillFlag, AiFillStar } from 'react-icons/ai'
 import { RegularInput, RegularTextArea } from "./inputs"
 import { RegularButton, TaskDateTimeButton, TaskIconButton } from "./buttons"
+import { truncate } from '../functions'
 
 // fetcher function for useSWR hook
 const fetcher = ([url, token]) => 
     axios.get(url, { headers: { 'Authorization': 'Bearer ' + token } }).then(res => res.data)
 
 const priorityOptions = [
-    {priority: 'P1', title: 'Priority 1', style:' bg-task-ss-red-200 text-task-ss-white-100 '},
-    {priority: 'P2', title: 'Priority 2', style:' bg-task-ss-yellow text-task-ss-white-100 '},
-    {priority: 'P3', title: 'Priority 3', style:' bg-task-ss-category-200 text-task-ss-white-100 '},
-    {priority: 'P4', title: 'Priority 4', style:' bg-task-ss-white-100 text-task-ss-white-400 '} 
+    {priority: 'P1', title: 'Priority High', style:' bg-task-ss-red-200 text-task-ss-white-100 '},
+    {priority: 'P2', title: 'Priority Medium', style:' bg-task-ss-yellow text-task-ss-white-100 '},
+    {priority: 'P3', title: 'Priority Low', style:' bg-task-ss-category-200 text-task-ss-white-100 '},
+    {priority: 'P4', title: 'Not Priority', style:' bg-task-ss-white-100 text-task-ss-white-400 '} 
 ]
 
 const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }) => {
@@ -158,12 +159,12 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
 
                             {/* task icon buttons (starred, recurring, priority) */}
                             <div className='flex justify-between flex-wrap'>
-                                <div className='flex flex-wrap mt-2'>
+                                <div className='flex flex-wrap mt-2 w-full md:w-auto'>
 
                                 {taskType == 2 && 
                                     <TaskDateTimeButton 
                                         color='text-task-ss-green-200'
-                                        title='Start Date' m='mr-2' 
+                                        title='Start Date' m='md:mr-2' 
                                         dateValue={startDate} 
                                         changeDate={(e) => setStartDate(e.target.value)} 
                                         timeValue={startTime} 
@@ -175,7 +176,7 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
 
                                     <TaskDateTimeButton 
                                         color='text-task-ss-orange'
-                                        title='End Date' m='mr-2'
+                                        title='End Date' m='md:mr-2'
                                         dateValue={endDate} 
                                         changeDate={(e) => setEndDate(e.target.value)} 
                                         timeValue={endTime} 
@@ -187,7 +188,7 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
                                     <select 
                                         value={taskCategory} 
                                         onChange={(e) => setTaskCategory(e.target.value)}
-                                        className='rounded-lg py-3 px-4 text-xs text-task-ss-white-400 border transition-all border-task-ss-white-300'
+                                        className='rounded-lg py-3 px-4 text-xs text-task-ss-white-400 border transition-all border-task-ss-white-300 w-full md:w-auto active:scale-[0.98]'
                                     >
                                         {!categories && <option>Loading...</option>}
                                         {categories?.data?.map((category, idx) => (
@@ -195,15 +196,15 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
                                                 key={idx.toString()}
                                                 value={category.id}
                                             >
-                                                {category.category_name}
+                                                {truncate(category.category_name, 15)}
                                             </option>
                                         ))}
                                     </select>
                                     
                                 </div>
 
-                                {/* starred and priority button */}
-                                <div className='flex mt-2'>
+                                {/* starred and priority button*/}
+                                <div className='flex flex-wrap mt-5 md:mt-2 ml-auto'>
                                     <TaskIconButton 
                                         event={() => setIsStarred(isStarred == 0 ? 1 : 0)} 
                                         icon={<AiFillStar />} 
@@ -230,7 +231,7 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
                                         />
 
                                         <div className={`absolute top-10 right-0 rounded-md bg-task-ss-white-100 border border-task-ss-white-300 ${priorClose ? 'hidden' : 'block'}`}>
-                                            <ul className='w-20'>
+                                            <ul className='w-28'>
                                                 {priorityOptions.map((p, index) => (
                                                     <li 
                                                         className='text-xs py-1 px-3 cursor-pointer'
