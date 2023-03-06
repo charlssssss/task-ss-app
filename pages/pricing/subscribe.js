@@ -19,8 +19,8 @@ const Subscribe = () => {
     if(session) { user = session.user }
 
   return (
-    <>
-      <div className='flex items-center w-full h-14 mb-14'>
+    <div className='h-screen w-screen overflow-y-auto pb-10'>
+      <div className='flex items-center w-full h-14 mt-4 mb-14'>
         <div className='flex flex-col mx-14 w-screen'>
           <div className='flex justify-between items-center'>
             <Link href='/'>
@@ -46,7 +46,7 @@ const Subscribe = () => {
           </ul>
 
         </div>
-        <div className='w-screen bg-task-ss-white-100 md:w-[50%] rounded-md drop-shadow-lg px-8 py-6'>
+        <div className='w-screen bg-task-ss-white-100 md:w-[60%] rounded-md drop-shadow-lg px-8 py-6'>
           <h3 className='mb-2'>Plan</h3>
 
           <div className='flex justify-between flex-wrap'>
@@ -89,7 +89,7 @@ const Subscribe = () => {
 
         </div>
       </div>
-    </>
+    </div>
   )
 }
  
