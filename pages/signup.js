@@ -58,7 +58,17 @@ const SignUp = () => {
         router.push('/login?signup=success')
       }
   }
-  
+
+  const signupInputsLeft = [
+    {label: 'First Name', name: 'firstname', value: firstname, change: e => setFirstname(e.target.value)},
+    {label: 'Last Name', name: 'lastname', value: lastname, change: e => setLastname(e.target.value)},
+    {label: 'Email', name: 'email', value: email, change: e => setEmail(e.target.value)}
+  ]
+  const signupInputsRight = [
+    {label: 'Phone Number', name: 'phone', value: phone, change: e => setPhone(e.target.value)},
+    {label: 'Password', name: 'password', value: password, change: e => setPassword(e.target.value)},
+    {label: 'Confirm Password', name: 'cnfrmpassword', value: cnfrmpassword, change: e => setCnfrmpassword(e.target.value)}
+  ]
   return (
     <div className='flex justify-center items-center w-screen h-screen overflow-y-auto'>
       
@@ -77,7 +87,7 @@ const SignUp = () => {
               <p className='text-[10px] text-task-ss-white-400 mr-2'>Already have an account?</p>
               <Link href='/login'>
                 <button className='bg-task-ss-white-100 text-soc-med-google px-5 py-1 border border-soc-med-google rounded-full w-auto transition-all hover:bg-soc-med-google hover:text-task-ss-white-100'>
-                    <p className='text-[10px]'>Log In</p>
+                    <p className='text-[10px]'>Login</p>
                 </button>
               </Link>
             </div>
@@ -97,15 +107,15 @@ const SignUp = () => {
               <p className={`text-[11px] ${errorMsg.success ? 'text-task-ss-green-200 ' : 'text-task-ss-red-200 '}`} >{isError && errorMsg.message}</p>
               
               <ul className='list-disc ml-3'>
-                {(isError && errorMsg.errors) && (errorMsg.errors.password ? ((errorMsg.errors.password.length > 1 ? (
-                  errorMsg.errors.password.map((error, index) => (
+                {isError && (errorMsg.errors?.password?.length > 1 ? (
+                  errorMsg?.errors?.password?.map((error, index) => (
                     <li key={index.toString()}
                         className={`text-[11px] ${errorMsg.success ? 'text-task-ss-green-200 ' : 'text-task-ss-red-200 '}`}
                     >
                       {error}
                     </li>
                   ))
-                ) : null )) : null)}
+                ) : null )}
               </ul>
             </div>
 
@@ -115,69 +125,45 @@ const SignUp = () => {
               <div className='flex flex-col justify-between w-full lg:flex-row'>
                 {/* left side inputs */}
                 <div className='flex flex-col w-full lg:w-[49%]'>
-                  <div className='flex flex-col my-2 h-16'>
-                    <label htmlFor='firstname' className='text-sm font-medium'>First Name</label>
-                    <input type="text" id="firstname"
-                          className={`px-3 py-1 outline-none transition-all border border-soc-med-google rounded-md ${(isError && errorMsg.errors) ? (errorMsg.errors.firstname ? 'border-task-ss-red-200' : '') : ('focus:border-task-ss-purple')}`}
-                          name='firstname'
-                          value={firstname}
-                          onChange={e => setFirstname(e.target.value)}
+                  {signupInputsLeft.map((input, idx) => (
+                    <SignupInput
+                      key={idx.toString()} 
+                      label={input.label}
+                      name={input.name}
+                      value={input.value}
+                      isError={isError}
+                      errorMsg={errorMsg}
+                      change={input.change}    
                     />
-                    {(isError && errorMsg.errors) && <p className='text-xs text-task-ss-red-200'>{errorMsg.errors.firstname}</p>}
-                  </div>
-
-                  <div className='flex flex-col my-2 h-16'>
-                    <label htmlFor='lastname' className='text-sm font-medium'>Last Name</label>
-                    <input type="text" id="lastname"
-                          className={`px-3 py-1 outline-none transition-all border border-soc-med-google rounded-md ${(isError && errorMsg.errors) ? (errorMsg.errors.lastname ? 'border-task-ss-red-200' : '') : ('focus:border-task-ss-purple')}`}
-                          name='lastname'
-                          value={lastname}
-                          onChange={e => setLastname(e.target.value)}
-                    />
-                    {(isError && errorMsg.errors) && <p className='text-xs text-task-ss-red-200'>{errorMsg.errors.lastname}</p>}
-                  </div>
-
-                  <div className='flex flex-col my-2 h-16'>
-                    <label htmlFor='email' className='text-sm font-medium'>Email</label>
-                    <input type="text" id="email"
-                          className={`px-3 py-1 outline-none transition-all border border-soc-med-google rounded-md ${(isError && errorMsg.errors) ? (errorMsg.errors.email ? 'border-task-ss-red-200' : '') : ('focus:border-task-ss-purple')}`}
-                          name='email'
-                          value={email}
-                          onChange={e => setEmail(e.target.value)}
-                    />
-                    {(isError && errorMsg.errors) && <p className='text-xs text-task-ss-red-200'>{errorMsg.errors.email}</p>}
-                  </div>
+                  ))}
                 </div>
 
                 {/* right side inputs */}
                 <div className='flex flex-col w-full lg:w-[49%]'>
-                  <div className='flex flex-col my-2 h-16'>
-                    <label htmlFor='phone' className='text-sm font-medium'>Phone Number</label>
-                    <input type="text" id="phone"
-                          className={`px-3 py-1 outline-none transition-all border border-soc-med-google rounded-md ${(isError && errorMsg.errors) ? (errorMsg.errors.phone ? 'border-task-ss-red-200' : '') : ('focus:border-task-ss-purple')}`}
-                          name='phone'
-                          value={phone}
-                          onChange={e => setPhone(e.target.value)}
-                    />
-                    {(isError && errorMsg.errors) && <p className='text-xs text-task-ss-red-200'>{errorMsg.errors.phone}</p>}
-                  </div>
-
+                  <SignupInput
+                    label='Phone Number'
+                    name='phone'
+                    value={phone}
+                    isError={isError}
+                    errorMsg={errorMsg}
+                    change={e => setPhone(e.target.value)}    
+                  />
                   <div className='flex flex-col my-2 h-16 relative'>
                     <label htmlFor='password' className='text-sm font-medium'>Password</label>
                     <input type={viewPass ? 'text' : 'password'} id="password"
-                          className={`px-3 py-1 outline-none transition-all border border-soc-med-google rounded-md ${(isError && errorMsg.errors) ? (errorMsg.errors.password ? 'border-task-ss-red-200' : '') : (' input_pass focus:border-task-ss-purple')}`}
+                          className={`px-3 py-1 outline-none transition-all border border-soc-med-google rounded-md ${isError ? (errorMsg.errors?.password ? 'border-task-ss-red-200' : '') : (' input_pass focus:border-task-ss-purple')}`}
                           name='password'
                           value={password}
                           onChange={e => setPassword(e.target.value)}
                     />
                     <label htmlFor='password' 
-                          className={`absolute top-7 right-3 text-soc-med-google cursor-pointer ${(isError && errorMsg.errors) ? (errorMsg.errors.password ? 'text-task-ss-red-200' : '') : ('focus:text-task-ss-purple')}`} 
+                          className={`absolute top-7 right-3 text-soc-med-google cursor-pointer ${isError ? (errorMsg.errors?.password ? 'text-task-ss-red-200' : '') : ('focus:text-task-ss-purple')}`} 
                           onClick={() => setViewPass(!viewPass)}
                     >
                       {viewPass ? <AiOutlineEye /> : <AiOutlineEyeInvisible /> }
                     </label>
 
-                    {(isError && errorMsg.errors) && <p className='text-xs text-task-ss-red-200'>{errorMsg.errors.password[0]}</p>}
+                    {isError && <p className='text-xs text-task-ss-red-200'>{errorMsg.errors?.password[0]}</p>}
                   </div>
 
                   <div className='flex flex-col my-2 h-16 relative'>
@@ -189,7 +175,7 @@ const SignUp = () => {
                           onChange={e => setCnfrmpassword(e.target.value)}
                     />
                     <label htmlFor='cnfrmpassword' 
-                          className={`absolute top-7 right-3 text-soc-med-google cursor-pointer ${(isError && errorMsg.errors) ? (errorMsg.errors.password ? 'text-task-ss-red-200' : '') : ('focus:text-task-ss-purple')}`} 
+                          className={`absolute top-7 right-3 text-soc-med-google cursor-pointer ${isError ? (errorMsg.errors?.password ? 'text-task-ss-red-200' : '') : ('focus:text-task-ss-purple')}`} 
                           onClick={() => setViewCnfrmPass(!viewCnfrmPass)}
                     >
                       {viewCnfrmPass ? <AiOutlineEye /> : <AiOutlineEyeInvisible /> }
@@ -204,11 +190,26 @@ const SignUp = () => {
                 type='submit'
                 className='bg-task-ss-purple text-task-ss-white-100 px-10 py-2 rounded-full w-auto mb-5 float-right'
               >
-                <p className='text-xs'>Sign Up</p>
+                <p className='text-xs'>Signup</p>
               </button>
             </form>
         </div>
       </div>
+    </div>
+  )
+}
+
+export const SignupInput = ({label, name, value, isError, errorMsg, change }) => {
+  return (
+    <div className='flex flex-col my-2 h-16'>
+      <label htmlFor={name} className='text-sm font-medium'>{label}</label>
+      <input type="text" id={name}
+            className={`px-3 py-1 outline-none transition-all border border-soc-med-google rounded-md ${isError ? (errorMsg.errors?.[name] ? 'border-task-ss-red-200' : '') : ('focus:border-task-ss-purple')}`}
+            name={name}
+            value={value}
+            onChange={change}
+      />
+      {isError && <p className='text-xs text-task-ss-red-200'>{errorMsg.errors?.[name]}</p>}
     </div>
   )
 }
@@ -220,7 +221,7 @@ SignUp.getLayout = function PageLayout(page) {
     <>
       <GeneralLayout>
         <Head>
-          <title>Sign Up: Task SS</title>
+          <title>Signup: Task SS</title>
         </Head>
         {page}
       </GeneralLayout>

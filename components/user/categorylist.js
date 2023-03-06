@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import { Empty, FailedToLoad, Loading } from './errors'
 import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai'
+import { BsFillCircleFill } from 'react-icons/bs'
 import EditCategory from './editcategory'
 
 // fetcher function for useSWR hook
@@ -74,7 +75,7 @@ const CategoryList = () => {
                             className={`flex items-start py-4 px-7 w-full cursor-default rounded-xl  ${(hover &&  current == category.id) ? 'bg-task-ss-white-300' : ''}`} 
                             href={`/user/categories/${category.id}`}
                         >
-                            <div className={`rounded-full w-3 h-3 mt-2 mr-4 bg-task-ss-category-${category.color.toString()}`}></div>
+                            <BsFillCircleFill className={`mt-2 mr-4 text-task-ss-category-${category.color.toString()}`} size={13} />
                             <div className='flex flex-col'>
                                 <p className='font-medium'>{category.category_name}</p>
                                 <p className='text-sm'>{category.category_desc}</p>

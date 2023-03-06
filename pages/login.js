@@ -56,9 +56,14 @@ const LogIn = () => {
       redirect: false
     }).then(res => {
       if (res.ok) {
-        router.push('/login')
+        if(router.query.callbackUrl) {
+          router.push(router.query.callbackUrl)
+        }
+        else {
+          router.push('/login')
+        }
       }
-      else {
+      else {Login
         setIsError(true)
         //alert('Email and/or password is incorrect.')
       }
@@ -147,7 +152,7 @@ const LogIn = () => {
                 type='submit'
                 className='bg-task-ss-purple text-task-ss-white-100 px-10 py-2 rounded-full w-auto mb-5 float-right transition-all active:scale-[0.98]'
               >
-                <p className='text-xs'>Log In</p>
+                <p className='text-xs'>Login</p>
               </button>
             </form>
 
@@ -158,7 +163,7 @@ const LogIn = () => {
             {/* sign up button */}
             <Link href='/signup'>
               <button className='px-10 py-2 mb-2 border rounded-full w-full bg-task-ss-white-100 text-task-ss-purple border-task-ss-purple hover:bg-task-ss-purple hover:text-task-ss-white-100 transition-all active:scale-[0.98]'>
-                <p className='text-xs ml-2 align-middle'>SIGN UP FOR TASK SS</p>
+                <p className='text-xs ml-2 align-middle'>SIGNUP FOR TASK SS</p>
               </button>
             </Link>
         </div>
@@ -174,7 +179,7 @@ LogIn.getLayout = function PageLayout(page) {
       <>
         <GeneralLayout>
           <Head>
-            <title>Log In: Task SS</title>
+            <title>Login: Task SS</title>
           </Head>
           {page}
         </GeneralLayout>
