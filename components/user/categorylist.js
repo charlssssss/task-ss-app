@@ -8,6 +8,7 @@ import { Empty, FailedToLoad, Loading } from './errors'
 import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai'
 import { BsFillCircleFill } from 'react-icons/bs'
 import EditCategory from './editcategory'
+import { truncate } from '../functions'
 
 // fetcher function for useSWR hook
 // const fetcher = (...args) => fetch(...args).then(res => res.json())
@@ -77,7 +78,7 @@ const CategoryList = () => {
                         >
                             <BsFillCircleFill className={`mt-2 mr-4 text-task-ss-category-${category.color.toString()}`} size={13} />
                             <div className='flex flex-col'>
-                                <p className='font-medium'>{category.category_name}</p>
+                                <p className='font-medium'>{truncate(category.category_name, 20)}</p>
                                 <p className='text-sm'>{category.category_desc}</p>
                             </div>
                         </Link>

@@ -3,6 +3,7 @@ import axios from 'axios'
 import moment from 'moment'
 import Link from "next/link"
 import { useState } from 'react'
+import { truncate } from '../functions'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import { Empty, FailedToLoad, Loading } from './errors'
@@ -64,36 +65,48 @@ const TaskList = ({ api, token, url }) => {
                     const endDateTime = `${task.end_date} ${task.end_time}`
 
                     return (
+                        <>
                         <div
                             key={task.id} 
-                            className='flex justify-between py-4 px-7 w-full rounded-xl hover:bg-task-ss-white-300' 
+                            className='flex justify-between py-4 w-full rounded-xl' 
                             href={`/user/categories/${task.category_id}/tasks/${task.id}`} 
                             onMouseEnter={()=> { setHover(true); setCurrent(task.id) }} 
                             onMouseLeave={()=> { setHover(false); setCurrent('') }}
                         >
-                            <div className='flex items-start'>
-                                <button className='mt-2 mr-4'>
+                            <div className='flex items-start w-full'>
+                                <button className='mt-2 mr-4 outline-none'>
                                     <div className={`rounded-full w-5 h-5 border border-1 border-task-ss-white-400`}></div>
                                 </button>
-                                <div className='flex flex-col'>
+                                <div className='flex flex-col w-full'>
                                     {/* task info */}
-                                    <div className='flex items-center'>
-                                        {task.is_starred == 1 ? <AiFillStar className='text-task-ss-yellow' size={17}/> : null}
-                                        <p className='font-normal pl-[5px]'>{task.task_name}</p>
-                                    </div>
-                                    <p className='text-sm text-task-ss-white-400'>{task.task_desc}</p>
-                                    <div className='flex items-center text-xs text-task-ss-white-400'>
-                                        {/* start date */}
-                                        <div className='flex text-task-ss-green-200'>
-                                            <AiOutlineCalendar size={15} />
-                                            <p className='px-[5px]'>{moment(startDateTime).format('MMM D, YYYY')}</p>
-                                            <p>{moment(startDateTime).format('H:mm')}</p>
+                                    <div className='flex justify-between h-8'>
+                                        <div className='flex items-center'>
+                                            {task.is_starred == 1 ? <AiFillStar className='text-task-ss-yellow pr-[5px]' size={20}/> : null}
+                                            <p className='text-md'>{task.task_name}</p>
                                         </div>
-    
-                                        <p className='px-2'>to</p>
-                                        
+                                        {/* edit, delete part */}
+                                        <div className={`flex items-center text-task-ss-white-400 ${(hover &&  current == task.id) ? '' : 'hidden'}`}>
+                                            <AiOutlineEdit size={20} className='m-[5px] transition-all hover:text-task-ss-white-500' />
+                
+                                            <span onClick={(e) => handleDeleteTask(e, task.id)}>
+                                                <AiOutlineDelete size={20} className='m-[5px] transition-all hover:text-task-ss-white-500'/>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <p className='text-sm text-task-ss-white-400'>{truncate(task.task_desc, 20)}</p>
+                                    <div className='flex flex-wrap items-center text-xs text-task-ss-white-400'>
+                                        {/* start date */}
+                                        {task.task_type_id == 2 && (
+                                            <div className='flex flex-wrap text-task-ss-green-200 mr-4'>
+                                                <AiOutlineCalendar size={15} />
+                                                <p className='px-[5px]'>{moment(startDateTime).format('MMM D, YYYY')}</p>
+                                                <p>{moment(startDateTime).format('H:mm')}</p>
+                                            </div>
+                                        )}
+
                                         {/* end date */}
-                                        <div className='flex text-task-ss-orange'>
+                                        <div className='flex flex-wrap text-task-ss-orange'>
                                             <AiOutlineCalendar size={15} />
                                             <p className='px-[5px]'>{moment(endDateTime).format('MMM D, YYYY')}</p>
                                             <p>{moment(endDateTime).format('H:mm')}</p>
@@ -101,15 +114,10 @@ const TaskList = ({ api, token, url }) => {
                                     </div>
                                 </div>
                             </div>
-                            {/* edit, delete part */}
-                            <div className={`flex items-center text-task-ss-white-400 ${(hover &&  current == task.id) ? '' : 'hidden'}`}>
-                                <AiOutlineEdit size={20} className='m-[5px] transition-all hover:text-task-ss-white-500' />
-    
-                                <span onClick={(e) => handleDeleteTask(e, task.id)}>
-                                    <AiOutlineDelete size={20} className='m-[5px] transition-all hover:text-task-ss-white-500'/>
-                                </span>
-                            </div>
+                            
                         </div>
+                        <hr className='text-task-ss-white-300'/>
+                        </>
                     )
                 }
 
