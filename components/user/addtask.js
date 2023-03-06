@@ -124,17 +124,17 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
             className={` items-center absolute top-0 left-0 w-screen h-screen bg-task-ss-dark-blue-600 bg-opacity-50 ${isTaskMdlClosed ? ' hidden ' : ' flex flex-col'}`} 
         >   
             {(categories?.data.length > 0) ? 
-                <div className='bg-task-ss-white-100 w-[600px] h-auto rounded-lg mt-[5%] relative z-20'>
+                <div className='bg-task-ss-white-100 w-[90%] md:w-[600px] h-auto rounded-lg mt-[5%] relative z-20'>
                     {/* add task form */}
                     <form method='POST' onSubmit={handleAddTask}>
-                        <div className='flex items-center py-3 px-5'>
-                            <h2 className='font-semibold text-lg'>Add Task</h2>
+                        <div className='flex flex-wrap items-center py-3 px-5'>
+                            <h2 className='font-semibold text-lg mr-4'>Add Task</h2>
                             {/* task type dropdown */}
                             <select 
                                 value={taskType}
                                 onChange={e => setTaskType(e.target.value)}
                                 name='task_type_id'
-                                className='font-medium rounded-md bg-task-ss-white-300 text-xs ml-4 p-2'
+                                className='font-medium rounded-md bg-task-ss-white-300 text-xs p-2'
                             >   
                                 <option value='1'>To Do List</option>
                                 <option value='2'>To Be Done</option>
@@ -157,8 +157,8 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
 
 
                             {/* task icon buttons (starred, recurring, priority) */}
-                            <div className='flex justify-between'>
-                                <div className='flex'>
+                            <div className='flex justify-between flex-wrap'>
+                                <div className='flex flex-wrap mt-2'>
 
                                 {taskType == 2 && 
                                     <TaskDateTimeButton 
@@ -175,7 +175,7 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
 
                                     <TaskDateTimeButton 
                                         color='text-task-ss-orange'
-                                        title='End Date' 
+                                        title='End Date' m='mr-2'
                                         dateValue={endDate} 
                                         changeDate={(e) => setEndDate(e.target.value)} 
                                         timeValue={endTime} 
@@ -187,7 +187,7 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
                                     <select 
                                         value={taskCategory} 
                                         onChange={(e) => setTaskCategory(e.target.value)}
-                                        className='rounded-lg py-3 px-4 ml-2 text-xs text-task-ss-white-400 border transition-all border-task-ss-white-300'
+                                        className='rounded-lg py-3 px-4 text-xs text-task-ss-white-400 border transition-all border-task-ss-white-300'
                                     >
                                         {!categories && <option>Loading...</option>}
                                         {categories?.data?.map((category, idx) => (
@@ -203,7 +203,7 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
                                 </div>
 
                                 {/* starred and priority button */}
-                                <div className='flex'>
+                                <div className='flex mt-2'>
                                     <TaskIconButton 
                                         event={() => setIsStarred(isStarred == 0 ? 1 : 0)} 
                                         icon={<AiFillStar />} 
@@ -253,7 +253,7 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
 
                         {/* cancel and add task button */}
                         <hr className='text-task-ss-white-300'/>
-                        <div className='flex items-center justify-end py-3 px-5'>
+                        <div className='flex flex-wrap items-center justify-end py-3 px-5'>
                             <RegularButton 
                                 type='snd' 
                                 title='Cancel' 
@@ -282,7 +282,7 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
                     </div>
 
                     <hr className='text-task-ss-white-300'/>
-                    <div className='flex items-center justify-end py-3 px-5'>
+                    <div className='flex flex-wrap items-center justify-end py-3 px-5'>
                         <RegularButton 
                             type='pmry' 
                             title='Okay, I Understand' 

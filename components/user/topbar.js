@@ -18,8 +18,8 @@ const settingsTitle = [
     {icon: BiPalette, title: 'Customize Theme', link: '/#'},
     {icon: BsCheckCircle, title: 'Completed Tasks', link: '/#'},
     {icon: TbPuzzle, title: 'Link to Google', link: '/#'},
-    {icon: BiStar, title: 'Pro Subscription', link: '/#'},
-    {icon: <TbLogout />, title: 'Log Out', link: '/#'}
+    {icon: BiStar, title: 'Pro Subscription', link: '/pricing/subscribe'},
+    {icon: <TbLogout />, title: 'Logout', link: '/#'}
 ]
 
 // component for top bar

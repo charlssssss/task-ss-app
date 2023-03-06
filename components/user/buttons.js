@@ -6,6 +6,10 @@ import { useSession } from 'next-auth/react'
 import { AiOutlineCalendar } from 'react-icons/ai'
 import { FailedToLoad, Loading } from '../user/errors'
 
+// fetcher function for useSWR hook
+const fetcher = ([url, token]) => 
+    axios.get(url, { headers: { 'Authorization': 'Bearer ' + token } }).then(res => res.data)
+
 // component for buttons with icons, (for consistent design, reusable)
 export const IconButton = ({ icon, hover, event, link }) => {
     
@@ -34,11 +38,6 @@ export const SideNavButton = ({ icon, title, link, router }) => (
         </div>
     </Link>
 )
-
-// fetcher function for useSWR hook
-// const fetcher = (...args) => fetch(...args).then(res => res.json())
-const fetcher = ([url, token]) => 
-    axios.get(url, { headers: { 'Authorization': 'Bearer ' + token } }).then(res => res.data)
 
 // component for category buttons at sidebar (for consistent design)
 export const SideCategoryButton = ({ router }) => {
@@ -69,10 +68,17 @@ export const SideCategoryButton = ({ router }) => {
     )
 }
 
-export const RegularButton = ({ type, title, event, eventType, m, disabled }) => {
+export const RegularButton = ({ type, title, event, eventType, m, disabled, link }) => {
     const btnType = {
         'pmry': ' bg-task-ss-purple text-task-ss-white-100 ',
         'snd': ' bg-task-ss-white-300 text-task-ss-dark-blue-300 ',
+    }
+    if(link) {
+        return (
+            <Link href={link}  className={`py-2 px-4 rounded-full active:scale-[0.98] ${btnType[type]} ${m}`}>
+                <p className='text-sm font-medium'>{title}</p>
+            </Link>
+        )
     }
 
     if(disabled) {
@@ -118,7 +124,7 @@ export const TaskDateTimeButton = ({ title, color, dateValue, changeDate, timeVa
             </button>
 
             {/* dropdown section */}
-            <div className={`absolute top-10 left-0 text-xs rounded-md py-3 px-5 bg-task-ss-white-100 border border-task-ss-white-300 ${state ? 'hidden' : 'flex flex-col'}`}>
+            <div className={`absolute top-10 left-0 text-xs rounded-md py-3 px-5 bg-task-ss-white-100 border border-task-ss-white-300 z-30 ${state ? 'hidden' : 'flex flex-col'}`}>
                 <div className='py-2'>
                     <label htmlFor='date' className='font-medium'>Date</label>
                     <input type='date' id='date' 
