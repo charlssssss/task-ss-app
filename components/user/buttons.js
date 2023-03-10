@@ -5,10 +5,7 @@ import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import { AiOutlineCalendar } from 'react-icons/ai'
 import { FailedToLoad, Loading } from '../user/errors'
-
-// fetcher function for useSWR hook
-const fetcher = ([url, token]) => 
-    axios.get(url, { headers: { 'Authorization': 'Bearer ' + token } }).then(res => res.data)
+import { fetcher, truncate } from '../functions'
 
 // component for buttons with icons, (for consistent design, reusable)
 export const IconButton = ({ icon, hover, event, link }) => {
@@ -60,7 +57,7 @@ export const SideCategoryButton = ({ router }) => {
                     <div className={`bg-task-ss-white-200 w-2 h-10 rounded-r-xl ${router.asPath == '/user/categories/'+category.id ? 'scale-100' : 'scale-0'}`}></div>
                     <div className={`flex items-center w-11/12 text-task-ss-white-300 pl-5 py-3 cursor-pointer hover:bg-task-ss-dark-blue-200 hover:text-task-ss-white-100 ${router.asPath == '/user/categories/'+category.id ? 'bg-task-ss-dark-blue-200' : ''}`}>
                         <div className={`rounded-full w-3 h-3 mr-4 bg-task-ss-category-${category.color.toString()}`}></div>
-                        <p className='ml-4 text-md font-light'>{category.category_name}</p>
+                        <p className='ml-4 text-md font-light'>{truncate(category.category_name, 20)}</p>
                     </div>
                 </Link>
             ))}
@@ -107,13 +104,21 @@ export const TaskIconButton = ({ event, icon, m, current, styles }) => {
 
 
 export const TaskDateTimeButton = ({ title, color, dateValue, changeDate, timeValue, changeTime, state, event, m }) => {
-    const dateFormatted = moment(dateValue).format('MMM D')
+    const dateFormatted = moment(dateValue).calendar({
+        sameDay: '[Today]',
+        nextDay: '[Tomorrow]',
+        nextWeek: 'dddd',
+        lastDay: '[Yesterday]',
+        lastWeek: '[Last] dddd',
+        sameElse: 'MMM D'
+    })
+    
     const timeFormatted = moment(`${dateValue} ${timeValue}`).format('h:mma')
 
     return (
-        <div className={`relative ${m}`}>
+        <div className={`relative w-full md:w-auto ${m}`}>
             {/* button section */}
-            <button type='button' className={`flex rounded-lg py-3 px-4 text-sm ${color} border transition-all border-task-ss-white-300 active:scale-[0.98]`} onClick={event}>
+            <button type='button' className={`flex rounded-lg w-full py-3 px-4 text-sm mb-2 md:mb-0 ${color} border transition-all border-task-ss-white-300 active:scale-[0.98]`} onClick={event}>
                 <AiOutlineCalendar />
                 
                 {state ? 

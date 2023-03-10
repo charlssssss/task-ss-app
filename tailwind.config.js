@@ -51,6 +51,24 @@ module.exports = {
       'soc-med': {
         'google': '#BBBBBB',
         'facebook': '#3F4E9F',
+      },
+      'priority': {
+        'high': {
+          100: '#ffe3e3',
+          200: '#E44545',
+        },
+        'med': {
+          100: '#faf4de',
+          200: '#F5D04F',
+        },
+        'low': {
+          100: '#ebf3ff',
+          200: '#4f91f5',
+        },
+        'default': {
+          100: '#eeeeee',
+          200: '#777777',
+        }
       }
     },
     extend: {},

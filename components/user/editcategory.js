@@ -13,7 +13,7 @@ const colorOptions = [
     { 'value': '500', 'label': 'Red' },
 ]
 
-const EditCategory = ({ isCatMdlClosed, catMdlCloseHandler, editCat }) => {
+const EditCategory = ({ isCatMdlClosed, catMdlCloseHandler, editCat, callbackUrl }) => {
     const router = useRouter()
 
     // fetch user token
@@ -59,7 +59,7 @@ const EditCategory = ({ isCatMdlClosed, catMdlCloseHandler, editCat }) => {
 
         if(data.success) {
             clearHandler()
-            router.push('/user/categories')
+            router.push(callbackUrl)
             alert(data.message)
         } else { console.log(data.message) }
     }

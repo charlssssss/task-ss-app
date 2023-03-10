@@ -10,7 +10,7 @@ const pricingCardOptions = [
       img: 'illustration_1.png',
       header: 'Free',
       sub: 'For starters',
-      price: 'P0'
+      price: '₱0'
     },
     btn: {
       type: 'snd',
@@ -28,7 +28,7 @@ const pricingCardOptions = [
       img: 'illustration_2.png',
       header: 'Pro',
       sub: 'For pro users',
-      price: 'P500'
+      price: '₱500'
     },
     btn: {
       type: 'pmry',
