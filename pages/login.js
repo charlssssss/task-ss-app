@@ -63,7 +63,7 @@ const LogIn = () => {
           router.push('/login')
         }
       }
-      else {Login
+      else {
         setIsError(true)
         //alert('Email and/or password is incorrect.')
       }

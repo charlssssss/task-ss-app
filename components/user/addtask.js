@@ -7,11 +7,7 @@ import { useSession } from 'next-auth/react'
 import { AiFillFlag, AiFillStar } from 'react-icons/ai'
 import { RegularInput, RegularTextArea } from "./inputs"
 import { RegularButton, TaskDateTimeButton, TaskIconButton } from "./buttons"
-import { truncate } from '../functions'
-
-// fetcher function for useSWR hook
-const fetcher = ([url, token]) => 
-    axios.get(url, { headers: { 'Authorization': 'Bearer ' + token } }).then(res => res.data)
+import { fetcher, truncate } from '../functions'
 
 const priorityOptions = [
     {priority: 'P1', title: 'Priority High', style:' bg-task-ss-red-200 text-task-ss-white-100 '},
@@ -26,7 +22,7 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
     let userToken
     if(session) { userToken = session.user.token }
 
-    const { data:categories, error, isLoading } = useSWR(['http://localhost:8000/api/user/categories', userToken], fetcher)
+    const { data:categories } = useSWR(['http://localhost:8000/api/user/categories', userToken], fetcher)
 
     // add task variables
     const [taskCategory, setTaskCategory] = useState('')
@@ -108,17 +104,6 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
             alert(data.message)
         } else { console.log(data.message) }
     }
-    
-
-    const noCategoriesHandler = () => {
-        setIs
-        alert('no categories')
-    }
-
-    // {!isTaskMdlClosed && (
-    //      && return()
-    //        noCategoriesHandler()
-    // )}
 
     return (
         <div 
@@ -265,6 +250,7 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
                                 type='pmry' 
                                 title='Add Task'
                                 eventType='submit'
+                                disabled={taskName == '' || taskDesc == ''}
                             />
                         </div>
 

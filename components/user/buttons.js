@@ -5,11 +5,7 @@ import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import { AiOutlineCalendar } from 'react-icons/ai'
 import { FailedToLoad, Loading } from '../user/errors'
-import { truncate } from '../functions'
-
-// fetcher function for useSWR hook
-const fetcher = ([url, token]) => 
-    axios.get(url, { headers: { 'Authorization': 'Bearer ' + token } }).then(res => res.data)
+import { fetcher, truncate } from '../functions'
 
 // component for buttons with icons, (for consistent design, reusable)
 export const IconButton = ({ icon, hover, event, link }) => {
@@ -108,7 +104,15 @@ export const TaskIconButton = ({ event, icon, m, current, styles }) => {
 
 
 export const TaskDateTimeButton = ({ title, color, dateValue, changeDate, timeValue, changeTime, state, event, m }) => {
-    const dateFormatted = moment(dateValue).format('MMM D')
+    const dateFormatted = moment(dateValue).calendar({
+        sameDay: '[Today]',
+        nextDay: '[Tomorrow]',
+        nextWeek: 'dddd',
+        lastDay: '[Yesterday]',
+        lastWeek: '[Last] dddd',
+        sameElse: 'MMM D'
+    })
+    
     const timeFormatted = moment(`${dateValue} ${timeValue}`).format('h:mma')
 
     return (

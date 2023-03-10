@@ -3,19 +3,13 @@ import axios from 'axios'
 import Link from "next/link"
 import { useState } from 'react'
 import { useRouter } from 'next/router'
-import { useSession } from 'next-auth/react'
-import { Empty, FailedToLoad, Loading } from './errors'
-import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai'
-import { BsFillCircleFill } from 'react-icons/bs'
 import EditCategory from './editcategory'
-import { truncate } from '../functions'
+import { useSession } from 'next-auth/react'
+import { BsFillCircleFill } from 'react-icons/bs'
+import { Empty, FailedToLoad, Loading } from './errors'
+import { fetcher, handleDeleteCategory, truncate } from '../functions'
+import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai'
 
-// fetcher function for useSWR hook
-// const fetcher = (...args) => fetch(...args).then(res => res.json())
-const fetcher = ([url, token]) => 
-    axios.get(url, { headers: { 'Authorization': 'Bearer ' + token } }).then(res => res.data)
-
-// component for category list
 const CategoryList = () => {
     const router = useRouter()
     
@@ -36,24 +30,6 @@ const CategoryList = () => {
     const catMdlCloseHandler = () => setIsCatMdlClosed(!isCatMdlClosed)
 
     const[editCat, setEditCat] = useState({})
-    
-    // delete category function
-    const handleDeleteCategory =  async (e, id) => {
-        e.preventDefault()
-        // confirmation
-        if(confirm(`Are you sure u want to delete category no.${id}?`) ) {
-            const { data } = await axios(`http://127.0.0.1:8000/api/user/categories/${id}`, { 
-                method: 'DELETE',
-                headers: { 'Authorization': 'Bearer ' + userToken }
-            })
-    
-            if(data.success) {
-                router.push('/user/categories')
-                setDeleted(id)
-                alert(data.message)
-            } else { console.log(data.message) }
-        }
-    }
 
     if (error) return <FailedToLoad />
     if (isLoading) return <Loading />
@@ -97,7 +73,7 @@ const CategoryList = () => {
 
                             {/* delete button */}
                             <div className='transition-all rounded-md hover:bg-task-ss-white-300 hover:text-task-ss-white-500'
-                                onClick={(e) => handleDeleteCategory(e, category.id)}
+                                onClick={(e) => handleDeleteCategory(e, category.id, userToken, router, setDeleted)}
                             >
                                 <AiOutlineDelete size={20} className='m-[5px]'/>
                             </div>
@@ -110,6 +86,7 @@ const CategoryList = () => {
                 isCatMdlClosed={isCatMdlClosed} 
                 catMdlCloseHandler={catMdlCloseHandler} 
                 editCat={editCat}
+                callbackUrl='/user/categories'
             />
         </>
     )
