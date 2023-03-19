@@ -7,6 +7,7 @@ import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai'
 import { useRouter } from 'next/router'
 import EditCategory from '../../../../components/user/editcategory'
 import { handleDeleteCategory } from '../../../../components/functions'
+import { BsCircleFill } from 'react-icons/bs'
 
 // fetching all categories and single category
 export const getServerSideProps = async (context) => {
@@ -44,7 +45,10 @@ const CategoryDetail = ({ category, userToken }) => {
                 onMouseEnter={()=> setHover(true)} 
                 onMouseLeave={()=> setHover(false)}
             >
-                <h3 className='text-2xl font-medium'>{category.category_name}</h3>
+                <div className='flex items-center'>
+                    <BsCircleFill className={`mr-4 text-task-ss-category-${category.color}`} size={17} />
+                    <h3 className='text-2xl font-medium'>{category.category_name}</h3>
+                </div>
 
                 {/* edit, delete part */}
                 <div className={`items-center pl-2 text-task-ss-white-400 ${hover ? 'flex':'hidden'}`}>

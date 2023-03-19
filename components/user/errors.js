@@ -32,3 +32,14 @@ export const Empty = ({ user, title, img }) => {
         </div>
     )
 }
+
+export const Empty2 = ({ title, img }) => {
+    return (
+        <div className='pt-16'>
+            <div className='flex flex-col justify-center items-center'>
+                <img src={img} className='w-32 mb-4' />
+                <p className='text-xs text-task-ss-white-400'>Woah, it seems like you don't have {title}.</p>
+            </div>
+        </div>
+    )
+}

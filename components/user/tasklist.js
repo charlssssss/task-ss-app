@@ -38,6 +38,34 @@ const TaskList = ({ api, token, url }) => {
     const taskMdlCloseHandler = () => setIsTaskMdlClosed(!isTaskMdlClosed)
 
     const[editTask, setEditTask] = useState({})
+
+    // complete task function
+    const handleCompleteTask =  async (e, task) => {
+        e.preventDefault()
+        await axios(`http://127.0.0.1:8000/api/user/tasks/${task.id}`, { 
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json', 
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            data: JSON.stringify({ 
+                "task_name" : task.task_name,
+                "status"    : "completed",
+                "priority"  : task.priority
+            }),
+        })
+        .then(res => {
+            if(res.data.success) {
+                alert("Task successfully completed!")
+            } else { alert(res.data.message) }
+        })
+        .catch(error => {
+            console.log(error)
+            const errorMsg = JSON.parse(error.request?.response)
+            alert(errorMsg.errors)
+        })
+    }
     
     // handle errors
     if (error) return <FailedToLoad />
@@ -49,7 +77,7 @@ const TaskList = ({ api, token, url }) => {
         <>
             {data.data.map(task => {
                 
-                if(deleted != task.id) {
+                if(deleted != task.id && task.status == 'pending') {
                     // formatting date and time
                     const startDate = moment(`${task.start_date} ${task.start_time}`).calendar({
                         sameDay: '[Today]',
@@ -67,9 +95,8 @@ const TaskList = ({ api, token, url }) => {
                         lastWeek: '[Last] dddd',
                         sameElse: 'MMM D'
                     })
-                    const startTime = moment(`${task.start_date} ${task.start_time}`).format('H:mm') 
-                    const endTime = moment(`${task.end_date} ${task.end_time}`).format('H:mm')
-
+                    const startTime = moment(task.start_time, 'HH:mm:ss').format('h:mma')
+                    const endTime = moment(task.end_time, 'HH:mm:ss').format('h:mma')
 
                     return (
                         <div key={task.id} >
@@ -84,7 +111,9 @@ const TaskList = ({ api, token, url }) => {
                                         onMouseEnter={()=> setHoverCheckBtn(true)} 
                                         onMouseLeave={()=> setHoverCheckBtn(false)}
                                     >
-                                        <div className={`rounded-full w-5 h-5 flex justify-center items-center transition-all ${priorityStyles[task.priority].style}`}>
+                                        <div className={`rounded-full w-5 h-5 flex justify-center items-center transition-all ${priorityStyles[task.priority].style}`}
+                                            onClick={(e) => handleCompleteTask(e, task)}
+                                        >
                                             <BsCheck className={hoverCheckBtn && current == task.id ? null : 'hidden'} />
                                         </div>
                                     </button>
@@ -93,7 +122,7 @@ const TaskList = ({ api, token, url }) => {
                                         <div className='flex justify-between h-8'>
                                             <div className='flex items-center'>
                                                 {task.is_starred == 1 ? <AiFillStar className='text-task-ss-yellow pr-[5px]' size={20}/> : null}
-                                                <p className='text-md'>{task.task_name}</p>
+                                                <p className='text-md'>{truncate(task.task_name, 70)}</p>
                                             </div>
                                             {/* edit, delete part */}
                                             <div className={`flex items-center text-task-ss-white-400 ${(hover &&  current == task.id) ? '' : 'hidden'}`}>
@@ -105,12 +134,12 @@ const TaskList = ({ api, token, url }) => {
                                                 </span>
                     
                                                 <span onClick={(e) => handleDeleteTask(e, task.id, token, url, router, setDeleted)}>
-                                                    <AiOutlineDelete size={20} className='m-[5px] transition-all hover:text-task-ss-white-500'/>
+                                                    <AiOutlineDelete size={20} className='ml-[5px] transition-all hover:text-task-ss-white-500'/>
                                                 </span>
                                             </div>
                                         </div>
 
-                                        <p className='text-sm text-task-ss-white-400'>{truncate(task.task_desc, 20)}</p>
+                                        <p className='text-sm text-task-ss-white-400'>{truncate(task.task_desc, 45)}</p>
                                         <div className='flex flex-wrap justify-between items-center text-xs text-task-ss-white-400'>
                                             <div className='flex flex-wrap'>
                                                 {/* start date */}

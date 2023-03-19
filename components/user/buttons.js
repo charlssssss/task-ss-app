@@ -17,7 +17,7 @@ export const IconButton = ({ icon, hover, event, link }) => {
     )
 
     return (
-        <Link href={link}>
+        <Link href={link} className='outline-none'>
             <button className={`p-2 mr-2 rounded-md ${hover ? 'hover:bg-task-ss-white-200' : null}`}>
                 {icon}
             </button>
@@ -95,7 +95,7 @@ export const TaskIconButton = ({ event, icon, m, current, styles }) => {
     return (
         <button 
             type='button'
-            className={`p-3 rounded-lg text-task-ss-white-400 border transition-all border-task-ss-white-300 active:scale-[0.98] ${m} ${styles[current]?.style}`} 
+            className={`p-3 rounded-lg  border transition-all active:scale-[0.98] ${m} ${styles[current]?.style}`} 
             onClick={event}>
             {icon}
         </button>
@@ -113,7 +113,7 @@ export const TaskDateTimeButton = ({ title, color, dateValue, changeDate, timeVa
         sameElse: 'MMM D'
     })
     
-    const timeFormatted = moment(`${dateValue} ${timeValue}`).format('h:mma')
+    const timeFormatted = moment(timeValue, 'HH:mm:ss').format('h:mma')
 
     return (
         <div className={`relative w-full md:w-auto ${m}`}>

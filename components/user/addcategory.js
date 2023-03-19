@@ -77,11 +77,13 @@ const AddCategory = ({ isCatMdlClosed, catMdlCloseHandler }) => {
                         <RegularInput 
                             name='category_name' 
                             title='Category Name' m='mb-6' 
+                            placeholder='e.g. School Works'
                             value={catName} change={setCatName} 
                         />
                         <RegularTextArea 
                             name='category_desc' 
                             title='Category Description' m='mb-6' 
+                            placeholder='e.g. All stuffs related to school'
                             value={catDesc} change={setCatDesc}
                         />
                         <RegularDropDown 
