@@ -31,7 +31,6 @@ const TaskList = ({ api, token, url }) => {
     const [hover, setHover] = useState(false)
     const [hoverCheckBtn, setHoverCheckBtn] = useState(false)
     const [current, setCurrent] = useState('')
-    const [deleted, setDeleted] = useState(null)
 
     // edit task modal
     const [isTaskMdlClosed, setIsTaskMdlClosed] = useState(true)
@@ -58,6 +57,7 @@ const TaskList = ({ api, token, url }) => {
         .then(res => {
             if(res.data.success) {
                 alert("Task successfully completed!")
+                router.push(url)
             } else { alert(res.data.message) }
         })
         .catch(error => {
@@ -70,112 +70,109 @@ const TaskList = ({ api, token, url }) => {
     // handle errors
     if (error) return <FailedToLoad />
     if (isLoading) return <Loading />
-
-    if(data.data.length == 0) return <Empty user={session.user.firstname} title={`${url} tasks`} img='/illustration_1.png' />
+    
+    const filteredTasks = data.data.filter(task => task.status == 'pending')
+    
+    if(filteredTasks.length == 0) return <Empty user={session.user.firstname} title={`${url} tasks`} img='/illustration_1.png' />
 
     return (
         <>
-            {data.data.map(task => {
-                
-                if(deleted != task.id && task.status == 'pending') {
-                    // formatting date and time
-                    const startDate = moment(`${task.start_date} ${task.start_time}`).calendar({
-                        sameDay: '[Today]',
-                        nextDay: '[Tomorrow]',
-                        nextWeek: 'dddd',
-                        lastDay: '[Yesterday]',
-                        lastWeek: '[Last] dddd',
-                        sameElse: 'MMM D'
-                    })
-                    const endDate = moment(`${task.end_date} ${task.end_time}`).calendar({
-                        sameDay: '[Today]',
-                        nextDay: '[Tomorrow]',
-                        nextWeek: 'dddd',
-                        lastDay: '[Yesterday]',
-                        lastWeek: '[Last] dddd',
-                        sameElse: 'MMM D'
-                    })
-                    const startTime = moment(task.start_time, 'HH:mm:ss').format('h:mma')
-                    const endTime = moment(task.end_time, 'HH:mm:ss').format('h:mma')
+            {filteredTasks.map(task => {
+                // formatting date and time
+                const startDate = moment(`${task.start_date} ${task.start_time}`).calendar({
+                    sameDay: '[Today]',
+                    nextDay: '[Tomorrow]',
+                    nextWeek: 'dddd',
+                    lastDay: '[Yesterday]',
+                    lastWeek: '[Last] dddd',
+                    sameElse: 'MMM D'
+                })
+                const endDate = moment(`${task.end_date} ${task.end_time}`).calendar({
+                    sameDay: '[Today]',
+                    nextDay: '[Tomorrow]',
+                    nextWeek: 'dddd',
+                    lastDay: '[Yesterday]',
+                    lastWeek: '[Last] dddd',
+                    sameElse: 'MMM D'
+                })
+                const startTime = moment(task.start_time, 'HH:mm:ss').format('h:mma')
+                const endTime = moment(task.end_time, 'HH:mm:ss').format('h:mma')
 
-                    return (
-                        <div key={task.id} >
-                            <div
-                                className='flex justify-between py-4 w-full rounded-xl' 
-                                href={`/user/categories/${task.category_id}/tasks/${task.id}`} 
-                                onMouseEnter={()=> { setHover(true); setCurrent(task.id) }} 
-                                onMouseLeave={()=> { setHover(false); setCurrent('') }}
-                            >
-                                <div className='flex items-start w-full'>
-                                    <button className='mt-2 mr-4' 
-                                        onMouseEnter={()=> setHoverCheckBtn(true)} 
-                                        onMouseLeave={()=> setHoverCheckBtn(false)}
+                return (
+                    <div key={task.id} >
+                        <div
+                            className='flex justify-between py-4 w-full rounded-xl' 
+                            href={`/user/categories/${task.category_id}/tasks/${task.id}`} 
+                            onMouseEnter={()=> { setHover(true); setCurrent(task.id) }} 
+                            onMouseLeave={()=> { setHover(false); setCurrent('') }}
+                        >
+                            <div className='flex items-start w-full'>
+                                <button className='mt-2 mr-4' 
+                                    onMouseEnter={()=> setHoverCheckBtn(true)} 
+                                    onMouseLeave={()=> setHoverCheckBtn(false)}
+                                >
+                                    <div className={`rounded-full w-5 h-5 flex justify-center items-center transition-all ${priorityStyles[task.priority].style}`}
+                                        onClick={(e) => handleCompleteTask(e, task)}
                                     >
-                                        <div className={`rounded-full w-5 h-5 flex justify-center items-center transition-all ${priorityStyles[task.priority].style}`}
-                                            onClick={(e) => handleCompleteTask(e, task)}
-                                        >
-                                            <BsCheck className={hoverCheckBtn && current == task.id ? null : 'hidden'} />
+                                        <BsCheck className={hoverCheckBtn && current == task.id ? null : 'hidden'} />
+                                    </div>
+                                </button>
+                                <div className='flex flex-col w-full'>
+                                    {/* task info */}
+                                    <div className='flex justify-between h-8'>
+                                        <div className='flex items-center'>
+                                            {task.is_starred == 1 ? <AiFillStar className='text-task-ss-yellow pr-[5px]' size={20}/> : null}
+                                            <p className='text-md'>{truncate(task.task_name, 70)}</p>
                                         </div>
-                                    </button>
-                                    <div className='flex flex-col w-full'>
-                                        {/* task info */}
-                                        <div className='flex justify-between h-8'>
-                                            <div className='flex items-center'>
-                                                {task.is_starred == 1 ? <AiFillStar className='text-task-ss-yellow pr-[5px]' size={20}/> : null}
-                                                <p className='text-md'>{truncate(task.task_name, 70)}</p>
-                                            </div>
-                                            {/* edit, delete part */}
-                                            <div className={`flex items-center text-task-ss-white-400 ${(hover &&  current == task.id) ? '' : 'hidden'}`}>
-                                                <span onClick={() => {
-                                                    taskMdlCloseHandler()
-                                                    setEditTask(task)
-                                                }}>
-                                                    <AiOutlineEdit size={20} className='m-[5px] transition-all hover:text-task-ss-white-500' />
-                                                </span>
-                    
-                                                <span onClick={(e) => handleDeleteTask(e, task.id, token, url, router, setDeleted)}>
-                                                    <AiOutlineDelete size={20} className='ml-[5px] transition-all hover:text-task-ss-white-500'/>
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        <p className='text-sm text-task-ss-white-400'>{truncate(task.task_desc, 45)}</p>
-                                        <div className='flex flex-wrap justify-between items-center text-xs text-task-ss-white-400'>
-                                            <div className='flex flex-wrap'>
-                                                {/* start date */}
-                                                {task.task_type_id == 2 && (
-                                                    <div className='flex flex-wrap text-task-ss-green-200 mr-4'>
-                                                        <AiOutlineCalendar size={15} />
-                                                        <p className='px-[5px]'>{startDate}</p>
-                                                        <p>{startTime}</p>
-                                                    </div>
-                                                )}
-
-                                                {/* end date */}
-                                                <div className='flex flex-wrap text-task-ss-orange'>
-                                                    <AiOutlineCalendar size={15} />
-                                                    <p className='px-[5px]'>{endDate}</p>
-                                                    <p>{endTime}</p>
-                                                </div>
-                                            </div>
-                                            
-                                            {task.category && 
-                                                <div className='flex ml-auto items-center'>
-                                                    <p className='text-[14px] text-task-ss-white-400'>{task?.category?.category_name}</p>
-                                                    <BsFillCircleFill className={`ml-2 text-task-ss-category-${task?.category?.color}`} size={10} />
-                                                </div>
-                                            }
+                                        {/* edit, delete part */}
+                                        <div className={`flex items-center text-task-ss-white-400 ${(hover &&  current == task.id) ? '' : 'hidden'}`}>
+                                            <span onClick={() => {
+                                                taskMdlCloseHandler()
+                                                setEditTask(task)
+                                            }}>
+                                                <AiOutlineEdit size={20} className='m-[5px] transition-all hover:text-task-ss-white-500' />
+                                            </span>
+                
+                                            <span onClick={(e) => handleDeleteTask(e, task.id, token, url, router)}>
+                                                <AiOutlineDelete size={20} className='ml-[5px] transition-all hover:text-task-ss-white-500'/>
+                                            </span>
                                         </div>
                                     </div>
-                                </div>
-                                
-                            </div>
-                            <hr className='text-task-ss-white-300'/>
-                        </div>
-                    )
-                }
 
-                
+                                    <p className='text-sm text-task-ss-white-400'>{truncate(task.task_desc, 45)}</p>
+                                    <div className='flex flex-wrap justify-between items-center text-xs text-task-ss-white-400'>
+                                        <div className='flex flex-wrap'>
+                                            {/* start date */}
+                                            {task.task_type_id == 2 && (
+                                                <div className='flex flex-wrap text-task-ss-green-200 mr-4'>
+                                                    <AiOutlineCalendar size={15} />
+                                                    <p className='px-[5px]'>{startDate}</p>
+                                                    <p>{startTime}</p>
+                                                </div>
+                                            )}
+
+                                            {/* end date */}
+                                            <div className='flex flex-wrap text-task-ss-orange'>
+                                                <AiOutlineCalendar size={15} />
+                                                <p className='px-[5px]'>{endDate}</p>
+                                                <p>{endTime}</p>
+                                            </div>
+                                        </div>
+                                        
+                                        {task.category && 
+                                            <div className='flex ml-auto items-center'>
+                                                <p className='text-[14px] text-task-ss-white-400'>{task?.category?.category_name}</p>
+                                                <BsFillCircleFill className={`ml-2 text-task-ss-category-${task?.category?.color}`} size={10} />
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <hr className='text-task-ss-white-300'/>
+                    </div>
+                )         
             })}
 
             <EditTask 

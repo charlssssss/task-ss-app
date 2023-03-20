@@ -25,7 +25,7 @@ export const handleDeleteCategory =  async (e, id, token, router, setDeleted) =>
     }
 }
 
-export const handleDeleteTask =  async (e, id, token, url, router, setDeleted) => {
+export const handleDeleteTask =  async (e, id, token, url, router) => {
     e.preventDefault()
     // confirmation
     if(confirm(`Are you sure u want to delete task no.${id}?`) ) {
@@ -36,7 +36,6 @@ export const handleDeleteTask =  async (e, id, token, url, router, setDeleted) =
 
         if(data.success) {
             router.push(url)
-            {setDeleted && setDeleted(id)}
             alert(data.message)
         } else { console.log(data.message) }
     }

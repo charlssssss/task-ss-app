@@ -14,35 +14,43 @@ import { truncate } from '../../components/functions'
 export const getServerSideProps = async (context) => {
     const res = await getSession(context)
     try {
-        const[recent, todolistCount] = await Promise.all([
+        const[recent, tasks, completedCount] = await Promise.all([
             axios.get('http://127.0.0.1:8000/api/user/tasks/recent', 
             { headers: { 'Authorization': 'Bearer ' + res.user.token } }),
-            axios.get('http://127.0.0.1:8000/api/user/tasks/type/1', 
+            axios.get('http://127.0.0.1:8000/api/user/tasks', 
+            { headers: { 'Authorization': 'Bearer ' + res.user.token } }),
+            axios.get('http://127.0.0.1:8000/api/user/tasks/filter?status=completed', 
             { headers: { 'Authorization': 'Bearer ' + res.user.token } }),
         ])
-        return { props: { recent: recent.data.data, todolistCount: todolistCount.data.count } }
+        return { 
+            props: { 
+                recent: recent.data.data, 
+                tasks: tasks.data.data ,
+                completedCount: completedCount.data.data.length
+            } 
+        }
     
     } catch (error) {
         console.log(error)
         return { notFound: true }
     }
-    // const { data } = await axios.get('http://127.0.0.1:8000/api/user/tasks/recent', 
-    //     { headers: { 'Authorization': 'Bearer ' + res.user.token } })
 }
 
-const Dashboard = ({recent, todolistCount }) => {
+const Dashboard = ({recent, tasks, completedCount }) => {
     // add task modal
     const [isTaskMdlClosed, setIsTaskMdlClosed] = useState(true)
     const taskMdlCloseHandler = () => setIsTaskMdlClosed(!isTaskMdlClosed)
     const [taskType, setTaskType] = useState('')
 
     const [showRecent, setShowRecent] = useState(false)
+    
+    const filteredTasks = tasks.filter(task => task.task_type_id == 1 && task.status == 'pending')
 
     const now = new Date();
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
     const lastMonth = now.getMonth() - 1
     const lastYear = now.getFullYear() - 1
-    console.log(recent)
+
     return (
         <>
             <Head>
@@ -61,7 +69,7 @@ const Dashboard = ({recent, todolistCount }) => {
 
                 <LargeCard 
                     title='To Do List Tasks' 
-                    count={todolistCount.toString().padStart(2, '0')}  
+                    count={filteredTasks.length.toString().padStart(2, '0')}  
                     link='/user/todolist' 
                     m='lg:mr-5 mb-5' 
                 />
@@ -72,9 +80,9 @@ const Dashboard = ({recent, todolistCount }) => {
                     m='lg:mr-5 mb-5' 
                 />
                 <LargeCard 
-                    title='Overdue Tasks' 
-                    count={'00'}  
-                    link='/user/inbox'
+                    title='Completed Tasks' 
+                    count={completedCount.toString().padStart(2, '0')}  
+                    link='/user/completed'
                     m=' mb-5' 
                 />
 
@@ -94,6 +102,10 @@ const Dashboard = ({recent, todolistCount }) => {
                                 lastWeek: '[Last] dddd',
                                 sameElse: 'MMM D'
                             })
+
+                            let link = `/user/categories/${task.category_id}`
+                            if(task.status == 'completed') link = '/user/completed'
+
                             return (
                                 <RecentTask 
                                     key={task.id}
@@ -103,7 +115,7 @@ const Dashboard = ({recent, todolistCount }) => {
                                     priority={task.priority}
                                     category={task.category.category_name}
                                     color={task.category.color}
-                                    link={`/user/categories/${task.category_id}`}
+                                    link={link}
                                 />
                             )
                         })}
@@ -117,6 +129,10 @@ const Dashboard = ({recent, todolistCount }) => {
                                     lastWeek: '[Last] dddd',
                                     sameElse: 'MMM D'
                                 })
+
+                                let link = `/user/categories/${task.category_id}`
+                                if(task.status == 'completed') link = '/user/completed'
+
                                 return (
                                     <RecentTask 
                                         key={task.id}
@@ -126,7 +142,7 @@ const Dashboard = ({recent, todolistCount }) => {
                                         priority={task.priority}
                                         category={task.category.category_name}
                                         color={task.category.color}
-                                        link={`/user/categories/${task.category_id}`}
+                                        link={link}
                                     />
                                 )
                             })}
@@ -201,7 +217,7 @@ export const RecentTask = ({title, status, dueDate, priority, category, color, l
                 <div className='flex flex-col'>
                     <div className='flex items-center'>
                         <BsSquareFill size={8} className={`mr-2 text-task-ss-category-${color}`} />
-                        <h5 className='text-sm'>{truncate(title, 45)}</h5>
+                        <h5 className='text-sm'>{truncate(title, 30)}</h5>
                     </div>
                     <p className='text-xs font-semibold mr-1'>{dueDate}</p>
                 </div>

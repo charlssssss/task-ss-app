@@ -16,7 +16,7 @@ const settingsTitle = [
     {icon: <MdOutlineAccountCircle />, title: 'Account', link: '/#'},
     {icon: MdOutlineBlock, title: 'Website Blocker', link: '/#'},
     {icon: BiPalette, title: 'Customize Theme', link: '/#'},
-    {icon: BsCheckCircle, title: 'Completed Tasks', link: '/#'},
+    {icon: BsCheckCircle, title: 'Completed Tasks', link: '/user/completed'},
     {icon: TbPuzzle, title: 'Link to Google', link: '/#'},
     {icon: BiStar, title: 'Pro Subscription', link: '/pricing/subscribe'},
     {icon: <TbLogout />, title: 'Logout', link: '/#'}
