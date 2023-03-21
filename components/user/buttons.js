@@ -69,6 +69,7 @@ export const RegularButton = ({ type, title, event, eventType, m, disabled, link
     const btnType = {
         'pmry': ' bg-task-ss-purple text-task-ss-white-100 ',
         'snd': ' bg-task-ss-white-300 text-task-ss-dark-blue-300 ',
+        'dngr': ' bg-task-ss-red-200 text-task-ss-white-100 ',
     }
     if(link) {
         return (

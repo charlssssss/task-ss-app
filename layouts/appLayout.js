@@ -4,6 +4,7 @@ import { Rubik } from '@next/font/google'
 import Topbar from "../components/user/topbar"
 import SideNavbar from "../components/user/sidenavbar"
 import AddCategory from '../components/user/addcategory'
+import WebsiteBlocker from '../components/user/websiteblocker'
 import AddTask from '../components/user/addtask'
 
 // If loading a variable font, you don't need to specify the font weight
@@ -17,6 +18,10 @@ const AppLayout = ({ children }) => {
     // add category modal
     const [isCatMdlClosed, setIsCatMdlClosed] = useState(true)
     const catMdlCloseHandler = () => setIsCatMdlClosed(!isCatMdlClosed)
+
+    // add website blocker modal
+    const [isBlockMdlClosed, setIsBlockMdlClosed] = useState(true)
+    const blockMdlCloseHandler = () => setIsBlockMdlClosed(!isBlockMdlClosed)
 
     // add task modal
     const [isTaskMdlClosed, setIsTaskMdlClosed] = useState(true)
@@ -42,6 +47,7 @@ const AppLayout = ({ children }) => {
                     <Topbar 
                         toggleHandler={toggleHandler} 
                         taskMdlCloseHandler={taskMdlCloseHandler} 
+                        blockMdlCloseHandler={blockMdlCloseHandler} 
                         setTaskType={setTaskType}
                     />
                     <div className='h-[calc(100vh-3.5rem)] overflow-y-auto'>
@@ -60,6 +66,10 @@ const AppLayout = ({ children }) => {
                     taskMdlCloseHandler={taskMdlCloseHandler} 
                     taskType={taskType}
                     setTaskType={setTaskType}
+                />
+                <WebsiteBlocker 
+                    isBlockMdlClosed={isBlockMdlClosed} 
+                    blockMdlCloseHandler={blockMdlCloseHandler} 
                 />
             </div>
         </>

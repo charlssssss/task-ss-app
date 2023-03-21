@@ -14,19 +14,22 @@ import { truncate } from '../../components/functions'
 export const getServerSideProps = async (context) => {
     const res = await getSession(context)
     try {
-        const[recent, tasks, completedCount] = await Promise.all([
+        const[recent, tasks, completedCount, blockedkWebCount] = await Promise.all([
             axios.get('http://127.0.0.1:8000/api/user/tasks/recent', 
             { headers: { 'Authorization': 'Bearer ' + res.user.token } }),
             axios.get('http://127.0.0.1:8000/api/user/tasks', 
             { headers: { 'Authorization': 'Bearer ' + res.user.token } }),
             axios.get('http://127.0.0.1:8000/api/user/tasks/filter?status=completed', 
             { headers: { 'Authorization': 'Bearer ' + res.user.token } }),
+            axios.get('http://127.0.0.1:8000/api/user/blockwebsites/includes', 
+            { headers: { 'Authorization': 'Bearer ' + res.user.token } }),
         ])
         return { 
             props: { 
                 recent: recent.data.data, 
-                tasks: tasks.data.data ,
-                completedCount: completedCount.data.data.length
+                tasks: tasks.data.data,
+                completedCount: completedCount.data.data.length,
+                blockedkWebCount: blockedkWebCount.data.data.length,
             } 
         }
     
@@ -36,7 +39,7 @@ export const getServerSideProps = async (context) => {
     }
 }
 
-const Dashboard = ({recent, tasks, completedCount }) => {
+const Dashboard = ({recent, tasks, completedCount, blockedkWebCount }) => {
     // add task modal
     const [isTaskMdlClosed, setIsTaskMdlClosed] = useState(true)
     const taskMdlCloseHandler = () => setIsTaskMdlClosed(!isTaskMdlClosed)
@@ -74,15 +77,15 @@ const Dashboard = ({recent, tasks, completedCount }) => {
                     m='lg:mr-5 mb-5' 
                 />
                 <LargeCard 
-                    title='Category Sample' 
-                    count={'00'}  
-                    link='#' 
-                    m='lg:mr-5 mb-5' 
-                />
-                <LargeCard 
                     title='Completed Tasks' 
                     count={completedCount.toString().padStart(2, '0')}  
                     link='/user/completed'
+                    m='lg:mr-5 mb-5' 
+                />
+                <LargeCard 
+                    title='Blocked Website' 
+                    count={blockedkWebCount.toString().padStart(2, '0')}  
+                    link='#' 
                     m=' mb-5' 
                 />
 

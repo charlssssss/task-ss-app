@@ -42,7 +42,7 @@ export const getServerSideProps = async (context) => {
 }
 
 const Completed = ({ completed, token, user }) => {
-    console.log(user)
+    // console.log(user)
     const router = useRouter()
 
     // front end variables

@@ -40,3 +40,50 @@ export const handleDeleteTask =  async (e, id, token, url, router) => {
         } else { console.log(data.message) }
     }
 }
+
+export const handleDeleteWebsite =  async (e, id, token) => {
+    e.preventDefault()
+    // confirmation
+    if(confirm(`Are you sure u want to delete website no.${id}?`) ) {
+        const { data } = await axios(`http://127.0.0.1:8000/api/user/blockwebsites/${id}`, { 
+            method: 'DELETE',
+            headers: { 'Authorization': 'Bearer ' + token }
+        })
+
+        if(data.success) {
+            alert(data.message)
+        } else { console.log(data.message) }
+    }
+}
+
+export const handleEditWebsite =  async (e, web, token) => {
+    e.preventDefault()
+    const { data } = await axios(`http://127.0.0.1:8000/api/user/blockwebsites/${web.id}`, { 
+        method: 'PUT',
+        headers: {
+            'Accept': 'application/json', 
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        },
+        data: JSON.stringify({ 
+            "website_name": web.website_name,
+            "website_link": web.website_link,
+            "is_include": !web.is_include
+        }),
+    })
+
+    if(data.success) {
+        alert(data.message)
+    } else { console.log(data.message) }
+}
+
+
+export const isValidUrl = (url) => {
+    const pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+        '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+        '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+        '(\\#[-a-z\\d_]*)?$','i') // fragment locator
+    return pattern.test(url)
+}

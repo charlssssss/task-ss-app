@@ -43,3 +43,14 @@ export const Empty2 = ({ title, img }) => {
         </div>
     )
 }
+
+export const Empty3 = ({ title, img, size, m, addMsg}) => {
+    return (
+        <div className={`${m}`}>
+            <div className='flex flex-col justify-center items-center'>
+                <img src={img} className={`${size} mb-2`} />
+                <p className='text-xs text-task-ss-white-400'>No {title} yet. {addMsg}</p>
+            </div>
+        </div>
+    )
+}
