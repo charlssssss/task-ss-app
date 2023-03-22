@@ -48,7 +48,7 @@ const Pricing = () => {
   const { data: session } = useSession()
 
     return (
-      <div className='h-[calc(100%-3.5rem)] w-[90%] mx-auto'>
+      <div className='w-[90%] mx-auto'>
         <div className='flex flex-wrap justify-center w-[90%] py-10 max-w-5xl mx-auto'>
           {pricingCardOptions.map((option, idx) => (
             <PricingCard 
@@ -66,7 +66,7 @@ const Pricing = () => {
 
 export const PricingCard = ({title, btn, list, session }) => {
   return (
-    <div className='w-[80%] lg:w-[40%] bg-task-ss-white-100 rounded-xl h-auto mx-5 drop-shadow-lg flex flex-col items-center py-10 px-20 transition-all lg:hover:drop-shadow-2xl'>
+    <div className='w-[80%] lg:w-[40%] bg-task-ss-white-100 rounded-xl h-auto mx-5 mb-10 drop-shadow-lg flex flex-col items-center py-10 px-20 transition-all lg:hover:drop-shadow-2xl'>
 
       <div className='flex flex-col items-center my-5'>
         <img src={title.img} className='w-40 mb-5' />

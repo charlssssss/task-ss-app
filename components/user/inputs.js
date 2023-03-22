@@ -1,27 +1,47 @@
 // component for inputs
-export const RegularInput = ({ name, title, value, change, m }) => {
+export const RegularInput = ({ ref, name, title, value, change, placeholder, m }) => {
     return (
         <div className={`flex flex-col my-2 ${m}`}>
             <label htmlFor={name} className='text-sm font-medium mb-2'>{title}</label>
             <input type="text" id={name}
-                    className={`px-3 py-1 border outline-none text-sm border-task-ss-white-300 rounded-md transition-all ${ 'focus:border-task-ss-purple'}`}
+                    className={`px-3 py-2 border outline-none text-sm border-task-ss-white-300 rounded-md transition-all ${ 'focus:border-task-ss-purple'}`}
                     name={name}
                     value={value}
-                    onChange={e => change(e.target.value)}
+                    onChange={e => change(e.target.value)} 
+                    placeholder={placeholder}
+                    ref={ref}
+            />
+        </div>
+    )
+}
+
+// component for inputs
+export const RegularInput2 = ({ ref, name, title, value, change, placeholder, m }) => {
+    return (
+        <div className={`flex flex-col my-2 ${m}`}>
+            <label htmlFor={name} className='text-sm font-medium mb-2'>{title}</label>
+            <input type="text" id={name}
+                    className={`px-3 py-2 border outline-none text-sm border-task-ss-white-300 rounded-md transition-all ${ 'focus:border-task-ss-purple'}`}
+                    name={name}
+                    value={value}
+                    onChange={change} 
+                    placeholder={placeholder}
+                    ref={ref}
             />
         </div>
     )
 }
 
 // component for textarea
-export const RegularTextArea = ({ name, title, value, change, m }) => {
+export const RegularTextArea = ({ name, title, value, change, placeholder, m }) => {
     return (
         <div className={`flex flex-col my-2 ${m}`}>
             <label htmlFor={name} className='text-sm font-medium mb-2'>{title}</label>
             <textarea type="text" id={name}
-                    className={`px-3 py-1 border resize-none outline-none text-sm border-task-ss-white-300 rounded-md transition-all ${ 'focus:border-task-ss-purple'}`}
+                    className={`px-3 py-2 border resize-none outline-none text-sm border-task-ss-white-300 rounded-md transition-all ${ 'focus:border-task-ss-purple'}`}
                     name={name}
                     value={value}
+                    placeholder={placeholder}
                     onChange={e => change(e.target.value)}
             ></textarea>
         </div>
@@ -34,7 +54,7 @@ export const RegularDropDown = ({ name, title, value, change, options, m }) => {
         <div className={`flex flex-col my-2 ${m}`}>
             <label htmlFor={name} className='text-sm font-medium mb-2'>{title}</label>
             <select id={name} value={value}
-                    className={`px-3 py-1 border resize-none outline-none text-sm border-task-ss-white-300 rounded-md transition-all ${ 'focus:border-task-ss-red'}`}
+                    className={`px-3 py-2 border resize-none outline-none text-sm border-task-ss-white-300 rounded-md transition-all ${ 'focus:border-task-ss-red'}`}
                     name={name}
                     onChange={e => change(e.target.value)}
             >

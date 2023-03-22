@@ -55,7 +55,9 @@ const SignUp = () => {
       setIsError(true)
 
       if(data.success) {
-        router.push('/login?signup=success')
+        setTimeout(() => {
+          router.push('/login?signup=success')
+        }, 5000);
       }
   }
 
@@ -72,7 +74,7 @@ const SignUp = () => {
   return (
     <div className='flex justify-center items-center w-screen h-screen overflow-y-auto'>
       
-      <div className='flex rounded-2xl bg-task-ss-white-100 w-full max-w-[1000px] drop-shadow-lg md:w-[90%] lg:w-[80%]'>
+      <div className='flex lg:rounded-2xl bg-task-ss-white-100 w-full max-w-[1000px] drop-shadow-lg lg:w-[80%]'>
         {/* left side panel */}
         <div className='bg-task-ss-dark-blue-300 rounded-l-2xl hidden lg:block lg:w-[20%]'>
         <Link href='/'>

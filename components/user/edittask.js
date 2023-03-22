@@ -1,6 +1,5 @@
 import useSWR from 'swr'
 import axios from 'axios'
-import moment from 'moment'
 import { useEffect, useState } from "react"
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
@@ -10,10 +9,10 @@ import { RegularButton, TaskDateTimeButton, TaskIconButton } from "./buttons"
 import { fetcher, truncate } from '../functions'
 
 const priorityOptions = [
-    {priority: 'P1', title: 'Priority High', style:' bg-task-ss-red-200 text-task-ss-white-100 '},
-    {priority: 'P2', title: 'Priority Medium', style:' bg-task-ss-yellow text-task-ss-white-100 '},
-    {priority: 'P3', title: 'Priority Low', style:' bg-task-ss-category-200 text-task-ss-white-100 '},
-    {priority: 'P4', title: 'Not Priority', style:' bg-task-ss-white-100 text-task-ss-white-400 '} 
+    {priority: 'P1', title: 'Priority High'},
+    {priority: 'P2', title: 'Priority Medium'},
+    {priority: 'P3', title: 'Priority Low'},
+    {priority: 'P4', title: 'Not Priority'}
 ]
 
 const EditTask = ({ isTaskMdlClosed, taskMdlCloseHandler, editTask, callbackUrl }) => {
@@ -31,11 +30,15 @@ const EditTask = ({ isTaskMdlClosed, taskMdlCloseHandler, editTask, callbackUrl 
     const [taskDesc, setTaskDesc] = useState('')
     const [isStarred, setIsStarred] = useState(0)
     const [priority, setPriority] = useState('P4')
-    const [status, setStatus] = useState('Pending')
+    const [status, setStatus] = useState('pending')
 
-    const currDate = moment(new Date().toLocaleDateString()).format('YYYY-MM-DD')
-    const currTime = new Date()
-        .toLocaleTimeString('it-IT')
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const day = String(currentDate.getDate()).padStart(2, '0');
+
+    const currDate = `${year}-${month}-${day}`;
+    const currTime = new Date().toLocaleTimeString('it-IT')
     
     const [startDate, setStartDate] = useState(currDate)
     const [startTime, setStartTime] = useState(currTime)
@@ -85,7 +88,7 @@ const EditTask = ({ isTaskMdlClosed, taskMdlCloseHandler, editTask, callbackUrl 
     // edit task function
     const handleEditTask =  async (e) => {
         e.preventDefault()
-        const { data } = await axios(`http://127.0.0.1:8000/api/user/tasks/${editTask.id}`, { 
+        await axios(`http://127.0.0.1:8000/api/user/tasks/${editTask.id}`, { 
             method: 'PUT',
             headers: {
                 'Accept': 'application/json', 
@@ -106,12 +109,18 @@ const EditTask = ({ isTaskMdlClosed, taskMdlCloseHandler, editTask, callbackUrl 
                 "end_time"     : endTime
             }),
         })
-
-        if(data.success) {
-            clearHandler()
-            router.push(callbackUrl)
-            alert(data.message)
-        } else { console.log(data.message) }
+        .then(res => {
+            if(res.data.success) {
+                clearHandler()
+                router.push(callbackUrl)
+                alert(res.data.message)
+            } else { alert(res.data.message) }
+        })
+        .catch(error => {
+            const errorMsg = JSON.parse(error.request?.response)
+            console.log(errorMsg.errors)
+            alert("Failed to Edit Task: \n - " + errorMsg.message)
+        })
     }
 
     return (
@@ -141,11 +150,13 @@ const EditTask = ({ isTaskMdlClosed, taskMdlCloseHandler, editTask, callbackUrl 
                         <RegularInput 
                             name='task_name' 
                             title='Task Name' m='mb-6' 
+                            placeholder='e.g. Write a essay about your favorite hobby.' 
                             value={taskName ?? ''} change={setTaskName} 
                         />
                         <RegularTextArea 
                             name='task_desc' 
                             title='Task Description' m='mb-4' 
+                            placeholder="e.g. You'll need to explain what the hobby is, why you enjoy it..." 
                             value={taskDesc ?? ''} change={setTaskDesc}
                         />
 
@@ -204,8 +215,8 @@ const EditTask = ({ isTaskMdlClosed, taskMdlCloseHandler, editTask, callbackUrl 
                                     m='mr-2' 
                                     current={isStarred} 
                                     styles={{
-                                        0: {style:' bg-task-ss-white-100 text-task-ss-white-400 '},
-                                        1: {style:' bg-task-ss-white-400 text-task-ss-yellow '} 
+                                        0: {style:' bg-task-ss-white-100 text-task-ss-white-400 border-task-ss-white-300 '},
+                                        1: {style:' bg-task-ss-white-400 text-task-ss-yellow border-task-ss-white-400 '} 
                                     }}
                                 />
 
@@ -216,10 +227,10 @@ const EditTask = ({ isTaskMdlClosed, taskMdlCloseHandler, editTask, callbackUrl 
                                         icon={<AiFillFlag />} 
                                         current={priority} 
                                         styles={{
-                                            'P1': {style:' bg-task-ss-red-200 text-task-ss-white-100 '},
-                                            'P2': {style:' bg-task-ss-yellow text-task-ss-white-100 '},
-                                            'P3': {style:' bg-task-ss-category-200 text-task-ss-white-100 '},
-                                            'P4': {style:' bg-task-ss-white-100 text-task-ss-white-400 '} 
+                                            'P1': {style:' bg-task-ss-red-200 text-task-ss-white-100 border-task-ss-red-200 '},
+                                            'P2': {style:' bg-task-ss-yellow text-task-ss-white-100 border-task-ss-yellow '},
+                                            'P3': {style:' bg-task-ss-category-200 text-task-ss-white-100 border-task-ss-category-200 '},
+                                            'P4': {style:' bg-task-ss-white-100 text-task-ss-white-400 border-task-ss-white-300 '} 
                                         }}
                                     />
 

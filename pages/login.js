@@ -72,7 +72,7 @@ const LogIn = () => {
 
   return (
     <div className='flex justify-center items-center w-screen h-screen'>
-      <div className='flex rounded-2xl bg-task-ss-white-100 w-full max-w-[1000px] drop-shadow-lg md:w-[70%] lg:w-[60%]'>
+      <div className='flex md:rounded-2xl h-full md:h-auto bg-task-ss-white-100 w-full max-w-[1000px] drop-shadow-lg md:w-[70%] lg:w-[60%]'>
         {/* left side panel */}
         <div className='bg-task-ss-dark-blue-300 w-[30%] rounded-l-2xl hidden lg:block xl:w-[40%]'>
           <Link href='/'>

@@ -15,7 +15,7 @@ const TopNavbar = () => {
     
     return (
         <>
-        <div className='bg-task-ss-white-100 flex items-center drop-shadow-xl w-full h-14 fixed z-20'>
+        <div className='bg-task-ss-white-100 flex items-center drop-shadow-lg w-full h-14 fixed z-20'>
             <div className='mx-8 w-screen'>
                 <div className='flex justify-between items-center'>
                     <Link href="/"

@@ -14,16 +14,16 @@ import { MdOutlineAccountCircle, MdOutlineBlock, MdListAlt } from 'react-icons/m
 
 const settingsTitle = [
     {icon: <MdOutlineAccountCircle />, title: 'Account', link: '/#'},
-    {icon: MdOutlineBlock, title: 'Website Blocker', link: '/#'},
+    {icon: <MdOutlineBlock />, title: 'Website Blocker'},
     {icon: BiPalette, title: 'Customize Theme', link: '/#'},
-    {icon: BsCheckCircle, title: 'Completed Tasks', link: '/#'},
+    {icon: BsCheckCircle, title: 'Completed Tasks', link: '/user/completed'},
     {icon: TbPuzzle, title: 'Link to Google', link: '/#'},
     {icon: BiStar, title: 'Pro Subscription', link: '/pricing/subscribe'},
-    {icon: <TbLogout />, title: 'Logout', link: '/#'}
+    {icon: <TbLogout />, title: 'Logout'}
 ]
 
 // component for top bar
-const Topbar = ({ toggleHandler, taskMdlCloseHandler, setTaskType }) => {
+const Topbar = ({ toggleHandler, taskMdlCloseHandler, blockMdlCloseHandler, setTaskType }) => {
     // for redirecting
     const router = useRouter()
 
@@ -43,7 +43,7 @@ const Topbar = ({ toggleHandler, taskMdlCloseHandler, setTaskType }) => {
             signOut({ redirect: false })
             .then(() => router.push("/"))
         }
-        console.log(res)
+        // console.log(res)
     }
     
     // for 'dropdown' stuff on settings
@@ -137,9 +137,15 @@ const Topbar = ({ toggleHandler, taskMdlCloseHandler, setTaskType }) => {
 
                                     <hr className='text-task-ss-white-300 mx-2 my-2' />
 
+                                    <SettingsButton
+                                            title={settingsTitle[1].title}
+                                            icon={settingsTitle[1].icon}
+                                            event={blockMdlCloseHandler}
+                                    />
+
                                     {/* settings buttons (mapping/looping) */}
                                     {settingsTitle.map((item, index) => {
-                                        if(index != 0 && index != settingsTitle.length-1) {
+                                        if(index > 1 && index != settingsTitle.length-1) {
                                             return (
                                                 <SettingsButton
                                                     key={index.toString()}
@@ -154,16 +160,11 @@ const Topbar = ({ toggleHandler, taskMdlCloseHandler, setTaskType }) => {
                                     <hr className='text-task-ss-white-300 mx-2 my-2' />
 
                                     {/* logout button */}
-                                    <div className='mx-2'>
-                                        <button 
-                                            className='flex items-center px-5 py-2 w-full text-task-ss-white-400 rounded-lg hover:bg-task-ss-white-200 hover:text-task-ss-white-500'
-                                            onClick={handleLogout}
-                                        >
-                                            {settingsTitle[settingsTitle.length-1].icon} 
-                                            <p className='text-sm ml-2'>{settingsTitle[settingsTitle.length-1].title}</p>
-                                        </button>
-                                    </div>
-                                    
+                                    <SettingsButton
+                                            title={settingsTitle[settingsTitle.length-1].title}
+                                            icon={settingsTitle[settingsTitle.length-1].icon}
+                                            event={handleLogout}
+                                    />            
                                 </div>
                             </div>
                         </div>
@@ -174,7 +175,19 @@ const Topbar = ({ toggleHandler, taskMdlCloseHandler, setTaskType }) => {
     )
 }
 
-const SettingsButton = ({ title, link, icon }) => {
+const SettingsButton = ({ title, link, icon, event }) => {
+    if(event) {
+        return (
+            <div className='mx-2'>
+                <button className='flex items-center px-5 py-2 w-full text-task-ss-white-400 rounded-lg hover:bg-task-ss-white-200 hover:text-task-ss-white-500'
+                    onClick={event}
+                >
+                    {icon}
+                    <p className='text-sm ml-2'>{title}</p>
+                </button>
+            </div>
+        )
+    }
     return (
         <Link href={link} className='flex items-center px-5 py-2 text-task-ss-white-400 rounded-lg mx-2 hover:bg-task-ss-white-200 hover:text-task-ss-white-500'>
             {icon}
