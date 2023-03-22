@@ -24,7 +24,7 @@ const PagesLayout = ({ children }) => {
                     </main>
 
                     <footer className='h-full w-screen bg-task-ss-white-100 border-t border-task-ss-white-300'>
-                        <div className='w-[90%] mx-auto py-14'>
+                        <div className='w-[70%] mx-auto py-14'>
 
                             <div>
                                 <Link href="/">
