@@ -40,6 +40,8 @@ export const getServerSideProps = async (context) => {
 }
 
 const Dashboard = ({recent, tasks, completedCount, blockedkWebCount }) => {
+
+    console.log(recent)
     // add task modal
     const [isTaskMdlClosed, setIsTaskMdlClosed] = useState(true)
     const taskMdlCloseHandler = () => setIsTaskMdlClosed(!isTaskMdlClosed)
@@ -53,7 +55,7 @@ const Dashboard = ({recent, tasks, completedCount, blockedkWebCount }) => {
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
     const lastMonth = now.getMonth() - 1
     const lastYear = now.getFullYear() - 1
-
+    // return(<div></div>)
     return (
         <>
             <Head>
@@ -211,7 +213,8 @@ export const RecentTask = ({title, status, dueDate, priority, category, color, l
     const statusStyles = {
         'pending' : {style: 'text-task-ss-yellow'},
         'completed' : {style: 'text-task-ss-green-200'},
-        'overdue' : {style: 'text-task-ss-red-200'}
+        'overdue' : {style: 'text-task-ss-red-200'},
+        'abandoned' : {style: 'text-task-ss-red-200'},
     }
     
     return (
