@@ -108,7 +108,7 @@ const AddCategory = ({ isCatMdlClosed, catMdlCloseHandler }) => {
                                 type='pmry' 
                                 title='Add Category'
                                 eventType='submit'
-                                disabled={catName == '' || catDesc == ''}
+                                disabled={catName == ''}
                             />
                         </div>
                     </div>

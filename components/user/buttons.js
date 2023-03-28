@@ -142,7 +142,72 @@ export const TaskDateTimeButton = ({ title, color, dateValue, changeDate, timeVa
                 <hr className='text-task-ss-white-300' />
 
                 <div className='py-2'>    
-                    <label htmlFor='time' className='font-medium'>Time (optional)</label>
+                    <label htmlFor='time' className='font-medium'>Time</label>
+                    <input type='time' id='time'
+                        className='py-1 float-right' value={timeValue}
+                        onChange={changeTime}    
+                    />
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export const TaskDateTimeButton2 = ({ title, color, dateValue, changeDate, timeValue, changeTime, state, event, event2, m }) => {
+
+    let dateFormatted
+    let timeFormatted
+    
+    if(dateValue != '') {
+        dateFormatted = moment(dateValue).calendar({
+            sameDay: '[Today]',
+            nextDay: '[Tomorrow]',
+            nextWeek: 'dddd',
+            lastDay: '[Yesterday]',
+            lastWeek: '[Last] dddd',
+            sameElse: 'MMM D'
+        })
+    }
+
+    if(timeValue != '') {  
+        timeFormatted = moment(timeValue, 'HH:mm:ss').format('h:mma')
+    }
+
+    return (
+        <div className={`relative w-full md:w-auto ${m}`}>
+            {/* button section */}
+            <div className={`flex rounded-lg w-full py-3 px-4 text-sm mb-2 md:mb-0 ${color} border transition-all border-task-ss-white-300`}>
+                <span className='flex cursor-pointer active:scale-[0.98]' onClick={event}>
+                    <AiOutlineCalendar />
+                
+                    {state ? 
+                        (dateValue || timeValue ? 
+                            <p className='text-xs ml-2'>{dateFormatted} {timeValue && '|'} {timeFormatted}</p>
+                            :
+                            <p className='text-xs ml-2'>No End Date</p>
+                        )    
+                        :
+                        <p className='text-xs ml-2'>Confirm {title}</p>
+                    }
+                </span>
+
+                <button type='button' onClick={event2} className='text-xs ml-2 text-task-ss-white-400'>x</button>
+            </div>
+
+            {/* dropdown section */}
+            <div className={`absolute top-10 left-0 text-xs rounded-md py-3 px-5 bg-task-ss-white-100 border border-task-ss-white-300 z-30 ${state ? 'hidden' : 'flex flex-col'}`}>
+                <div className='py-2'>
+                    <label htmlFor='date' className='font-medium'>Date</label>
+                    <input type='date' id='date' 
+                        className='py-1 float-right' value={dateValue}
+                        onChange={changeDate}
+                    />
+                </div>
+
+                <hr className='text-task-ss-white-300' />
+
+                <div className='py-2'>    
+                    <label htmlFor='time' className='font-medium'>Time</label>
                     <input type='time' id='time'
                         className='py-1 float-right' value={timeValue}
                         onChange={changeTime}    

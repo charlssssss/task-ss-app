@@ -9,7 +9,7 @@ import { useRouter } from 'next/router'
 import { TbPuzzle, TbLogout } from 'react-icons/tb'
 import { useSession, signOut } from "next-auth/react"
 import { BiPalette, BiStar, BiCalendarCheck } from 'react-icons/bi'
-import { BsBellFill, BsGearFill, BsCheckCircle } from 'react-icons/bs'
+import { BsBellFill, BsGearFill, BsCheckCircle, BsSearch } from 'react-icons/bs'
 import { MdOutlineAccountCircle, MdOutlineBlock, MdListAlt } from 'react-icons/md'
 
 const settingsTitle = [
@@ -65,6 +65,11 @@ const Topbar = ({ toggleHandler, taskMdlCloseHandler, blockMdlCloseHandler, setT
                             icon={<ImHome className='text-task-ss-dark-blue-300' size={18} />}
                             link='/user/dashboard'
                             hover={true}
+                        />
+                        <IconButton 
+                            icon={<BsSearch className='text-task-ss-dark-blue-300' size={18} />} 
+                            hover={true}
+                            link='/user/search'
                         />
                     </div>
                     

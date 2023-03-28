@@ -87,16 +87,22 @@ const TaskList = ({ api, token, url }) => {
                     lastWeek: '[Last] dddd',
                     sameElse: 'MMM D'
                 })
-                const endDate = moment(`${task.end_date} ${task.end_time}`).calendar({
-                    sameDay: '[Today]',
-                    nextDay: '[Tomorrow]',
-                    nextWeek: 'dddd',
-                    lastDay: '[Yesterday]',
-                    lastWeek: '[Last] dddd',
-                    sameElse: 'MMM D'
-                })
                 const startTime = moment(task.start_time, 'HH:mm:ss').format('h:mma')
-                const endTime = moment(task.end_time, 'HH:mm:ss').format('h:mma')
+                
+                let endDate
+                let endTime
+
+                if(task.end_date != null && task.end_time != null) {
+                    endDate = moment(`${task.end_date} ${task.end_time}`).calendar({
+                        sameDay: '[Today]',
+                        nextDay: '[Tomorrow]',
+                        nextWeek: 'dddd',
+                        lastDay: '[Yesterday]',
+                        lastWeek: '[Last] dddd',
+                        sameElse: 'MMM D'
+                    })
+                    endTime = moment(task.end_time, 'HH:mm:ss').format('h:mma')
+                }
 
                 return (
                     <div key={task.id} >
@@ -139,7 +145,7 @@ const TaskList = ({ api, token, url }) => {
                                         </div>
                                     </div>
 
-                                    <p className='text-sm text-task-ss-white-400'>{truncate(task.task_desc, 45)}</p>
+                                    {task?.task_desc && <p className='text-sm text-task-ss-white-400'>{truncate(task?.task_desc, 45)}</p>}
                                     <div className='flex flex-wrap justify-between items-center text-xs text-task-ss-white-400'>
                                         <div className='flex flex-wrap'>
                                             {/* start date */}
@@ -152,11 +158,13 @@ const TaskList = ({ api, token, url }) => {
                                             )}
 
                                             {/* end date */}
-                                            <div className='flex flex-wrap text-task-ss-orange'>
-                                                <AiOutlineCalendar size={15} />
-                                                <p className='px-[5px]'>{endDate}</p>
-                                                <p>{endTime}</p>
-                                            </div>
+                                            {(task.end_date != null && task.end_time != null) &&                     
+                                                <div className='flex flex-wrap text-task-ss-orange'>
+                                                    <AiOutlineCalendar size={15} />
+                                                    <p className='px-[5px]'>{endDate}</p>
+                                                    <p>{endTime}</p>
+                                                </div>
+                                            }
                                         </div>
                                         
                                         {task.category && 

@@ -72,7 +72,7 @@ export const authOptions = {
                 // const user = await res.json()
 
                 // If no error and we have user data, return it
-                console.log(user)
+                // console.log(user)
                 if (user) {
                     return user
                 }

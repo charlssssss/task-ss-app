@@ -1,5 +1,5 @@
 import axios from 'axios'
-import useSWR from 'swr'
+import useSWR, { mutate } from 'swr'
 import { useState } from "react"
 import { useRouter } from 'next/router'
 import { RegularButton } from "./buttons"
@@ -62,6 +62,8 @@ const WebsiteBlocker = ({ isBlockMdlClosed, blockMdlCloseHandler }) => {
             console.log(err)
             alert(err)
         })
+
+        mutate('http://127.0.0.1:8000/api/user/blockwebsites')
     }
 
     if (error) return <FailedToLoad />

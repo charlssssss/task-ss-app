@@ -10,6 +10,7 @@ import TitleHeader from '../../components/user/titleheader'
 import { BsSquareFill, BsArrowRightShort } from 'react-icons/bs'
 import { Empty2 } from '../../components/user/errors'
 import { truncate } from '../../components/functions'
+import WebsiteBlocker from '../../components/user/websiteblocker'
 
 export const getServerSideProps = async (context) => {
     const res = await getSession(context)
@@ -40,22 +41,24 @@ export const getServerSideProps = async (context) => {
 }
 
 const Dashboard = ({recent, tasks, completedCount, blockedkWebCount }) => {
-
-    console.log(recent)
     // add task modal
     const [isTaskMdlClosed, setIsTaskMdlClosed] = useState(true)
     const taskMdlCloseHandler = () => setIsTaskMdlClosed(!isTaskMdlClosed)
     const [taskType, setTaskType] = useState('')
 
+    // add website blocker modal
+    const [isBlockMdlClosed, setIsBlockMdlClosed] = useState(true)
+    const blockMdlCloseHandler = () => setIsBlockMdlClosed(!isBlockMdlClosed)
+
+    // recent tasks variables
     const [showRecent, setShowRecent] = useState(false)
-    
     const filteredTasks = tasks.filter(task => task.task_type_id == 1 && task.status == 'pending')
 
+    // reports variables
     const now = new Date();
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
     const lastMonth = now.getMonth() - 1
     const lastYear = now.getFullYear() - 1
-    // return(<div></div>)
     return (
         <>
             <Head>
@@ -87,7 +90,7 @@ const Dashboard = ({recent, tasks, completedCount, blockedkWebCount }) => {
                 <LargeCard 
                     title='Blocked Website' 
                     count={blockedkWebCount.toString().padStart(2, '0')}  
-                    link='#' 
+                    event={() => blockMdlCloseHandler()} 
                     m=' mb-5' 
                 />
 
@@ -186,11 +189,27 @@ const Dashboard = ({recent, tasks, completedCount, blockedkWebCount }) => {
                 taskType={taskType}
                 setTaskType={setTaskType}
             />
+            <WebsiteBlocker
+                isBlockMdlClosed={isBlockMdlClosed} 
+                blockMdlCloseHandler={blockMdlCloseHandler} 
+            />
         </>
     )
 }
 
-export const LargeCard = ({title, count, link, m}) => {
+export const LargeCard = ({title, count, link, event, m}) => {
+
+    if(event) {
+        return (
+            <div className={`flex flex-col flex-wrap justify-center bg-task-ss-white-100 text-task-ss-dark-blue-200 px-8 w-full h-32 lg:h-44 lg:w-44 ${m}`}>
+                <h2 className='text-sm text-task-ss-dark-blue-500'>{title}</h2>
+                <div className='flex justify-between items-end lg:items-baseline lg:flex-col'>
+                    <h1 className='text-[40px] mt-2 lg:mb-4 '>{count}</h1>
+                    <button className='text-xs font-medium align-bottom hover:underline' onClick={event}>View Full List</button>
+                </div>
+            </div>
+        )
+    }
     return (
         <div className={`flex flex-col flex-wrap justify-center bg-task-ss-white-100 text-task-ss-dark-blue-200 px-8 w-full h-32 lg:h-44 lg:w-44 ${m}`}>
             <h2 className='text-sm text-task-ss-dark-blue-500'>{title}</h2>

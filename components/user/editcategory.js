@@ -113,7 +113,7 @@ const EditCategory = ({ isCatMdlClosed, catMdlCloseHandler, editCat, callbackUrl
                             <RegularButton 
                                 type='pmry' 
                                 title='Edit Category'
-                                disabled={catName == '' || catDesc == ''}
+                                disabled={catName == ''}
                                 eventType='submit'
                             />
                         </div>

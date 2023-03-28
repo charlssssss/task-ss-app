@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { mutate } from 'swr'; 
 
 export function truncate(str, n) {
     return (str.length > n) ? str.slice(0, n-1) + '...' : str
@@ -8,20 +9,27 @@ export function truncate(str, n) {
 export const fetcher = ([url, token]) => 
     axios.get(url, { headers: { 'Authorization': 'Bearer ' + token } }).then(res => res.data)
 
-export const handleDeleteCategory =  async (e, id, token, router, setDeleted) => {
+export const handleDeleteCategory =  async (e, id, token, router) => {
     e.preventDefault()
     // confirmation
     if(confirm(`Are you sure u want to delete category no.${id}?`) ) {
-        const { data } = await axios(`http://127.0.0.1:8000/api/user/categories/${id}`, { 
+        await axios(`http://127.0.0.1:8000/api/user/categories/${id}`, { 
             method: 'DELETE',
             headers: { 'Authorization': 'Bearer ' + token }
         })
+        .then(res => {
+            if(res.data.success) {
+                router.push('/user/categories')
+                alert(res.data.message)
+            } else { alert(res.data.message) }
+        })
+        .catch(error => {
+            const errorMsg = JSON.parse(error.request.response)
+            console.log(errorMsg.message)
+            alert(errorMsg.message)
+        })
 
-        if(data.success) {
-            router.push('/user/categories')
-            {setDeleted && setDeleted(id)}
-            alert(data.message)
-        } else { console.log(data.message) }
+        mutate('http://127.0.0.1:8000/api/user/categories')
     }
 }
 
@@ -38,6 +46,8 @@ export const handleDeleteTask =  async (e, id, token, url, router) => {
             router.push(url)
             alert(data.message)
         } else { console.log(data.message) }
+
+        mutate('http://127.0.0.1:8000/api/user/tasks')
     }
 }
 
@@ -53,6 +63,8 @@ export const handleDeleteWebsite =  async (e, id, token) => {
         if(data.success) {
             alert(data.message)
         } else { console.log(data.message) }
+
+        mutate('http://127.0.0.1:8000/api/user/blockwebsites')
     }
 }
 
@@ -75,6 +87,8 @@ export const handleEditWebsite =  async (e, web, token) => {
     if(data.success) {
         alert(data.message)
     } else { console.log(data.message) }
+
+    mutate('http://127.0.0.1:8000/api/user/blockwebsites')
 }
 
 
