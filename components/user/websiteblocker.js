@@ -1,14 +1,12 @@
 import axios from 'axios'
 import useSWR, { mutate } from 'swr'
 import { useState } from "react"
-import { useRouter } from 'next/router'
 import { RegularButton } from "./buttons"
 import { useSession } from 'next-auth/react'
 import { RegularInput, RegularInput2 } from "./inputs"
 import { fetcher, handleDeleteWebsite, handleEditWebsite, isValidUrl } from '../functions'
 import { IoMdRemoveCircle } from 'react-icons/io'
 import { Loading, FailedToLoad, Empty3 } from './errors'
-import Link from 'next/link'
 import { AiFillCheckCircle, AiOutlineCheckCircle } from 'react-icons/ai'
 
 const WebsiteBlocker = ({ isBlockMdlClosed, blockMdlCloseHandler }) => {
@@ -55,6 +53,7 @@ const WebsiteBlocker = ({ isBlockMdlClosed, blockMdlCloseHandler }) => {
             }),
         })
         .then(res => {
+            mutate('http://127.0.0.1:8000/api/user/blockwebsites')
             console.log(res.data.message)
             alert(res.data.message)
         })
@@ -62,8 +61,6 @@ const WebsiteBlocker = ({ isBlockMdlClosed, blockMdlCloseHandler }) => {
             console.log(err)
             alert(err)
         })
-
-        mutate('http://127.0.0.1:8000/api/user/blockwebsites')
     }
 
     if (error) return <FailedToLoad />

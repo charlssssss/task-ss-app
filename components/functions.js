@@ -9,6 +9,35 @@ export function truncate(str, n) {
 export const fetcher = ([url, token]) => 
     axios.get(url, { headers: { 'Authorization': 'Bearer ' + token } }).then(res => res.data)
 
+
+// add category function
+export const handleAddCategory =  async (e, dataValues, token, router, clearHandler) => {
+    e.preventDefault()
+    await axios('http://127.0.0.1:8000/api/user/categories', { 
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json', 
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        },
+        data: JSON.stringify(dataValues),
+    })
+    .then(res => {
+        if(res.data.success) {
+            clearHandler()
+            router.push('/user/categories')
+            alert(res.data.message)
+        } else { alert(res.data.message) }
+    })
+    .catch(error => {
+        const errorMsg = JSON.parse(error.request.response)
+        console.log(errorMsg.message)
+        alert(errorMsg.message)
+    })
+
+    mutate('http://127.0.0.1:8000/api/user/categories')
+}
+
 export const handleDeleteCategory =  async (e, id, token, router) => {
     e.preventDefault()
     // confirmation
@@ -45,7 +74,7 @@ export const handleDeleteTask =  async (e, id, token, url, router) => {
         if(data.success) {
             router.push(url)
             alert(data.message)
-        } else { console.log(data.message) }
+        } else { alert(data.message) }
 
         mutate('http://127.0.0.1:8000/api/user/tasks')
     }
@@ -62,7 +91,7 @@ export const handleDeleteWebsite =  async (e, id, token) => {
 
         if(data.success) {
             alert(data.message)
-        } else { console.log(data.message) }
+        } else { alert(data.message) }
 
         mutate('http://127.0.0.1:8000/api/user/blockwebsites')
     }
@@ -86,7 +115,7 @@ export const handleEditWebsite =  async (e, web, token) => {
 
     if(data.success) {
         alert(data.message)
-    } else { console.log(data.message) }
+    } else { alert(data.message) }
 
     mutate('http://127.0.0.1:8000/api/user/blockwebsites')
 }

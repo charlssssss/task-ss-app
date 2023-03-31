@@ -1,4 +1,4 @@
-import useSWR from 'swr'
+import useSWR, { mutate } from 'swr'
 import axios from 'axios'
 import moment from 'moment'
 import Link from "next/link"
@@ -56,6 +56,7 @@ const TaskList = ({ api, token, url }) => {
         })
         .then(res => {
             if(res.data.success) {
+                mutate('http://127.0.0.1:8000/api/user/tasks')
                 alert("Task successfully completed!")
                 router.push(url)
             } else { alert(res.data.message) }
@@ -87,7 +88,7 @@ const TaskList = ({ api, token, url }) => {
                     lastWeek: '[Last] dddd',
                     sameElse: 'MMM D'
                 })
-                const startTime = moment(task.start_time, 'HH:mm:ss').format('h:mma')
+                const startTime = moment(task.start_time, 'HH:mm:ss').format('h:mm a')
                 
                 let endDate
                 let endTime
@@ -101,7 +102,7 @@ const TaskList = ({ api, token, url }) => {
                         lastWeek: '[Last] dddd',
                         sameElse: 'MMM D'
                     })
-                    endTime = moment(task.end_time, 'HH:mm:ss').format('h:mma')
+                    endTime = moment(task.end_time, 'HH:mm:ss').format('h:mm a')
                 }
 
                 return (
@@ -145,9 +146,9 @@ const TaskList = ({ api, token, url }) => {
                                         </div>
                                     </div>
 
-                                    {task?.task_desc && <p className='text-sm text-task-ss-white-400'>{truncate(task?.task_desc, 45)}</p>}
-                                    <div className='flex flex-wrap justify-between items-center text-xs text-task-ss-white-400'>
-                                        <div className='flex flex-wrap'>
+                                    {task?.task_desc && <p className='text-sm text-task-ss-white-400 mb-1'>{truncate(task?.task_desc, 45)}</p>}
+                                    <div className='flex flex-wrap justify-between items-end text-xs text-task-ss-white-400'>
+                                        <div className='flex flex-col flex-wrap'>
                                             {/* start date */}
                                             {task.task_type_id == 2 && (
                                                 <div className='flex flex-wrap text-task-ss-green-200 mr-4'>

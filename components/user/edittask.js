@@ -1,4 +1,4 @@
-import useSWR from 'swr'
+import useSWR, { mutate } from 'swr'
 import axios from 'axios'
 import { useEffect, useState } from "react"
 import { useRouter } from 'next/router'
@@ -113,13 +113,14 @@ const EditTask = ({ isTaskMdlClosed, taskMdlCloseHandler, editTask, callbackUrl 
             if(res.data.success) {
                 clearHandler()
                 router.push(callbackUrl)
+                mutate('http://127.0.0.1:8000/api/user/categories')
                 alert(res.data.message)
             } else { alert(res.data.message) }
         })
         .catch(error => {
             const errorMsg = JSON.parse(error.request?.response)
             console.log(errorMsg.errors)
-            alert("Failed to Edit Task: \n - " + errorMsg.message)
+            alert("Failed to Edit Task: " + errorMsg.message + "\n")
         })
     }
 

@@ -22,7 +22,7 @@ const Inbox = () => {
             <TitleHeader title='Inbox' />
 
             <TaskList 
-                api={'http://localhost:8000/api/user/tasks'} 
+                api={'http://localhost:8000/api/user/tasks/created_at/desc'} 
                 token={userToken} 
                 url='inbox'
             />

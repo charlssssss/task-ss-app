@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import { RegularButton } from "./buttons"
 import { useSession } from 'next-auth/react'
 import { RegularDropDown, RegularInput, RegularTextArea } from "./inputs"
+import { mutate } from 'swr'
 
 const colorOptions = [
     { 'value': '100', 'label': 'Orange' },
@@ -60,8 +61,9 @@ const EditCategory = ({ isCatMdlClosed, catMdlCloseHandler, editCat, callbackUrl
         if(data.success) {
             clearHandler()
             router.push(callbackUrl)
+            mutate('http://127.0.0.1:8000/api/user/categories')
             alert(data.message)
-        } else { console.log(data.message) }
+        } else { alert(data.message) }
     }
     
     return (

@@ -6,10 +6,6 @@
   --bg-color: #eeeeee;
 }
 
-/* * {
-  border: 1px solid red;
-} */
-
 body {
   height: 100%;
   background-color: var(--bg-color);
@@ -21,9 +17,3 @@ body {
     @apply transition-all text-task-ss-purple;
   }
 }
-
-/* @layer components {
-  .sidenav-button {
-    @apply ;
-  }
-} */

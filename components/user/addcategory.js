@@ -4,6 +4,8 @@ import { useRouter } from 'next/router'
 import { RegularButton } from "./buttons"
 import { useSession } from 'next-auth/react'
 import { RegularDropDown, RegularInput, RegularTextArea } from "./inputs"
+import { mutate } from 'swr'
+import { handleAddCategory } from '../functions'
 
 const colorOptions = [
     { 'value': '100', 'label': 'Orange' },
@@ -33,30 +35,6 @@ const AddCategory = ({ isCatMdlClosed, catMdlCloseHandler }) => {
         setCatDesc('')
         setColor('100')
     }
-
-    // add category function
-    const handleAddCategory =  async (e) => {
-        e.preventDefault()
-        const { data } = await axios('http://127.0.0.1:8000/api/user/categories', { 
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json', 
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + userToken
-            },
-            data: JSON.stringify({ 
-                "category_name": catName,
-                "category_desc": catDesc,
-                "color": color
-            }),
-        })
-
-        if(data.success) {
-            clearHandler()
-            router.push('/user/categories')
-            alert(data.message)
-        } else { console.log(data.message) }
-    }
     
     return (
         <div 
@@ -64,7 +42,15 @@ const AddCategory = ({ isCatMdlClosed, catMdlCloseHandler }) => {
         >
             <div className='bg-task-ss-white-100 w-[90%] sm:w-[400px] h-auto rounded-lg relative z-20' >
                 {/* add category form */}
-                <form method='POST' onSubmit={handleAddCategory}>
+                <form method='POST' onSubmit={(e) => {
+                        const dataValues = {
+                            "category_name": catName,
+                            "category_desc": catDesc,
+                            "color": color
+                        }
+                        handleAddCategory(e, dataValues, userToken, router, clearHandler)
+                    }}
+                >
                     <div>
                         <div className='flex items-center py-3 px-5'>
                             <h2 className='font-semibold text-lg'>Add Category</h2>

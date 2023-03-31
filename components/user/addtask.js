@@ -1,4 +1,4 @@
-import useSWR from 'swr'
+import useSWR, { mutate } from 'swr'
 import axios from 'axios'
 import { useEffect, useState } from "react"
 import { useRouter } from 'next/router'
@@ -37,13 +37,19 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
     // today.setDate(today.getDate() + 3) 
     // const currDate = moment(new Date().toLocaleDateString()).format('YYYY-MM-DD')
 
-    const currentDate = new Date();
-    const year = currentDate.getFullYear();
-    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-    const day = String(currentDate.getDate()).padStart(2, '0');
+    const currentDate = new Date()
+    const year = currentDate.getFullYear()
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0')
+    const day = String(currentDate.getDate()).padStart(2, '0')
 
-    const currDate = `${year}-${month}-${day}`;
-    const currTime = new Date().toLocaleTimeString('it-IT')
+    const currDate = `${year}-${month}-${day}`
+
+    const currTime = new Date(Date.now() + 5 * 60000).toLocaleTimeString('en-US', { 
+        timeZone: 'Asia/Manila', 
+        hour12: false, 
+        hour: 'numeric', 
+        minute: 'numeric'
+    })
     
     const [startDate, setStartDate] = useState(currDate)
     const [startTime, setStartTime] = useState(currTime)
@@ -105,6 +111,7 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
         })
         .then(res => {
             if(res.data.success) {
+                mutate('http://127.0.0.1:8000/api/user/tasks')
                 clearHandler()
                 router.push(`/user/categories/${taskCategory}`)
                 alert(res.data.message)
@@ -113,11 +120,11 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
         .catch(error => {
             const errorMsg = JSON.parse(error.request.response)
             console.log(errorMsg.errors)
-            alert("Failed to Add Task: \n - " + errorMsg.message)
+            alert("Failed to Add Task: " + errorMsg.message + "\n")
         })
     }
 
-    // console.log("end date: ", endDate)
+    console.log("start time: ", startTime)
     // console.log("end time: ", endTime)
     return (
         <div 

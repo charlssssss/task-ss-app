@@ -190,8 +190,9 @@ export const TaskDateTimeButton2 = ({ title, color, dateValue, changeDate, timeV
                         <p className='text-xs ml-2'>Confirm {title}</p>
                     }
                 </span>
-
-                <button type='button' onClick={event2} className='text-xs ml-2 text-task-ss-white-400'>x</button>
+                {state &&
+                    ((dateValue || timeValue && state) && <button type='button' onClick={event2} className='text-xs ml-2 text-task-ss-white-400'>x</button>)
+                }
             </div>
 
             {/* dropdown section */}
