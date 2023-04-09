@@ -12,7 +12,7 @@ const priorityOptions = [
     {priority: 'P1', title: 'High Priority'},
     {priority: 'P2', title: 'Medium Priority'},
     {priority: 'P3', title: 'Low Priority'},
-    {priority: 'P4', title: 'Not Priority'}
+    {priority: 'P4', title: 'No Priority'}
 ]
 
 const EditTask = ({ isTaskMdlClosed, taskMdlCloseHandler, editTask, callbackUrl }) => {

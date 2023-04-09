@@ -12,7 +12,7 @@ const priorityOptions = [
     {priority: 'P1', title: 'High Priority'},
     {priority: 'P2', title: 'Medium Priority'},
     {priority: 'P3', title: 'Low Priority'},
-    {priority: 'P4', title: 'Not Priority'}
+    {priority: 'P4', title: 'No Priority'}
 ]
 
 const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }) => {
@@ -25,7 +25,14 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
 
     // add task variables
     const [taskCategory, setTaskCategory] = useState('')
-    useEffect(()=> { setTaskCategory(categories?.data[0]?.id) }, [categories])
+    if(router.query.categoryId) {
+        useEffect(()=> { setTaskCategory(router.query.categoryId) }, [router.query.categoryId])
+    }
+    else {
+        useEffect(()=> { setTaskCategory(categories?.data[0]?.id) }, [categories])
+    }
+
+    console.log(taskCategory)
 
     const [taskName, setTaskName] = useState('')
     const [taskDesc, setTaskDesc] = useState('')
@@ -66,7 +73,7 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
     // clear all input fields
     const clearHandler = () => {
         taskMdlCloseHandler()
-        setTaskCategory(categories?.data[0]?.id)
+        setTaskCategory(router.query.categoryId)
         setTaskName('')
         setTaskDesc('')
         setIsStarred(0)
@@ -124,7 +131,7 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
         })
     }
 
-    console.log("start time: ", startTime)
+    // console.log("start time: ", startTime)
     // console.log("end time: ", endTime)
     return (
         <div 

@@ -54,7 +54,7 @@ const Dashboard = ({recent, upcomingTasks, completedCount, blockedkWebCount }) =
     const [showRecent, setShowRecent] = useState(false)
     const totalTasks = upcomingTasks.filter(task => task.end_date != null)
 
-    console.log(totalTasks)
+    // console.log(totalTasks)
 
     // reports variables
     const now = new Date();
@@ -171,14 +171,10 @@ const Dashboard = ({recent, upcomingTasks, completedCount, blockedkWebCount }) =
                             
                             <TaskRow
                                 name={'hello'}
-                                category={'hello'}
+                                category={'sadasd'}
                                 time={'hello'}
-                                priority={'hello'}
+                                priority={'P4'}
                             />
-
-                            <p className='text-xs font-medium mt-2 mb-1'>March 4, 2023</p>
-
-                            
 
                         </div>
                     </div>
@@ -231,8 +227,7 @@ const TaskRow = ({ name, category, time, priority }) => {
     const priorityOptions = {
         'P1' : {title: 'High', color: 'text-task-ss-red-200'},
         'P2' : {title: 'Medium', color: 'text-task-ss-yellow'},
-        'P3' : {title: 'Low', color: 'text-task-ss-category-200'},
-        'P4' : {title: 'Low', color: 'text-task-ss-category-200'}
+        'P3' : {title: 'Low', color: 'text-task-ss-category-200'}
     }
 
     let endTime = 'no time'
@@ -269,8 +264,7 @@ const TaskRow2 = ({ name, category, date, priority }) => {
     const priorityOptions = {
         'P1' : {title: 'High', color: 'text-task-ss-red-200'},
         'P2' : {title: 'Medium', color: 'text-task-ss-yellow'},
-        'P3' : {title: 'Low', color: 'text-task-ss-category-200'},
-        'P4' : {title: 'Low', color: 'text-task-ss-category-200'}
+        'P3' : {title: 'Low', color: 'text-task-ss-category-200'}
     }
 
     return (
