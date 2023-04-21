@@ -35,7 +35,7 @@ const TopNavbar = () => {
                     </div>
 
                     <div className='lg:flex items-center hidden'>
-                        <Link href="/#" className='text-task-ss-dark-blue-500 mr-8'>
+                        <Link href="/feedback" className='text-task-ss-dark-blue-500 mr-8'>
                             <p className='text-sm'>Feedback</p>
                         </Link>  
                         <Link href="/pricing" className='text-task-ss-dark-blue-500 mr-8'>

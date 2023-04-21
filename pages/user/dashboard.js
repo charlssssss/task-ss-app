@@ -8,7 +8,7 @@ import { getSession } from 'next-auth/react'
 import AddTask from '../../components/user/addtask'
 import TitleHeader from '../../components/user/titleheader'
 import { BsFillCircleFill, BsArrowRightShort } from 'react-icons/bs'
-import { Empty2 } from '../../components/user/errors'
+import { Empty2, Empty3 } from '../../components/user/errors'
 import { truncate } from '../../components/functions'
 import WebsiteBlocker from '../../components/user/websiteblocker'
 
@@ -16,11 +16,11 @@ export const getServerSideProps = async (context) => {
     const res = await getSession(context)
     try {
         const[recent, upcomingTasks, completedCount, blockedkWebCount] = await Promise.all([
-            axios.get('http://127.0.0.1:8000/api/user/tasks/recent', 
+            axios.get('http://127.0.0.1:8000/api/user/tasks/sortfilter/updated_at/desc', 
             { headers: { 'Authorization': 'Bearer ' + res.user.token } }),
-            axios.get('http://127.0.0.1:8000/api/user/tasks/end_date/asc', 
+            axios.get('http://127.0.0.1:8000/api/user/tasks/sortfilter/end_date/asc', 
             { headers: { 'Authorization': 'Bearer ' + res.user.token } }),
-            axios.get('http://127.0.0.1:8000/api/user/tasks/filter?status=completed', 
+            axios.get('http://127.0.0.1:8000/api/user/tasks/sortfilter?status=completed', 
             { headers: { 'Authorization': 'Bearer ' + res.user.token } }),
             axios.get('http://127.0.0.1:8000/api/user/blockwebsites/includes', 
             { headers: { 'Authorization': 'Bearer ' + res.user.token } }),
@@ -54,7 +54,7 @@ const Dashboard = ({recent, upcomingTasks, completedCount, blockedkWebCount }) =
     const [showRecent, setShowRecent] = useState(false)
     const totalTasks = upcomingTasks.filter(task => task.end_date != null)
 
-    // console.log(totalTasks)
+    console.log(recent)
 
     // reports variables
     const now = new Date();
@@ -111,47 +111,57 @@ const Dashboard = ({recent, upcomingTasks, completedCount, blockedkWebCount }) =
                         
                         <div className='bg-task-ss-yellow h-2'></div>
                         <div className='flex flex-col bg-task-ss-white-100 px-5 py-3'>
-                            {totalTasks.map((task, idx, arr) => {
-                                let endDate = moment(task.end_date).format('LL')
+                            {
+                                totalTasks.length > 0 ?
+                                    totalTasks.map((task, idx, arr) => {
+                                        let endDate = moment(task.end_date).format('LL')
 
-                                if(idx > 0) {
-                                    if(task.end_date != arr[idx - 1].end_date) {
-                                        return (
-                                            <div key={idx.toString()}>
-                                                <p className='text-xs font-medium mt-2 mb-1'>{endDate}</p>   
+                                        if(idx > 0) {
+                                            if(task.end_date != arr[idx - 1].end_date) {
+                                                return (
+                                                    <div key={idx.toString()}>
+                                                        <p className='text-xs font-medium mt-2 mb-1'>{endDate}</p>   
+                                                        <TaskRow
+                                                            name={task.task_name}
+                                                            category={task.category}
+                                                            time={task.end_time}
+                                                            priority={task.priority}
+                                                        />
+                                                    </div>
+                                                )
+                                            }
+                                            return (
                                                 <TaskRow
+                                                    key={idx.toString()}
                                                     name={task.task_name}
                                                     category={task.category}
                                                     time={task.end_time}
                                                     priority={task.priority}
                                                 />
-                                            </div>
-                                        )
-                                    }
-                                    return (
-                                        <TaskRow
-                                            key={idx.toString()}
-                                            name={task.task_name}
-                                            category={task.category}
-                                            time={task.end_time}
-                                            priority={task.priority}
-                                        />
-                                    )
-                                }
-                                else {
-                                    return (
-                                        <div key={idx.toString()}>
-                                            <p className='text-xs font-medium mt-2 mb-1'>{endDate}</p>   
-                                            <TaskRow
-                                                name={task.task_name}
-                                                category={task.category}
-                                                time={task.end_time}
-                                                priority={task.priority}
-                                            />
-                                        </div>
-                                    )
-                                }
-                            })}
+                                            )
+                                        }
+                                        else {
+                                            return (
+                                                <div key={idx.toString()}>
+                                                    <p className='text-xs font-medium mt-2 mb-1'>{endDate}</p>   
+                                                    <TaskRow
+                                                        name={task.task_name}
+                                                        category={task.category}
+                                                        time={task.end_time}
+                                                        priority={task.priority}
+                                                    />
+                                                </div>
+                                            )
+                                        }
+                                    })
+                                :
+                                <Empty3
+                                    title='Upcoming Deadlines'
+                                    img='/illustration_3.png'
+                                    size='h-[50px]'
+                                    m='my-5'
+                                />
+                            }
 
                         </div>
                     </div>
@@ -167,7 +177,7 @@ const Dashboard = ({recent, upcomingTasks, completedCount, blockedkWebCount }) =
 
                         <div className='bg-task-ss-red-200 h-2'></div>
                         <div className='flex flex-col bg-task-ss-white-100 px-5 py-3'>
-                            <p className='text-xs font-medium mt-2 mb-1'>March 4, 2023</p>
+                            {/* <p className='text-xs font-medium mt-2 mb-1'>March 4, 2023</p>
                             
                             <TaskRow
                                 name={'hello'}
@@ -176,7 +186,14 @@ const Dashboard = ({recent, upcomingTasks, completedCount, blockedkWebCount }) =
                                 priority={'P4'}
                             />
 
-                        </div>
+                        */}
+                            <Empty3
+                                title='Recent Tasks'
+                                img='/illustration_5.png'
+                                size='h-[50px]'
+                                m='my-5'
+                            />
+                        </div> 
                     </div>
 
                     {/* Recent Tasks panel */}
@@ -185,17 +202,27 @@ const Dashboard = ({recent, upcomingTasks, completedCount, blockedkWebCount }) =
 
                         <div className='bg-task-ss-category-200 h-2'></div>
                         <div className='flex flex-col bg-task-ss-white-100 px-5 py-3'>
-                            {recent.slice(0, 5).map((task, idx) => {
-                                return (
-                                    <TaskRow2
-                                        key={idx.toString()}
-                                        name={task.task_name}
-                                        category={task.category}
-                                        date={task.end_date ? `${task.end_date} ${task.end_time}` : null}
-                                        priority={task.priority}
-                                    />
-                                )
-                            })} 
+                            {
+                                recent.length > 0 ?
+                                recent.slice(0, 5).map((task, idx) => {
+                                    return (
+                                        <TaskRow2
+                                            key={idx.toString()}
+                                            name={task.task_name}
+                                            category={task.category}
+                                            date={task.end_date ? `${task.end_date} ${task.end_time}` : null}
+                                            priority={task.priority}
+                                        />
+                                    )
+                                })
+                                :
+                                <Empty3
+                                    title='Recent Tasks'
+                                    img='/illustration_6.png'
+                                    size='h-[50px]'
+                                    m='my-5'
+                                />
+                            } 
                         </div>
                     </div>
 

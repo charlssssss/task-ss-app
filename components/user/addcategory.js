@@ -40,7 +40,7 @@ const AddCategory = ({ isCatMdlClosed, catMdlCloseHandler }) => {
         <div 
             className={`justify-center items-center absolute top-0 left-0 w-screen h-screen bg-task-ss-dark-blue-600 bg-opacity-50 ${isCatMdlClosed ? ' hidden ' : ' flex '}`} 
         >
-            <div className='bg-task-ss-white-100 w-[90%] sm:w-[400px] h-auto rounded-lg relative z-20' >
+            <div className='bg-task-ss-white-100 w-[90%] sm:w-[400px] h-auto rounded-lg relative z-20'>
                 {/* add category form */}
                 <form method='POST' onSubmit={(e) => {
                         const dataValues = {

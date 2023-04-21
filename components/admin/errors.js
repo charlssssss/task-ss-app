@@ -1,0 +1,56 @@
+import { VscLoading } from 'react-icons/vsc'
+import { MdSmsFailed } from 'react-icons/md'
+
+// fail to load error component
+export const FailedToLoad = ({ color }) => {
+    return (
+        <div className={`flex items-center justify-center mt-10 ${color}`}>
+            <MdSmsFailed size={20} />
+            <p className='ml-3 text-lg'>Failed to Load</p>
+        </div>
+    )
+}
+
+// loading error component
+export const Loading = ({ color }) => {
+    return (
+        <div className={`flex items-center justify-center mt-10 ${color}`}>
+            <VscLoading className='animate-spin -z-20' size={20} />
+            <p className='ml-3 text-lg'>Loading ...</p>
+        </div>
+    )
+}
+
+export const Empty = ({ user, title, img }) => {
+    return (
+        <div className='pt-16'>
+            <div className='flex flex-col justify-center items-center'>
+                <img src={img} className='w-32 mb-2' />
+                <h3 className='font-medium text-md text-task-ss-dark-blue-500'>Have a great day, {user}!</h3>
+                <p className='text-xs text-task-ss-white-400'>You are free from {title}. Nice one!</p>
+            </div>
+        </div>
+    )
+}
+
+export const Empty2 = ({ title, img }) => {
+    return (
+        <div className='pt-16'>
+            <div className='flex flex-col justify-center items-center'>
+                <img src={img} className='w-32 mb-4' />
+                <p className='text-xs text-task-ss-white-400'>Woah, it seems like you don't have {title}.</p>
+            </div>
+        </div>
+    )
+}
+
+export const Empty3 = ({ title, img, size, m, addMsg}) => {
+    return (
+        <div className={`${m}`}>
+            <div className='flex flex-col justify-center items-center'>
+                <img src={img} className={`${size} mb-2`} />
+                <p className='text-xs text-task-ss-white-400'>No {title} yet. {addMsg}</p>
+            </div>
+        </div>
+    )
+}

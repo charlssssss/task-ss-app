@@ -138,7 +138,7 @@ const EditTask = ({ isTaskMdlClosed, taskMdlCloseHandler, editTask, callbackUrl 
                             value={taskType ?? ''}
                             onChange={e => setTaskType(e.target.value)}
                             name='task_type_id'
-                            className='font-medium rounded-md bg-task-ss-white-300 text-xs p-2'
+                            className='font-medium rounded-md bg-task-ss-white-300 text-xs py-2 pr-7'
                         >   
                             <option value='1'>To Do List</option>
                             <option value='2'>To Be Done</option>

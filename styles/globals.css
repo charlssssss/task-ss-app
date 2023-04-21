@@ -12,6 +12,19 @@ body {
   overflow: hidden;
 }
 
+select {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+select {
+  padding: 0 35px 0 15px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16.59 8.59L12 13.17L7.41 8.59L6 10l6 6l6-6l-1.41-1.41z"/></svg>');
+  background-size: 24px;
+  background-repeat: no-repeat;
+  background-position: calc(100% - 8px) center;
+}
+
 @layer components {
   .input_pass:focus + * {
     @apply transition-all text-task-ss-purple;

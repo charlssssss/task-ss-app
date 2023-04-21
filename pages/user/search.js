@@ -56,7 +56,7 @@ const Search = () => {
 
             {q != undefined && (q != '' && 
             <TaskList 
-                api={`http://127.0.0.1:8000/api/user/tasks/filter?task_name=${q}&task_desc=${q}`} 
+                api={`http://127.0.0.1:8000/api/user/tasks/sortfilter?task_name=${q}&task_desc=${q}`} 
                 token={userToken} 
                 url={`search?q=${q}`}
             />)}

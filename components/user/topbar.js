@@ -13,7 +13,7 @@ import { BsBellFill, BsGearFill, BsCheckCircle, BsSearch } from 'react-icons/bs'
 import { MdOutlineAccountCircle, MdOutlineBlock, MdListAlt } from 'react-icons/md'
 
 const settingsTitle = [
-    {icon: <MdOutlineAccountCircle />, title: 'Account', link: '/#'},
+    {icon: <MdOutlineAccountCircle />, title: 'Account', link: '/user/account'},
     {icon: <MdOutlineBlock />, title: 'Website Blocker'},
     {icon: BiPalette, title: 'Customize Theme', link: '/#'},
     {icon: BsCheckCircle, title: 'Completed Tasks', link: '/user/completed'},
@@ -23,7 +23,7 @@ const settingsTitle = [
 ]
 
 // component for top bar
-const Topbar = ({ toggleHandler, taskMdlCloseHandler, blockMdlCloseHandler, setTaskType }) => {
+const Topbar = ({ toggleHandler, taskMdlCloseHandler, blockMdlCloseHandler, reminderMdlCloseHandler, setTaskType }) => {
     // for redirecting
     const router = useRouter()
 
@@ -119,7 +119,7 @@ const Topbar = ({ toggleHandler, taskMdlCloseHandler, blockMdlCloseHandler, setT
 
                         <IconButton 
                             icon={<BsBellFill className='text-task-ss-dark-blue-300' size={18} />}
-                            event={null}
+                            event={reminderMdlCloseHandler}
                             hover={true}
                         />
                         <div 

@@ -148,7 +148,7 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
                                 value={taskType}
                                 onChange={e => setTaskType(e.target.value)}
                                 name='task_type_id'
-                                className='font-medium rounded-md bg-task-ss-white-300 text-xs p-2'
+                                className='font-medium rounded-md bg-task-ss-white-300 text-xs py-2 pr-7'
                             >   
                                 <option value='1'>To Do List</option>
                                 <option value='2'>To Be Done</option>
@@ -219,7 +219,7 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
                                     <select 
                                         value={taskCategory} 
                                         onChange={(e) => setTaskCategory(e.target.value)}
-                                        className='rounded-lg py-3 px-4 text-xs border transition-all border-task-ss-white-300 w-full md:w-auto active:scale-[0.98]'
+                                        className='rounded-lg py-3 pr-8 text-xs border transition-all border-task-ss-white-300 w-full md:w-auto active:scale-[0.98]'
                                     >
                                         {!categories && <option>Loading...</option>}
                                         {categories?.data?.map((category, idx) => (

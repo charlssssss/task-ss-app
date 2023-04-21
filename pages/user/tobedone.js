@@ -22,7 +22,7 @@ const Tobedone = () => {
             <TitleHeader title='To Be Done' />
 
             <TaskList 
-                api={'http://localhost:8000/api/user/tasks/type/2'} 
+                api={'http://localhost:8000/api/user/tasks/sortfilter/created_at/desc?task_type_id=2'} 
                 token={userToken} 
                 url='tobedone'
             />
