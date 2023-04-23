@@ -135,7 +135,7 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
     // console.log("end time: ", endTime)
     return (
         <div 
-            className={` items-center absolute top-0 left-0 w-screen h-screen bg-task-ss-dark-blue-600 bg-opacity-50 ${isTaskMdlClosed ? ' hidden ' : ' flex flex-col'}`} 
+            className={` items-center absolute top-0 left-0 w-screen h-screen bg-task-ss-dark-blue-600 bg-opacity-50 z-20 ${isTaskMdlClosed ? ' hidden ' : ' flex flex-col'}`} 
         >   
             {(categories?.data.length > 0) ? 
                 <div className='bg-task-ss-white-100 w-[90%] md:w-[600px] h-auto rounded-lg mt-[5%] relative z-20'>

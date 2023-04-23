@@ -25,6 +25,7 @@ const Todolist = () => {
                 api={'http://localhost:8000/api/user/tasks/sortfilter/created_at/desc?task_type_id=1'} 
                 token={userToken} 
                 url='todolist'
+                showCategory={true}
             />
         </>
     )

@@ -68,7 +68,7 @@ const EditCategory = ({ isCatMdlClosed, catMdlCloseHandler, editCat, callbackUrl
     
     return (
         <div 
-            className={`justify-center items-center absolute top-0 left-0 w-screen h-screen bg-task-ss-dark-blue-600 bg-opacity-50 ${isCatMdlClosed ? ' hidden ' : ' flex '}`} 
+            className={`justify-center items-center absolute top-0 left-0 w-screen h-screen bg-task-ss-dark-blue-600 bg-opacity-50 z-20 ${isCatMdlClosed ? ' hidden ' : ' flex '}`} 
         >
             <div className='bg-task-ss-white-100 w-[400px] h-auto rounded-lg relative z-20' >
                 {/* add category form */}

@@ -36,6 +36,7 @@ const Starred = () => {
                 api={`http://localhost:8000/api/user/tasks/sortfilter/${sortBy}/${orderBy}?is_starred=1`} 
                 token={userToken}
                 url='starred'
+                showCategory={true}
             />
         </>
     )

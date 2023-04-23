@@ -32,7 +32,7 @@ const SideNavbar = ({ isToggled, toggleHandler, catMdlCloseHandler }) => {
     const catCloseHandler = () => setIsCatClosed(!isCatClosed)
 
     return (
-        <div className={`bg-task-ss-dark-blue-300 drop-shadow-xl fixed h-full transition-all pb-10 -translate-x-[100%] overflow-x-hidden lg:relative overflow-y-hidden hover:overflow-y-auto  ${isToggled ? null : 'translate-x-[0px]' }`}
+        <div className={`bg-task-ss-dark-blue-300 drop-shadow-xl fixed h-full transition-all pb-10 -translate-x-[100%] overflow-x-hidden lg:relative overflow-y-hidden hover:overflow-y-auto z-10 ${isToggled ? null : 'translate-x-[0px]' }`}
         >
             <div className='h-auto w-80'>
                 {/* close button section */}
@@ -104,7 +104,7 @@ export const SideNavProfile = () => {
     const userName = `${data?.data?.firstname} ${data?.data?.lastname}`
 
     if (error) return <FailedToLoad color='text-task-ss-white-100' />
-    if (isLoading) return <Loading color='text-task-ss-white-100' />
+    if (isLoading) return <Loading color='text-task-ss-white-100' m='mb-10' />
 
     return (
         <div className='flex justify-between items-center bg-task-ss-white-100 max-w-max p-2 my-6 mx-auto rounded-full'>

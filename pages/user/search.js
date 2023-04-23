@@ -59,6 +59,7 @@ const Search = () => {
                 api={`http://127.0.0.1:8000/api/user/tasks/sortfilter?task_name=${q}&task_desc=${q}`} 
                 token={userToken} 
                 url={`search?q=${q}`}
+                showCategory={true}
             />)}
         </>
     )

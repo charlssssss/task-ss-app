@@ -19,7 +19,7 @@ const priorityStyles = {
 }
    
 // component for task list
-const TaskList = ({ api, token, url }) => {
+const TaskList = ({ api, token, url, showCategory }) => {
     const router = useRouter()
 
     const { data: session } = useSession()
@@ -168,7 +168,7 @@ const TaskList = ({ api, token, url }) => {
                                             }
                                         </div>
                                         
-                                        {task.category && 
+                                        {(task.category && showCategory) && 
                                             <div className='flex ml-auto items-center'>
                                                 <p className='text-[14px] text-task-ss-white-400'>{task?.category?.category_name}</p>
                                                 <BsFillCircleFill className={`ml-2 text-task-ss-category-${task?.category?.color}`} size={10} />

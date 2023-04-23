@@ -70,7 +70,7 @@ const WebsiteBlocker = ({ isBlockMdlClosed, blockMdlCloseHandler }) => {
 
     return (
         <div 
-            className={`justify-center items-center absolute top-0 left-0 w-screen h-screen bg-task-ss-dark-blue-600 bg-opacity-50 ${isBlockMdlClosed ? ' hidden ' : ' flex '}`} 
+            className={`justify-center items-center absolute top-0 left-0 w-screen h-screen bg-task-ss-dark-blue-600 bg-opacity-50 z-20 ${isBlockMdlClosed ? ' hidden ' : ' flex '}`} 
         >
             <div className='bg-task-ss-white-100 w-[90%] sm:w-[500px] h-auto rounded-lg relative z-20' >
                 {/* add website form */}

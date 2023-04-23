@@ -26,7 +26,7 @@ const SideNavbar = ({ isToggled, toggleHandler }) => {
     const router = useRouter()
 
     return (
-        <div className={`bg-task-ss-dark-blue-300 drop-shadow-xl fixed h-full transition-all pb-10 -translate-x-[100%] overflow-x-hidden lg:relative overflow-y-hidden hover:overflow-y-auto  ${isToggled ? null : 'translate-x-[0px]' }`}
+        <div className={`bg-task-ss-dark-blue-300 drop-shadow-xl fixed h-full transition-all pb-10 -translate-x-[100%] overflow-x-hidden lg:relative z-20 overflow-y-hidden hover:overflow-y-auto  ${isToggled ? null : 'translate-x-[0px]' }`}
         >
             <div className='h-auto w-80'>
                 {/* close button section */}

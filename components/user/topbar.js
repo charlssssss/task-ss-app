@@ -88,7 +88,7 @@ const Topbar = ({ toggleHandler, taskMdlCloseHandler, blockMdlCloseHandler, remi
                                 hover={true}
                             />
                             {/* add task button (add todolist task or tobedone task) */}
-                            <div className={`absolute top-10 right-[118px] pt-6  ${hoverAdd ? '' : 'hidden' }`}>
+                            <div className={`absolute top-10 right-[118px] pt-6 z-10  ${hoverAdd ? '' : 'hidden' }`}>
                                 <div className='bg-task-ss-white-100 rounded-xl py-3 w-52 drop-shadow-md'>
                                     <span 
                                         className='flex items-center px-5 py-2 cursor-pointer text-task-ss-white-400  rounded-lg mx-2 hover:bg-task-ss-white-200 hover:text-task-ss-white-500'
@@ -131,7 +131,7 @@ const Topbar = ({ toggleHandler, taskMdlCloseHandler, blockMdlCloseHandler, remi
                                 event={null}
                                 hover={true}
                             />
-                            <div className={`absolute top-10 right-[32px] pt-6  ${hoverSetting ? '' : 'hidden' }`}>
+                            <div className={`absolute top-10 right-[32px] pt-6 z-10  ${hoverSetting ? '' : 'hidden' }`}>
                                 <div className='bg-task-ss-white-100 rounded-xl py-3 w-72 drop-shadow-md'>
                                     {/* account button */}
                                     <SettingsButton

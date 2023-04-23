@@ -35,6 +35,7 @@ const Inbox = () => {
                 api={`http://localhost:8000/api/user/tasks/sortfilter/${sortBy}/${orderBy}`} 
                 token={userToken} 
                 url='inbox'
+                showCategory={true}
             />
         </>
     )
