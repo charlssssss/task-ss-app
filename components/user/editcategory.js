@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import { RegularButton } from "./buttons"
 import { useSession } from 'next-auth/react'
 import { RegularDropDown, RegularInput, RegularTextArea } from "./inputs"
+import { mutate } from 'swr'
 
 const colorOptions = [
     { 'value': '100', 'label': 'Orange' },
@@ -60,13 +61,14 @@ const EditCategory = ({ isCatMdlClosed, catMdlCloseHandler, editCat, callbackUrl
         if(data.success) {
             clearHandler()
             router.push(callbackUrl)
+            mutate('http://127.0.0.1:8000/api/user/categories')
             alert(data.message)
-        } else { console.log(data.message) }
+        } else { alert(data.message) }
     }
     
     return (
         <div 
-            className={`justify-center items-center absolute top-0 left-0 w-screen h-screen bg-task-ss-dark-blue-600 bg-opacity-50 ${isCatMdlClosed ? ' hidden ' : ' flex '}`} 
+            className={`justify-center items-center absolute top-0 left-0 w-screen h-screen bg-task-ss-dark-blue-600 bg-opacity-50 z-20 ${isCatMdlClosed ? ' hidden ' : ' flex '}`} 
         >
             <div className='bg-task-ss-white-100 w-[400px] h-auto rounded-lg relative z-20' >
                 {/* add category form */}
@@ -113,7 +115,7 @@ const EditCategory = ({ isCatMdlClosed, catMdlCloseHandler, editCat, callbackUrl
                             <RegularButton 
                                 type='pmry' 
                                 title='Edit Category'
-                                disabled={catName == '' || catDesc == ''}
+                                disabled={catName == ''}
                                 eventType='submit'
                             />
                         </div>

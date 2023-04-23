@@ -6,6 +6,7 @@ import SideNavbar from "../components/user/sidenavbar"
 import AddCategory from '../components/user/addcategory'
 import WebsiteBlocker from '../components/user/websiteblocker'
 import AddTask from '../components/user/addtask'
+import DailyReminder from '../components/user/dailyreminder'
 
 // If loading a variable font, you don't need to specify the font weight
 const rubik = Rubik({ subsets: ['latin'] })
@@ -28,6 +29,10 @@ const AppLayout = ({ children }) => {
     const taskMdlCloseHandler = () => setIsTaskMdlClosed(!isTaskMdlClosed)
     const [taskType, setTaskType] = useState('')
 
+    // add website blocker modal
+    const [isReminderMdlClosed, setIsReminderMdlClosed] = useState(true)
+    const reminderMdlCloseHandler = () => setIsReminderMdlClosed(!isReminderMdlClosed)
+
     return (
         <>
             <Head>
@@ -48,6 +53,7 @@ const AppLayout = ({ children }) => {
                         toggleHandler={toggleHandler} 
                         taskMdlCloseHandler={taskMdlCloseHandler} 
                         blockMdlCloseHandler={blockMdlCloseHandler} 
+                        reminderMdlCloseHandler={reminderMdlCloseHandler} 
                         setTaskType={setTaskType}
                     />
                     <div className='h-[calc(100vh-3.5rem)] overflow-y-auto'>
@@ -70,6 +76,10 @@ const AppLayout = ({ children }) => {
                 <WebsiteBlocker 
                     isBlockMdlClosed={isBlockMdlClosed} 
                     blockMdlCloseHandler={blockMdlCloseHandler} 
+                />
+                <DailyReminder
+                    isReminderMdlClosed={isReminderMdlClosed} 
+                    reminderMdlCloseHandler={reminderMdlCloseHandler} 
                 />
             </div>
         </>

@@ -1,18 +1,18 @@
-import useSWR from 'swr'
+import useSWR, { mutate } from 'swr'
 import axios from 'axios'
 import { useEffect, useState } from "react"
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import { AiFillFlag, AiFillStar } from 'react-icons/ai'
 import { RegularInput, RegularTextArea } from "./inputs"
-import { RegularButton, TaskDateTimeButton, TaskIconButton } from "./buttons"
+import { RegularButton, TaskDateTimeButton, TaskDateTimeButton2, TaskIconButton } from "./buttons"
 import { fetcher, truncate } from '../functions'
 
 const priorityOptions = [
-    {priority: 'P1', title: 'Priority High'},
-    {priority: 'P2', title: 'Priority Medium'},
-    {priority: 'P3', title: 'Priority Low'},
-    {priority: 'P4', title: 'Not Priority'}
+    {priority: 'P1', title: 'High Priority'},
+    {priority: 'P2', title: 'Medium Priority'},
+    {priority: 'P3', title: 'Low Priority'},
+    {priority: 'P4', title: 'No Priority'}
 ]
 
 const EditTask = ({ isTaskMdlClosed, taskMdlCloseHandler, editTask, callbackUrl }) => {
@@ -113,19 +113,20 @@ const EditTask = ({ isTaskMdlClosed, taskMdlCloseHandler, editTask, callbackUrl 
             if(res.data.success) {
                 clearHandler()
                 router.push(callbackUrl)
+                mutate('http://127.0.0.1:8000/api/user/categories')
                 alert(res.data.message)
             } else { alert(res.data.message) }
         })
         .catch(error => {
             const errorMsg = JSON.parse(error.request?.response)
             console.log(errorMsg.errors)
-            alert("Failed to Edit Task: \n - " + errorMsg.message)
+            alert("Failed to Edit Task: " + errorMsg.message + "\n")
         })
     }
 
     return (
         <div 
-            className={`items-center absolute top-0 left-0 w-screen h-screen bg-task-ss-dark-blue-600 bg-opacity-50 ${isTaskMdlClosed ? ' hidden ' : ' flex flex-col'}`} 
+            className={`items-center absolute top-0 left-0 w-screen h-screen bg-task-ss-dark-blue-600 bg-opacity-50 z-20 ${isTaskMdlClosed ? ' hidden ' : ' flex flex-col'}`} 
         >   
             <div className='bg-task-ss-white-100 w-[90%] md:w-[600px] h-auto rounded-lg mt-[5%] relative z-20'>
                 {/* add task form */}
@@ -137,7 +138,7 @@ const EditTask = ({ isTaskMdlClosed, taskMdlCloseHandler, editTask, callbackUrl 
                             value={taskType ?? ''}
                             onChange={e => setTaskType(e.target.value)}
                             name='task_type_id'
-                            className='font-medium rounded-md bg-task-ss-white-300 text-xs p-2'
+                            className='font-medium rounded-md bg-task-ss-white-300 text-xs py-2 pr-7'
                         >   
                             <option value='1'>To Do List</option>
                             <option value='2'>To Be Done</option>
@@ -165,29 +166,45 @@ const EditTask = ({ isTaskMdlClosed, taskMdlCloseHandler, editTask, callbackUrl 
                         <div className='flex justify-between flex-wrap'>
                             <div className='flex flex-wrap mt-2 w-full md:w-auto'>
 
-                            {taskType == 2 && 
-                                <TaskDateTimeButton 
-                                    color='text-task-ss-green-200'
-                                    title='Start Date' m='md:mr-2' 
-                                    dateValue={startDate ?? ''} 
-                                    changeDate={(e) => setStartDate(e.target.value)} 
-                                    timeValue={startTime ?? ''} 
-                                    changeTime={(e) => setStartTime(e.target.value)} 
-                                    state={startClose}
-                                    event={startCloseHandler}
-                                />
-                            }
-
-                                <TaskDateTimeButton 
-                                    color='text-task-ss-orange'
-                                    title='End Date' m='md:mr-2'
-                                    dateValue={endDate ?? ''} 
-                                    changeDate={(e) => setEndDate(e.target.value)} 
-                                    timeValue={endTime ?? ''} 
-                                    changeTime={(e) => setEndTime(e.target.value)} 
-                                    state={endClose}
-                                    event={endCloseHandler}
-                                />
+                                {taskType == 2 ?  
+                                    <>
+                                        <TaskDateTimeButton 
+                                            color='text-task-ss-green-200'
+                                            title='Start Date' m='md:mr-2' 
+                                            dateValue={startDate} 
+                                            changeDate={(e) => setStartDate(e.target.value)} 
+                                            timeValue={startTime} 
+                                            changeTime={(e) => setStartTime(`${e.target.value}:00`)} 
+                                            state={startClose}
+                                            event={startCloseHandler}
+                                        />
+                                        <TaskDateTimeButton 
+                                            color='text-task-ss-orange'
+                                            title='End Date' m='md:mr-2'
+                                            dateValue={endDate ?? ''} 
+                                            changeDate={(e) => setEndDate(e.target.value)} 
+                                            timeValue={endTime ?? ''} 
+                                            changeTime={(e) => setEndTime(`${e.target.value}:00`)} 
+                                            state={endClose}
+                                            event={endCloseHandler}
+                                        />
+                                    </>
+                                :
+                                    <TaskDateTimeButton2
+                                        color='text-task-ss-orange'
+                                        title='End Date' m='md:mr-2'
+                                        dateValue={endDate ?? ''} 
+                                        changeDate={(e) => setEndDate(e.target.value)} 
+                                        timeValue={endTime ?? ''} 
+                                        changeTime={(e) => setEndTime(`${e.target.value}:00`)} 
+                                        state={endClose}
+                                        event={endCloseHandler}
+                                        event2={() => {
+                                            setEndDate('')
+                                            setEndTime('')
+                                        }}
+                                    />
+                                }
 
                                 <select 
                                     value={taskCategory ?? ''} 
@@ -269,7 +286,7 @@ const EditTask = ({ isTaskMdlClosed, taskMdlCloseHandler, editTask, callbackUrl 
                             type='pmry' 
                             title='Edit Task'
                             eventType='submit' 
-                            disabled={taskName == '' || taskDesc == ''}
+                            disabled={taskName == ''}
                         />
                     </div>
 

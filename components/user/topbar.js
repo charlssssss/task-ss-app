@@ -9,11 +9,11 @@ import { useRouter } from 'next/router'
 import { TbPuzzle, TbLogout } from 'react-icons/tb'
 import { useSession, signOut } from "next-auth/react"
 import { BiPalette, BiStar, BiCalendarCheck } from 'react-icons/bi'
-import { BsBellFill, BsGearFill, BsCheckCircle } from 'react-icons/bs'
+import { BsBellFill, BsGearFill, BsCheckCircle, BsSearch } from 'react-icons/bs'
 import { MdOutlineAccountCircle, MdOutlineBlock, MdListAlt } from 'react-icons/md'
 
 const settingsTitle = [
-    {icon: <MdOutlineAccountCircle />, title: 'Account', link: '/#'},
+    {icon: <MdOutlineAccountCircle />, title: 'Account', link: '/user/account'},
     {icon: <MdOutlineBlock />, title: 'Website Blocker'},
     {icon: BiPalette, title: 'Customize Theme', link: '/#'},
     {icon: BsCheckCircle, title: 'Completed Tasks', link: '/user/completed'},
@@ -23,7 +23,7 @@ const settingsTitle = [
 ]
 
 // component for top bar
-const Topbar = ({ toggleHandler, taskMdlCloseHandler, blockMdlCloseHandler, setTaskType }) => {
+const Topbar = ({ toggleHandler, taskMdlCloseHandler, blockMdlCloseHandler, reminderMdlCloseHandler, setTaskType }) => {
     // for redirecting
     const router = useRouter()
 
@@ -66,6 +66,11 @@ const Topbar = ({ toggleHandler, taskMdlCloseHandler, blockMdlCloseHandler, setT
                             link='/user/dashboard'
                             hover={true}
                         />
+                        <IconButton 
+                            icon={<BsSearch className='text-task-ss-dark-blue-300' size={18} />} 
+                            hover={true}
+                            link='/user/search'
+                        />
                     </div>
                     
                     {/* right side add task, notif, and settings like logout */}
@@ -83,7 +88,7 @@ const Topbar = ({ toggleHandler, taskMdlCloseHandler, blockMdlCloseHandler, setT
                                 hover={true}
                             />
                             {/* add task button (add todolist task or tobedone task) */}
-                            <div className={`absolute top-10 right-[118px] pt-6  ${hoverAdd ? '' : 'hidden' }`}>
+                            <div className={`absolute top-10 right-[118px] pt-6 z-10  ${hoverAdd ? '' : 'hidden' }`}>
                                 <div className='bg-task-ss-white-100 rounded-xl py-3 w-52 drop-shadow-md'>
                                     <span 
                                         className='flex items-center px-5 py-2 cursor-pointer text-task-ss-white-400  rounded-lg mx-2 hover:bg-task-ss-white-200 hover:text-task-ss-white-500'
@@ -114,7 +119,7 @@ const Topbar = ({ toggleHandler, taskMdlCloseHandler, blockMdlCloseHandler, setT
 
                         <IconButton 
                             icon={<BsBellFill className='text-task-ss-dark-blue-300' size={18} />}
-                            event={null}
+                            event={reminderMdlCloseHandler}
                             hover={true}
                         />
                         <div 
@@ -126,7 +131,7 @@ const Topbar = ({ toggleHandler, taskMdlCloseHandler, blockMdlCloseHandler, setT
                                 event={null}
                                 hover={true}
                             />
-                            <div className={`absolute top-10 right-[32px] pt-6  ${hoverSetting ? '' : 'hidden' }`}>
+                            <div className={`absolute top-10 right-[32px] pt-6 z-10  ${hoverSetting ? '' : 'hidden' }`}>
                                 <div className='bg-task-ss-white-100 rounded-xl py-3 w-72 drop-shadow-md'>
                                     {/* account button */}
                                     <SettingsButton

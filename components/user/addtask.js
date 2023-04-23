@@ -1,18 +1,18 @@
-import useSWR from 'swr'
+import useSWR, { mutate } from 'swr'
 import axios from 'axios'
 import { useEffect, useState } from "react"
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import { AiFillFlag, AiFillStar } from 'react-icons/ai'
 import { RegularInput, RegularTextArea } from "./inputs"
-import { RegularButton, TaskDateTimeButton, TaskIconButton } from "./buttons"
+import { RegularButton, TaskDateTimeButton, TaskDateTimeButton2, TaskIconButton } from "./buttons"
 import { fetcher, truncate } from '../functions'
 
 const priorityOptions = [
-    {priority: 'P1', title: 'Priority High'},
-    {priority: 'P2', title: 'Priority Medium'},
-    {priority: 'P3', title: 'Priority Low'},
-    {priority: 'P4', title: 'Not Priority'}
+    {priority: 'P1', title: 'High Priority'},
+    {priority: 'P2', title: 'Medium Priority'},
+    {priority: 'P3', title: 'Low Priority'},
+    {priority: 'P4', title: 'No Priority'}
 ]
 
 const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }) => {
@@ -25,7 +25,14 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
 
     // add task variables
     const [taskCategory, setTaskCategory] = useState('')
-    useEffect(()=> { setTaskCategory(categories?.data[0]?.id) }, [categories])
+    if(router.query.categoryId) {
+        useEffect(()=> { setTaskCategory(router.query.categoryId) }, [router.query.categoryId])
+    }
+    else {
+        useEffect(()=> { setTaskCategory(categories?.data[0]?.id) }, [categories])
+    }
+
+    console.log(taskCategory)
 
     const [taskName, setTaskName] = useState('')
     const [taskDesc, setTaskDesc] = useState('')
@@ -37,13 +44,19 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
     // today.setDate(today.getDate() + 3) 
     // const currDate = moment(new Date().toLocaleDateString()).format('YYYY-MM-DD')
 
-    const currentDate = new Date();
-    const year = currentDate.getFullYear();
-    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-    const day = String(currentDate.getDate()).padStart(2, '0');
+    const currentDate = new Date()
+    const year = currentDate.getFullYear()
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0')
+    const day = String(currentDate.getDate()).padStart(2, '0')
 
-    const currDate = `${year}-${month}-${day}`;
-    const currTime = new Date().toLocaleTimeString('it-IT')
+    const currDate = `${year}-${month}-${day}`
+
+    const currTime = new Date(Date.now() + 5 * 60000).toLocaleTimeString('en-US', { 
+        timeZone: 'Asia/Manila', 
+        hour12: false, 
+        hour: 'numeric', 
+        minute: 'numeric'
+    })
     
     const [startDate, setStartDate] = useState(currDate)
     const [startTime, setStartTime] = useState(currTime)
@@ -60,7 +73,7 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
     // clear all input fields
     const clearHandler = () => {
         taskMdlCloseHandler()
-        setTaskCategory(categories?.data[0]?.id)
+        setTaskCategory(router.query.categoryId)
         setTaskName('')
         setTaskDesc('')
         setIsStarred(0)
@@ -105,6 +118,7 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
         })
         .then(res => {
             if(res.data.success) {
+                mutate('http://127.0.0.1:8000/api/user/tasks')
                 clearHandler()
                 router.push(`/user/categories/${taskCategory}`)
                 alert(res.data.message)
@@ -113,13 +127,15 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
         .catch(error => {
             const errorMsg = JSON.parse(error.request.response)
             console.log(errorMsg.errors)
-            alert("Failed to Add Task: \n - " + errorMsg.message)
+            alert("Failed to Add Task: " + errorMsg.message + "\n")
         })
     }
 
+    // console.log("start time: ", startTime)
+    // console.log("end time: ", endTime)
     return (
         <div 
-            className={` items-center absolute top-0 left-0 w-screen h-screen bg-task-ss-dark-blue-600 bg-opacity-50 ${isTaskMdlClosed ? ' hidden ' : ' flex flex-col'}`} 
+            className={` items-center absolute top-0 left-0 w-screen h-screen bg-task-ss-dark-blue-600 bg-opacity-50 z-20 ${isTaskMdlClosed ? ' hidden ' : ' flex flex-col'}`} 
         >   
             {(categories?.data.length > 0) ? 
                 <div className='bg-task-ss-white-100 w-[90%] md:w-[600px] h-auto rounded-lg mt-[5%] relative z-20'>
@@ -132,7 +148,7 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
                                 value={taskType}
                                 onChange={e => setTaskType(e.target.value)}
                                 name='task_type_id'
-                                className='font-medium rounded-md bg-task-ss-white-300 text-xs p-2'
+                                className='font-medium rounded-md bg-task-ss-white-300 text-xs py-2 pr-7'
                             >   
                                 <option value='1'>To Do List</option>
                                 <option value='2'>To Be Done</option>
@@ -160,34 +176,50 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
                             <div className='flex justify-between flex-wrap'>
                                 <div className='flex flex-wrap mt-2 w-full md:w-auto'>
 
-                                {taskType == 2 && 
-                                    <TaskDateTimeButton 
-                                        color='text-task-ss-green-200'
-                                        title='Start Date' m='md:mr-2' 
-                                        dateValue={startDate} 
-                                        changeDate={(e) => setStartDate(e.target.value)} 
-                                        timeValue={startTime} 
-                                        changeTime={(e) => setStartTime(e.target.value)} 
-                                        state={startClose}
-                                        event={startCloseHandler}
-                                    />
-                                }
-
-                                    <TaskDateTimeButton 
-                                        color='text-task-ss-orange'
-                                        title='End Date' m='md:mr-2'
-                                        dateValue={endDate} 
-                                        changeDate={(e) => setEndDate(e.target.value)} 
-                                        timeValue={endTime} 
-                                        changeTime={(e) => setEndTime(e.target.value)} 
-                                        state={endClose}
-                                        event={endCloseHandler}
-                                    />
+                                    {taskType == 2 ?  
+                                        <>
+                                            <TaskDateTimeButton 
+                                                color='text-task-ss-green-200'
+                                                title='Start Date' m='md:mr-2' 
+                                                dateValue={startDate} 
+                                                changeDate={(e) => setStartDate(e.target.value)} 
+                                                timeValue={startTime} 
+                                                changeTime={(e) => setStartTime(`${e.target.value}:00`)} 
+                                                state={startClose}
+                                                event={startCloseHandler}
+                                            />
+                                            <TaskDateTimeButton 
+                                                color='text-task-ss-orange'
+                                                title='End Date' m='md:mr-2'
+                                                dateValue={endDate ?? ''} 
+                                                changeDate={(e) => setEndDate(e.target.value)} 
+                                                timeValue={endTime ?? ''} 
+                                                changeTime={(e) => setEndTime(`${e.target.value}:00`)} 
+                                                state={endClose}
+                                                event={endCloseHandler}
+                                            />
+                                        </>
+                                    :
+                                        <TaskDateTimeButton2
+                                            color='text-task-ss-orange'
+                                            title='End Date' m='md:mr-2'
+                                            dateValue={endDate ?? ''} 
+                                            changeDate={(e) => setEndDate(e.target.value)} 
+                                            timeValue={endTime ?? ''} 
+                                            changeTime={(e) => setEndTime(`${e.target.value}:00`)} 
+                                            state={endClose}
+                                            event={endCloseHandler}
+                                            event2={() => {
+                                                setEndDate('')
+                                                setEndTime('')
+                                            }}
+                                        />
+                                    }
 
                                     <select 
                                         value={taskCategory} 
                                         onChange={(e) => setTaskCategory(e.target.value)}
-                                        className='rounded-lg py-3 px-4 text-xs border transition-all border-task-ss-white-300 w-full md:w-auto active:scale-[0.98]'
+                                        className='rounded-lg py-3 pr-8 text-xs border transition-all border-task-ss-white-300 w-full md:w-auto active:scale-[0.98]'
                                     >
                                         {!categories && <option>Loading...</option>}
                                         {categories?.data?.map((category, idx) => (
@@ -264,7 +296,7 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
                                 type='pmry' 
                                 title='Add Task'
                                 eventType='submit'
-                                disabled={taskName == '' || taskDesc == ''}
+                                disabled={taskName == ''}
                             />
                         </div>
 

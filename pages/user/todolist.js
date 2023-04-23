@@ -22,9 +22,10 @@ const Todolist = () => {
             <TitleHeader title='To Do List' />
 
             <TaskList 
-                api={'http://localhost:8000/api/user/tasks/type/1'} 
+                api={'http://localhost:8000/api/user/tasks/sortfilter/created_at/desc?task_type_id=1'} 
                 token={userToken} 
                 url='todolist'
+                showCategory={true}
             />
         </>
     )

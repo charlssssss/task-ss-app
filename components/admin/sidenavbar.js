@@ -14,25 +14,19 @@ import { FailedToLoad, Loading } from './errors'
 
 // side nav button data
 const sideNavTitle = [
-    {icon: MdOutlineSpaceDashboard, title: 'Dashboard', link: '/user/dashboard'},
-    {icon: FiInbox, title: 'Inbox', link: '/user/inbox'},
-    {icon: BiStar, title: 'Starred', link: '/user/starred'},
-    {icon: MdListAlt, title: 'To Do List', link: '/user/todolist'},
-    {icon: BiCalendarCheck, title: 'To Be Done', link: '/user/tobedone'},
-    {icon: BiCalendar, title: 'Calendar', link: '/user/calendar'},
-    {icon: TbReportAnalytics, title: 'Productivity Reports', link: '/user/reports'},
+    {icon: MdOutlineSpaceDashboard, title: 'User Accounts', link: '/admin/useraccount'},
+    {icon: FiInbox, title: 'Admin Accounts', link: '/admin/adminaccount'},
+    {icon: BiStar, title: 'Subscriptions', link: '/admin/#'},
+    {icon: MdListAlt, title: 'Sales Reports', link: '/admin/#'},
+    {icon: TbReportAnalytics, title: 'Productivity Reports', link: '/admin/#'},
 ]
 
-const SideNavbar = ({ isToggled, toggleHandler, catMdlCloseHandler }) => {
+const SideNavbar = ({ isToggled, toggleHandler }) => {
     // for redirecting
     const router = useRouter()
 
-    // close action variables
-    const [isCatClosed, setIsCatClosed] = useState(false)
-    const catCloseHandler = () => setIsCatClosed(!isCatClosed)
-
     return (
-        <div className={`bg-task-ss-dark-blue-300 drop-shadow-xl fixed h-full transition-all pb-10 -translate-x-[100%] overflow-x-hidden lg:relative overflow-y-hidden hover:overflow-y-auto z-10 ${isToggled ? null : 'translate-x-[0px]' }`}
+        <div className={`bg-task-ss-dark-blue-300 drop-shadow-xl fixed h-full transition-all pb-10 -translate-x-[100%] overflow-x-hidden lg:relative z-20 overflow-y-hidden hover:overflow-y-auto  ${isToggled ? null : 'translate-x-[0px]' }`}
         >
             <div className='h-auto w-80'>
                 {/* close button section */}
@@ -59,35 +53,7 @@ const SideNavbar = ({ isToggled, toggleHandler, catMdlCloseHandler }) => {
                         router={router}
                     />
                 ))}
-
-                {/* category add & dropdown section */}
-                <div className='flex justify-between items-center '>
-                    <div className={`bg-task-ss-white-200 w-2 h-10 rounded-r-xl ${router.asPath == "/user/categories" ? 'scale-100' : 'scale-0'}`}></div>
-                    <div className={`flex justify-between items-center w-11/12 text-task-ss-white-300 pr-5 py-3 cursor-pointer hover:bg-task-ss-dark-blue-200 hover:text-task-ss-white-100 ${router.asPath == "/user/categories" ? 'bg-task-ss-dark-blue-200' : '' }`}>
-                        <Link href='/user/categories/'>
-                            <p className='ml-4 text-md font-light'>Categories</p>
-                        </Link>
-                        <div className='flex'>
-                            {/* add new category */}
-                            <i className='hover:text-task-ss-light-blue-200' onClick={catMdlCloseHandler}>
-                                <BiPlus />
-                            </i>
-                            
-                            {/* hide/show category */}
-                            <i 
-                                className={`ml-2 hover:text-task-ss-light-blue-200 transition-all ${isCatClosed ? 'rotate-90' : null }`}
-                                onClick={catCloseHandler}
-                            >
-                                <FiChevronDown />
-                            </i>
-                        </div>
-                    </div>
-                </div>
-                
-                {/* user's list of categories at sidenavbar section */}
-                <div className={`${isCatClosed ? 'hidden' : 'block' }`}>
-                    <SideCategoryButton router={router} />
-                </div>
+            
             </div>
         </div>
     )
@@ -104,7 +70,7 @@ export const SideNavProfile = () => {
     const userName = `${data?.data?.firstname} ${data?.data?.lastname}`
 
     if (error) return <FailedToLoad color='text-task-ss-white-100' />
-    if (isLoading) return <Loading color='text-task-ss-white-100' m='mb-10' />
+    if (isLoading) return <Loading color='text-task-ss-white-100' />
 
     return (
         <div className='flex justify-between items-center bg-task-ss-white-100 max-w-max p-2 my-6 mx-auto rounded-full'>

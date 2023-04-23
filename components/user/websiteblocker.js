@@ -1,14 +1,12 @@
 import axios from 'axios'
-import useSWR from 'swr'
+import useSWR, { mutate } from 'swr'
 import { useState } from "react"
-import { useRouter } from 'next/router'
 import { RegularButton } from "./buttons"
 import { useSession } from 'next-auth/react'
 import { RegularInput, RegularInput2 } from "./inputs"
 import { fetcher, handleDeleteWebsite, handleEditWebsite, isValidUrl } from '../functions'
 import { IoMdRemoveCircle } from 'react-icons/io'
 import { Loading, FailedToLoad, Empty3 } from './errors'
-import Link from 'next/link'
 import { AiFillCheckCircle, AiOutlineCheckCircle } from 'react-icons/ai'
 
 const WebsiteBlocker = ({ isBlockMdlClosed, blockMdlCloseHandler }) => {
@@ -55,6 +53,7 @@ const WebsiteBlocker = ({ isBlockMdlClosed, blockMdlCloseHandler }) => {
             }),
         })
         .then(res => {
+            mutate('http://127.0.0.1:8000/api/user/blockwebsites')
             console.log(res.data.message)
             alert(res.data.message)
         })
@@ -71,7 +70,7 @@ const WebsiteBlocker = ({ isBlockMdlClosed, blockMdlCloseHandler }) => {
 
     return (
         <div 
-            className={`justify-center items-center absolute top-0 left-0 w-screen h-screen bg-task-ss-dark-blue-600 bg-opacity-50 ${isBlockMdlClosed ? ' hidden ' : ' flex '}`} 
+            className={`justify-center items-center absolute top-0 left-0 w-screen h-screen bg-task-ss-dark-blue-600 bg-opacity-50 z-20 ${isBlockMdlClosed ? ' hidden ' : ' flex '}`} 
         >
             <div className='bg-task-ss-white-100 w-[90%] sm:w-[500px] h-auto rounded-lg relative z-20' >
                 {/* add website form */}
