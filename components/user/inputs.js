@@ -32,6 +32,35 @@ export const RegularInput2 = ({ ref, name, title, value, change, placeholder, m 
     )
 }
 
+export const RegularInput3 = ({ ref, name, title, value, change, placeholder, m, inputP, textSize, disabled }) => {
+    return (
+        <div className={`flex flex-col my-2 ${m}`}>
+            <label htmlFor={name} className='text-sm font-medium mb-2'>{title}</label>
+            {disabled ? 
+            
+                <input type="text" id={name}
+                        className={`${inputP} border outline-none ${textSize} border-task-ss-white-300 rounded-md transition-all ${ 'focus:border-task-ss-purple'}`}
+                        name={name}
+                        value={value}
+                        onChange={change} 
+                        placeholder={placeholder}
+                        ref={ref}
+                        disabled
+                />
+            :
+                <input type="text" id={name}
+                        className={`${inputP} border outline-none ${textSize} border-task-ss-white-300 rounded-md transition-all ${ 'focus:border-task-ss-purple'}`}
+                        name={name}
+                        value={value}
+                        onChange={change} 
+                        placeholder={placeholder}
+                        ref={ref}
+                />
+            }
+        </div>
+    )
+}
+
 // component for textarea
 export const RegularTextArea = ({ name, title, value, change, placeholder, m }) => {
     return (

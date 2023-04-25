@@ -139,3 +139,7 @@ export const currDate = () => {
 
     return `${year}-${month}-${day}`
 }
+
+export const capFirst = (str) => {
+    return str != null ? str.charAt(0).toUpperCase() + str.slice(1) : ''
+}

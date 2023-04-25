@@ -44,7 +44,9 @@ const SideNavbar = ({ isToggled, toggleHandler, catMdlCloseHandler }) => {
                 </div>
 
                 {/* logo section */}
-                <img src='/task_ss_logo.png' className='w-28 mx-auto my-8'/>
+                <Link href='/'>
+                    <img src='/task_ss_logo.png' className='w-28 mx-auto my-8'/>
+                </Link>
 
                 {/* user side nav profile section */}
                 <SideNavProfile />
