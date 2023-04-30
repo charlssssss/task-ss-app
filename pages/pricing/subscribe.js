@@ -4,9 +4,10 @@ import Head from 'next/head'
 import { useSession } from 'next-auth/react'
 import { BsCheck } from 'react-icons/bs'
 import { RegularButton } from '../../components/user/buttons'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import axios from 'axios'
+import ConfirmPayment from '../../components/user/confirmpayment'
 
 const proList = [
   'Unlimited categories',
@@ -17,46 +18,42 @@ const proList = [
 ]
 
 const bill = {
-  '1': { price: '₱500' },
-  '2': { price: '₱5,400' }, 
+  'monthly': { price: '₱500' },
+  'yearly': { price: '₱5,400' }, 
 }
 
 const Subscribe = () => {
-  const router = useRouter()
   const { data: session } = useSession()
   let user
   if(session) { user = session.user }
 
-  const [subTypeId, setSubTypeId] = useState('1');
+  const [isCnfrmPymntClosed, setIsCnfrmPymntClosed] = useState(true)
+  const cnfrmPymntCloseHandler = () => setIsCnfrmPymntClosed(!isCnfrmPymntClosed)
+  
+  const [subscribeData, setSubscribeData] = useState({
+    fullName: "",
+    token: "",
+    email: "",
+    plan: "monthly",
+    cardNo: "",
+    mm: "",
+    yy: "",
+    cvc: "",
+  })
 
-  const handleSubscribe = async (e) => {
-    e.preventDefault()
-    await axios('http://127.0.0.1:8000/api/user/subscribe', {
-      method: 'POST',
-      headers: { 
-        'Accept': 'application/json', 
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + user.token
-      
-      },
-      data: JSON.stringify({
-        "subscription_type_id": subTypeId
-      })
+  useEffect(() => {
+    setSubscribeData(prev => {
+      return { ...prev, fullName: `${user?.firstname} ${user?.lastname}`, email: user?.email, token: user?.token }
     })
-    .then(res => {
-      if(res.data.success) {
-          router.push('/user/dashboard')
-          alert(res.data.message)
-      } else { alert(res.data.message) }
-    })
-    .catch(error => {
-        console.log(error?.response?.data?.message)
-        console.log(error)
-        alert(error?.response?.data?.message)
+  }, [user])
+
+  const onChange = (e) => {
+    const { name, value } = e.target
+
+    setSubscribeData( prev => {
+      return { ...prev, [name]: value }
     })
   }
-
-  console.log(subTypeId)
 
   return (
     <div className='h-screen w-screen overflow-y-auto pb-10'>
@@ -68,8 +65,8 @@ const Subscribe = () => {
             </Link>
             
             <div className='flex flex-col items-end'>
-              <h3 className='text-lg font-semibold text-task-ss-dark-blue-300'>{`${user?.firstname} ${user?.lastname}`}</h3>
-              <p className='text-xs text-task-ss-white-400'>{user?.email}</p>
+              <h3 className='text-lg font-semibold text-task-ss-dark-blue-300'>{`${subscribeData.fullName}`}</h3>
+              <p className='text-xs text-task-ss-white-400'>{subscribeData.email}</p>
             </div>
 
           </div>
@@ -87,26 +84,36 @@ const Subscribe = () => {
 
         </div>
         
-        <form 
-          method='POST' 
-          onSubmit={e => handleSubscribe(e)}
-          className='w-screen bg-task-ss-white-100 md:w-[60%] rounded-md drop-shadow-lg px-8 py-6'
-        >
+        <div className='w-screen bg-task-ss-white-100 md:w-[60%] rounded-md drop-shadow-lg px-8 py-6'>
           <h3 className='mb-2'>Plan</h3>
 
           <div className='flex justify-between flex-wrap'>
-            <label className='flex flex-col cursor-pointer border border-task-ss-white-300 px-6 py-4 rounded-md w-full mb-4 transition-all md:w-[48%] hover:bg-task-ss-white-200'>
+            <label className={`flex flex-col cursor-pointer border ${subscribeData.plan === 'monthly' ? 'border-task-ss-purple' : 'border-task-ss-white-300'}  px-6 py-4 rounded-md w-full mb-4 transition-all md:w-[48%] hover:bg-task-ss-white-200`}>
               <div className='flex mb-1 justify-between'>
                 <p className='text-xs'>Pay monthly</p>
-                <input type='radio' value='1' name='sub_type_id' checked={subTypeId === '1'} onChange={e => setSubTypeId(e.target.value)}  required />
+                <input 
+                    type='radio' 
+                    value='monthly' 
+                    name='plan' 
+                    className='hidden'
+                    checked={subscribeData.plan === 'monthly'} 
+                    onChange={e => onChange(e)}  required 
+                  />
               </div>
               <h3 className='font-medium'>₱500/month</h3>
             </label>
 
-            <label className='flex flex-col cursor-pointer border border-task-ss-white-300 px-6 py-4 rounded-md w-full mb-4 transition-all md:w-[48%] hover:bg-task-ss-white-200'>
+            <label className={`flex flex-col cursor-pointer border ${subscribeData.plan === 'yearly' ? 'border-task-ss-purple' : 'border-task-ss-white-300'}  px-6 py-4 rounded-md w-full mb-4 transition-all md:w-[48%] hover:bg-task-ss-white-200`}>
               <div className='flex mb-1 justify-between'>
                 <p className='text-xs'>Pay yearly</p>
-                <input type='radio' value='2' name='sub_type_id' checked={subTypeId === '2'} onChange={e => setSubTypeId(e.target.value)} required />
+                <input 
+                    type='radio' 
+                    value='yearly' 
+                    name='plan' 
+                    className='hidden'
+                    checked={subscribeData.plan === 'yearly'} 
+                    onChange={e => onChange(e)} required 
+                  />
               </div>
               <h3 className='font-medium'>₱450/month</h3>
             </label> 
@@ -115,35 +122,47 @@ const Subscribe = () => {
           <div className='flex flex-col mb-10'>
             <label htmlFor='card_details' className='mb-2'>Card details</label>
             <div className='flex flex-wrap justify-between gap-2'>
-              <input type='number'
-                    className='px-3 py-2 border outline-none transition-all border-task-ss-white-300 rounded-md focus:border-task-ss-purple w-full sm:w-auto'
-                    placeholder='Card Number'
-                    maxLength={5}
-                    required
+              <input 
+                type='number'
+                name='cardNo'
+                className='px-3 py-2 border outline-none transition-all border-task-ss-white-300 rounded-md focus:border-task-ss-purple w-full sm:w-auto'
+                placeholder='Card Number'
+                maxLength={5}
+                onChange={e => onChange(e)}
+                required
               />
               <div className='ml-auto flex gap-2'>
-                <input type='number'
-                      className='px-3 py-2 border outline-none transition-all border-task-ss-white-300 rounded-md focus:border-task-ss-purple w-14'
-                      placeholder='MM'
-                      required
+                <input 
+                  type='number'
+                  name='mm'
+                  className='px-3 py-2 border outline-none transition-all border-task-ss-white-300 rounded-md focus:border-task-ss-purple w-14'
+                  placeholder='MM'
+                  onChange={e => onChange(e)}
+                  required
                 />
-                <input type='number'
-                      className='px-3 py-2 border outline-none transition-all border-task-ss-white-300 rounded-md focus:border-task-ss-purple w-14'
-                      placeholder='YY'
-                      required
+                <input 
+                  type='number'
+                  name='yy'
+                  className='px-3 py-2 border outline-none transition-all border-task-ss-white-300 rounded-md focus:border-task-ss-purple w-14'
+                  placeholder='YY'
+                  onChange={e => onChange(e)}
+                  required
                 />
-                <input type='number'
-                      className='px-3 py-2 border outline-none transition-all border-task-ss-white-300 rounded-md focus:border-task-ss-purple w-20'
-                      placeholder='CVC'
-                      required
+                <input 
+                  type='number'
+                  name='cvc'
+                  className='px-3 py-2 border outline-none transition-all border-task-ss-white-300 rounded-md focus:border-task-ss-purple w-20'
+                  placeholder='CVC'
+                  onChange={e => onChange(e)}
+                  required
                 />
               </div>
             </div>
           </div>
 
           <div className='flex flex-col items-end'>
-            <h1 className='mb-2 text-xl'>Billed now: {bill[subTypeId].price}</h1>
-            <p className='text-end text-xs'>By clicking “Start Task SS Pro Plan”, you agree to be charged {bill[subTypeId].price}, unless you <Link href='/user/dashboard' className='underline'>cancel</Link>. You acknowledge that refunds won't be available on cancellation.</p>
+            <h1 className='mb-2 text-xl'>Billed now: {bill[subscribeData.plan]?.price}</h1>
+            <p className='text-end text-xs'>You agree to be charged {bill[subscribeData.plan]?.price}, unless you <Link href='/user/dashboard' className='underline'>cancel</Link>. You acknowledge that refunds won't be available on cancellation.</p>
             
             <div className='flex gap-3'>
               <RegularButton 
@@ -155,15 +174,21 @@ const Subscribe = () => {
 
               <RegularButton 
                 type='pmry'
-                title='Start Task SS Pro Plan'
-                eventType='submit'
+                title='Verify Payement'
+                event={cnfrmPymntCloseHandler}
+                disabled={subscribeData.cardNo == "" || subscribeData.mm == "" || subscribeData.yy == "" || subscribeData.cvc == ""}
                 m='my-4'
               />
             </div>
           </div>
-
-        </form>
+        </div>
       </div>
+
+      <ConfirmPayment
+        isCnfrmPymntClosed={isCnfrmPymntClosed}
+        cnfrmPymntCloseHandler={cnfrmPymntCloseHandler}
+        subscribeData={subscribeData}
+      />
     </div>
   )
 }

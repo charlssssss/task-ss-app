@@ -25,14 +25,12 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
 
     // add task variables
     const [taskCategory, setTaskCategory] = useState('')
-    if(router.query.categoryId) {
+    if(router.query.categoryId != undefined) {
         useEffect(()=> { setTaskCategory(router.query.categoryId) }, [router.query.categoryId])
     }
     else {
         useEffect(()=> { setTaskCategory(categories?.data[0]?.id) }, [categories])
     }
-
-    console.log(taskCategory)
 
     const [taskName, setTaskName] = useState('')
     const [taskDesc, setTaskDesc] = useState('')

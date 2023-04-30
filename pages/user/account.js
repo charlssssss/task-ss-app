@@ -81,7 +81,7 @@ const Account = ({ user, subscriptions, currentPlan, userToken }) => {
   const handleDeleteUser =  async (e) => {
     e.preventDefault()
     // confirmation
-    if(confirm(`Are you sure u want to deactivate ${user?.firstname}?`) ) {
+    if(confirm(`Are you sure you want to delete your account, ${user?.firstname}? \nAll of your data will be lost.`) ) {
         await axios(`http://127.0.0.1:8000/api/user/deleteUser/${user.id}`, { 
             method: 'DELETE',
             headers: { 'Authorization': 'Bearer ' + userToken }
@@ -200,7 +200,7 @@ const Account = ({ user, subscriptions, currentPlan, userToken }) => {
                     <div className='mt-3 flex justify-between flex-wrap gap-2'>
                       <RegularButton
                         type='dngr'
-                        title='Deactivate'
+                        title='Delete Account'
                         event={handleDeleteUser}
                       />
 

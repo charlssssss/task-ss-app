@@ -1,8 +1,26 @@
 import Head from 'next/head'
 import { BsCheck } from 'react-icons/bs'
-import { useSession } from 'next-auth/react'
-import PagesLayout from '../layouts/pagesLayout'
-import { RegularButton } from "../components/user/buttons"
+import { getSession, useSession } from 'next-auth/react'
+import PagesLayout from '../../layouts/pagesLayout'
+import { RegularButton } from "../../components/user/buttons"
+import axios from 'axios'
+
+export const getServerSideProps = async (context) => {
+  const res = await getSession(context)
+  try {
+      const[currentPlan] = await Promise.all([
+          axios.get('http://localhost:8000/api/user/currentplan', 
+          { headers: { 'Authorization': 'Bearer ' + res.user.token } }),
+      ])
+      return { 
+          props: { currentPlan: currentPlan.data.data } 
+      }
+  
+  } catch (error) {
+      console.log(error)
+      return { props: { currentPlan: null } }
+  }
+}
 
 const pricingCardOptions = [
   {
@@ -44,7 +62,7 @@ const pricingCardOptions = [
   },
 ]
 
-const Pricing = () => {
+const Pricing = ({ currentPlan }) => {
   const { data: session } = useSession()
 
     return (
@@ -57,6 +75,7 @@ const Pricing = () => {
               btn={option.btn} 
               list={option.list}
               session={session}
+              currentPlan={currentPlan}
             />
           ))}
         </div>
@@ -64,7 +83,7 @@ const Pricing = () => {
     )
 }
 
-export const PricingCard = ({title, btn, list, session }) => {
+export const PricingCard = ({title, btn, list, session, currentPlan }) => {
   return (
     <div className='w-[80%] lg:w-[40%] bg-task-ss-white-100 rounded-xl h-auto mx-5 mb-10 drop-shadow-lg flex flex-col items-center py-10 px-20 transition-all lg:hover:drop-shadow-2xl'>
 
@@ -77,12 +96,24 @@ export const PricingCard = ({title, btn, list, session }) => {
 
       {title.header == 'Free' ? 
         (session ? 
-          <RegularButton type={btn.type} title={btn.title} m='mb-5' link='/user/dashboard' />
+          (!currentPlan ?
+            <RegularButton type={btn.type} title={btn.title} m='mb-5' link='/user/dashboard' />
+          :
+          <RegularButton type='pmry' title='Free Plan' m='mb-5' link='/user/dashboard' />
+          )
         :
           <RegularButton type='pmry' title='Get Started' m='mb-5' link='/user/dashboard' />
         )
       :
-        <RegularButton type={btn.type} title={btn.title} m='mb-5' link='/pricing/subscribe' />
+        (session ? 
+          (!currentPlan ?
+            <RegularButton type={btn.type} title={btn.title} m='mb-5' link='/pricing/subscribe' />
+          :
+            <RegularButton type='snd' title='Current Plan' m='mb-5' link='/user/dashboard' />
+          )
+        :
+          <RegularButton type={btn.type} title={btn.title} m='mb-5' link='/pricing/subscribe' />
+        )
       }
       
 
