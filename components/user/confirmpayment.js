@@ -16,7 +16,7 @@ const ConfirmPayment = ({ isCnfrmPymntClosed, cnfrmPymntCloseHandler, subscribeD
 
     const handleSubscribe = async (e) => {
         e.preventDefault()
-        await axios('http://127.0.0.1:8000/api/user/subscribe', {
+        await axios('http://127.0.0.1:8000/api/user/subscriptions/subscribe', {
           method: 'POST',
           headers: { 
             'Accept': 'application/json', 

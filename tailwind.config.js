@@ -71,7 +71,11 @@ module.exports = {
         }
       }
     },
-    extend: {},
+    extend: {
+      fontFamily: {
+        'rubik': ['Rubik', 'san-serif'],
+      }
+    },
   },
   plugins: [],
   safelist: [{

@@ -22,7 +22,7 @@ export const getServerSideProps = async (context) => {
           { headers: { 'Authorization': 'Bearer ' + res.user.token } }),
           axios.get('http://localhost:8000/api/user/subscriptions', 
           { headers: { 'Authorization': 'Bearer ' + res.user.token } }),
-          axios.get('http://localhost:8000/api/user/currentplan', 
+          axios.get('http://localhost:8000/api/user/subscriptions/currentplan', 
           { headers: { 'Authorization': 'Bearer ' + res.user.token } }),
       ])
       return { 

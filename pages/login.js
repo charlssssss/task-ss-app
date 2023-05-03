@@ -26,7 +26,7 @@ export const getServerSideProps = async (context) => {
   if (session && session.user.role_id == 2) {
     return {
       redirect: {
-        destination: "/admin/dashboard",
+        destination: "/admin/useraccounts",
         permanent: false,
       }
     }

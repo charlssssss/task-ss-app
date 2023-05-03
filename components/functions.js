@@ -9,6 +9,7 @@ export function truncate(str, n) {
 export const fetcher = ([url, token]) => 
     axios.get(url, { headers: { 'Authorization': 'Bearer ' + token } }).then(res => res.data)
 
+export const fetcher2 = url => fetch(url).then(r => r.json())
 
 // add category function
 export const handleAddCategory =  async (e, dataValues, token, router, clearHandler) => {

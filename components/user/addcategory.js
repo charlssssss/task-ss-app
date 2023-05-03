@@ -32,7 +32,7 @@ const AddCategory = ({ isCatMdlClosed, catMdlCloseHandler }) => {
     let userToken
     if(session) { userToken = session.user.token }
 
-    const { data: proPlan } = useSWR(['http://localhost:8000/api/user/currentplan', userToken], fetcher)
+    const { data: proPlan } = useSWR(['http://localhost:8000/api/user/subscriptions/currentplan', userToken], fetcher)
     const { data: categoryCount } = useSWR(['http://localhost:8000/api/user/categories', userToken], fetcher)
 
     // add category variables

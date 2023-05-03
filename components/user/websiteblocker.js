@@ -8,6 +8,15 @@ import { fetcher, handleDeleteWebsite, handleEditWebsite, isValidUrl } from '../
 import { IoMdRemoveCircle } from 'react-icons/io'
 import { Loading, FailedToLoad, Empty3 } from './errors'
 import { AiFillCheckCircle, AiOutlineCheckCircle } from 'react-icons/ai'
+import { BsCheck } from 'react-icons/bs'
+
+const upgradeList = [
+    'Unlimited categories',
+    'Website Blocker',
+    'Notifications pop-ups',
+    'Recurring Tasks',
+    'Scheduled auto-generated links'
+]
 
 const WebsiteBlocker = ({ isBlockMdlClosed, blockMdlCloseHandler }) => {
     // fetch user token
@@ -21,6 +30,7 @@ const WebsiteBlocker = ({ isBlockMdlClosed, blockMdlCloseHandler }) => {
     const [validURL, setValidURL] = useState(false)
 
     const { data, error, isLoading } = useSWR(['http://localhost:8000/api/user/blockwebsites', userToken], fetcher)
+    const { data: proPlan } = useSWR(['http://localhost:8000/api/user/subscriptions/currentplan', userToken], fetcher)
 
     // clear and close modal
     const clearHandler = () => {
@@ -62,7 +72,7 @@ const WebsiteBlocker = ({ isBlockMdlClosed, blockMdlCloseHandler }) => {
             alert(err)
         })
     }
-
+    
     if (error) return <FailedToLoad />
     if (isLoading) return <Loading />
     
@@ -76,48 +86,68 @@ const WebsiteBlocker = ({ isBlockMdlClosed, blockMdlCloseHandler }) => {
                 {/* add website form */}
                 <div>
                     <div className='flex items-center py-3 px-5'>
-                        <h2 className='font-semibold text-lg'>Edit Website Blocker</h2>
+                        <h2 className='font-semibold text-lg'>{proPlan.data ? 'Edit Website Blocker' : 'Need a website blocker?'}</h2>
                     </div>
                     <hr className='text-task-ss-white-300'/>
                 </div>
                 
                 {/* input fields */}
-                <form method='POST' 
-                    onSubmit={e => { handleAddWebsite(e); clearInputsHandler()}} 
-                    className='py-2 px-5 flex flex-col'
-                >
-                    <RegularInput
-                        name='website_name' 
-                        title='Website Name' 
-                        value={webName} 
-                        change={setWebName} 
-                        placeholder='e.g. YouTube' 
-                    />
-                    
-                    
-                    <RegularInput2
-                        name='website_name' 
-                        title='Website URL' 
-                        value={webURLName} 
-                        change={(e) => {
-                            setValidURL(isValidUrl(webURLName))
-                            setWebURLName(e.target.value)
-                        }} 
-                        placeholder='e.g. www.youtube.com'
-                    />
+                {proPlan.data && 
+                    <form method='POST' 
+                        onSubmit={e => { handleAddWebsite(e); clearInputsHandler()}} 
+                        className='py-2 px-5 flex flex-col'
+                    >
+                        <RegularInput
+                            name='website_name' 
+                            title='Website Name' 
+                            value={webName} 
+                            change={setWebName} 
+                            placeholder='e.g. YouTube' 
+                        />
+                        
+                        
+                        <RegularInput2
+                            name='website_name' 
+                            title='Website URL' 
+                            value={webURLName} 
+                            change={(e) => {
+                                setValidURL(isValidUrl(webURLName))
+                                setWebURLName(e.target.value)
+                            }} 
+                            placeholder='e.g. www.youtube.com'
+                        />
 
-                    <RegularButton 
-                        type='dngr'
-                        title='Add Website'
-                        eventType='submit'
-                        m='mb-3'
-                        disabled={webName == '' || webURLName == '' || !validURL}
-                    />
+                        <RegularButton 
+                            type='dngr'
+                            title='Add Website'
+                            eventType='submit'
+                            m='mb-3'
+                            disabled={webName == '' || webURLName == '' || !validURL}
+                        />
 
-                    <hr className='text-task-ss-white-300'/>
-                </form>
+                        <hr className='text-task-ss-white-300'/>
+                    </form>
+                }
                 
-                <div className='py-2 px-5 flex flex-col'>
+                {!proPlan.data && 
+                    <div className='p-5'>
+                        <div className='flex flex-col items-center bg-task-ss-white-200 rounded-lg p-4'>
+                            <img src='/illustration_2.png' className='my-5 w-40' />
+                            
+                            <div>
+                                <h1 className='font-semibold'>Have it with the Pro plan</h1>
+                                <ul className='mt-2 text-sm font-light'>
+                                    {upgradeList.map((item, idx) => (
+                                    <li key={idx.toString()} className='mb-2 flex gap-2'><BsCheck size={20} className='text-task-ss-green-200' />{item}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>     
+                }
+                
+                {proPlan.data && 
+                    <div className='py-2 px-5 flex flex-col'>
                     <h2 className='text-sm font-medium'>Websites to be Blocked ({data.data.length - excludedWebsite.length})</h2>
 
                     <div className='mt-2 mb-4 w-full h-32 border border-task-ss-white-300 overflow-y-auto'>
@@ -162,18 +192,29 @@ const WebsiteBlocker = ({ isBlockMdlClosed, blockMdlCloseHandler }) => {
                         </ul>
 
                     </div>
-                </div>
+                    </div>
+                }
                 {/* cancel and add button */}
                 <div>
                     <hr className='text-task-ss-white-300'/>
                     <div className='flex flex-wrap md:flex-nowrap items-center justify-end py-3 px-5'>
                         <p className='text-[10px]'><b>NOTE:</b> The Task SS Website Blocker is only available through the Task SS Official Website Blocker Chrome Extension.</p>
-                        <RegularButton 
-                            type='snd' 
-                            title='Close' 
-                            event={clearHandler}
-                            eventType='button'
-                        />
+
+                        {proPlan.data ? 
+                            <RegularButton 
+                                type='snd' 
+                                title='Close' 
+                                event={clearHandler}
+                                eventType='button'
+                            />
+                        :
+                            <RegularButton 
+                                type='pmry' 
+                                title='Lasgo'
+                                link='/pricing/subscribe'
+                            />
+                        }
+                        
                     </div>
                 </div>
             </div>

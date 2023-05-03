@@ -9,7 +9,7 @@ import { RegularButton, TaskDateTimeButton, TaskDateTimeButton2, TaskIconButton 
 import { fetcher, truncate } from '../functions'
 
 
-const EditFeedback = ({ isFeedbackMdlClosed, feedbackMdlCloseHandler, editFeedback }) => {
+const AddFeedback = ({ isFeedbackMdlClosed, feedbackMdlCloseHandler }) => {
     const router = useRouter()
     const { data: session } = useSession()
     let userToken
@@ -18,24 +18,20 @@ const EditFeedback = ({ isFeedbackMdlClosed, feedbackMdlCloseHandler, editFeedba
     const [comments, setComments] = useState('')
     const [ratings, setRatings] = useState('1')
 
-    useEffect(() => {
-        setComments(editFeedback.comments)
-        setRatings(editFeedback.ratings)
-	}, [editFeedback])
 
     // clear all input fields
     const clearHandler = () => {
         feedbackMdlCloseHandler()
-        setComments(editFeedback.comments)
-        setRatings(editFeedback.ratings)
+        setComments('')
+        setRatings('1')
 
     }
 
-    const handleEditFeedback =  async (e) => {
+    const handleAddFeedback = async (e) => {
         e.preventDefault()
-      
-        await axios(`http://127.0.0.1:8000/api/user/feedbacks/${editFeedback.id}`, { 
-            method: 'PUT',
+    
+        await axios('http://127.0.0.1:8000/api/user/feedbacks', { 
+            method: 'POST',
             headers: {
                 'Accept': 'application/json', 
                 'Content-Type': 'application/json',
@@ -48,7 +44,6 @@ const EditFeedback = ({ isFeedbackMdlClosed, feedbackMdlCloseHandler, editFeedba
         })
         .then(res => {
             if(res.data.success) {
-                mutate('http://127.0.0.1:8000/api/user/feedbacks')
                 clearHandler()
                 router.push(`/feedback`)
                 alert(res.data.message)
@@ -56,21 +51,18 @@ const EditFeedback = ({ isFeedbackMdlClosed, feedbackMdlCloseHandler, editFeedba
         })
         .catch(error => {
             console.log(error)
-            alert(error)
         })
     }
 
-    // console.log("start time: ", startTime)
-    // console.log("end time: ", endTime)
     return (
         <div 
             className={` items-center absolute top-0 left-0 w-screen h-screen z-20 bg-task-ss-dark-blue-600 bg-opacity-50 ${isFeedbackMdlClosed ? ' hidden ' : ' flex flex-col'}`} 
         >   
                 <div className='bg-task-ss-white-100 w-[90%] md:w-[600px] h-auto rounded-lg mt-[5%] relative z-20'>
                     {/* add task form */}
-                    <form method='POST' onSubmit={handleEditFeedback}>
+                    <form method='POST' onSubmit={handleAddFeedback}>
                         <div className='flex flex-wrap items-center py-3 px-5'>
-                            <h2 className='font-semibold text-lg mr-4'>Edit Feedback</h2>
+                            <h2 className='font-semibold text-lg mr-4'>Send Feedback</h2>
                         </div>
                         <hr className='text-task-ss-white-300'/>
 
@@ -108,7 +100,7 @@ const EditFeedback = ({ isFeedbackMdlClosed, feedbackMdlCloseHandler, editFeedba
                             />
                             <RegularButton 
                                 type='pmry' 
-                                title='Edit Feedback'
+                                title='Submit Feedback'
                                 eventType='submit'
                             />
                         </div>
@@ -125,4 +117,4 @@ const EditFeedback = ({ isFeedbackMdlClosed, feedbackMdlCloseHandler, editFeedba
     )
 }
  
-export default EditFeedback
+export default AddFeedback
