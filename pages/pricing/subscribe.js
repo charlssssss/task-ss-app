@@ -18,8 +18,8 @@ const proList = [
 ]
 
 const bill = {
-  'monthly': { price: '₱500' },
-  'yearly': { price: '₱5,400' }, 
+  'monthly': { price: '₱300' },
+  'yearly': { price: '₱2,880' }, 
 }
 
 const Subscribe = () => {
@@ -100,7 +100,7 @@ const Subscribe = () => {
                     onChange={e => onChange(e)}  required 
                   />
               </div>
-              <h3 className='font-medium'>₱500/month</h3>
+              <h3 className='font-medium'>₱300/month</h3>
             </label>
 
             <label className={`flex flex-col cursor-pointer border ${subscribeData.plan === 'yearly' ? 'border-task-ss-purple' : 'border-task-ss-white-300'}  px-6 py-4 rounded-md w-full mb-4 transition-all md:w-[48%] hover:bg-task-ss-white-200`}>
@@ -115,7 +115,7 @@ const Subscribe = () => {
                     onChange={e => onChange(e)} required 
                   />
               </div>
-              <h3 className='font-medium'>₱450/month</h3>
+              <h3 className='font-medium'>₱240/month</h3>
             </label> 
           </div>
 

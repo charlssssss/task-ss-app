@@ -13,7 +13,7 @@ import { BsBellFill, BsGearFill, BsCheckCircle, BsSearch } from 'react-icons/bs'
 import { MdOutlineAccountCircle, MdOutlineBlock, MdListAlt } from 'react-icons/md'
 
 const settingsTitle = [
-    {icon: <MdOutlineAccountCircle />, title: 'Account', link: '/admin/#'},
+    {icon: <MdOutlineAccountCircle />, title: 'Account', link: '/admin/account'},
     {icon: <TbLogout />, title: 'Logout'}
 ]
 

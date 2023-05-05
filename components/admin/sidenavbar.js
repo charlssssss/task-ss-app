@@ -15,10 +15,9 @@ import { FailedToLoad, Loading } from './errors'
 const sideNavTitle = [
     {icon: BiUser, title: 'User Accounts', link: '/admin/useraccounts'},
     {icon: RiAdminLine, title: 'Admin Accounts', link: '/admin/adminaccounts'},
-    {icon: BiWallet, title: 'Subscriptions', link: '/admin/subscriptions'},
-    {icon: TbReportMoney, title: 'Sales Reports', link: '/admin/salesreports'},
     {icon: VscFeedback, title: 'User Feedbacks', link: '/admin/userfeedbacks'},
-    {icon: TbReportAnalytics, title: 'Productivity Reports', link: '/admin/prodreports'},
+    {icon: BiWallet, title: 'Subscriptions', link: '/admin/subscriptions'},
+    {icon: TbReportAnalytics, title: 'Reports', link: '/admin/reports'},
 ]
 
 const SideNavbar = ({ isToggled, toggleHandler }) => {

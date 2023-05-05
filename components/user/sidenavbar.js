@@ -20,7 +20,7 @@ const sideNavTitle = [
     {icon: MdListAlt, title: 'To Do List', link: '/user/todolist'},
     {icon: BiCalendarCheck, title: 'To Be Done', link: '/user/tobedone'},
     {icon: BiCalendar, title: 'Calendar', link: '/user/calendar'},
-    {icon: TbReportAnalytics, title: 'Productivity Reports', link: '/user/reports'},
+    {icon: TbReportAnalytics, title: 'Productivity Reports', link: '/user/prodreports'},
 ]
 
 const SideNavbar = ({ isToggled, toggleHandler, catMdlCloseHandler }) => {

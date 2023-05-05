@@ -10,7 +10,7 @@ const nextConfig = {
       },
       {
         source: '/admin',
-        destination: '/admin/dashboard',
+        destination: '/admin/useraccounts',
         permanent: true,
       },
     ]

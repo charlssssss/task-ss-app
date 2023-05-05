@@ -4,8 +4,8 @@ import { RegularButton } from "./buttons"
 import { useRouter } from "next/router"
 
 const bill = {
-    'monthly': { price: '500', quantity: '1', subId: '1' },
-    'yearly': { price: '450', quantity: '12', subId: '2' }, 
+    'monthly': { price: '300', quantity: '1', subId: '1' },
+    'yearly': { price: '240', quantity: '12', subId: '2' }, 
 }
 
 const ConfirmPayment = ({ isCnfrmPymntClosed, cnfrmPymntCloseHandler, subscribeData }) => {

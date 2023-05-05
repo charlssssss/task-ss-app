@@ -46,7 +46,7 @@ const pricingCardOptions = [
       img: 'illustration_2.png',
       header: 'Pro',
       sub: 'For pro users',
-      price: '₱500'
+      price: '₱300'
     },
     btn: {
       type: 'pmry',
@@ -57,7 +57,6 @@ const pricingCardOptions = [
       'Website Blocker',
       'Notifications pop-ups',
       'Recurring Tasks',
-      'Scheduled auto-generated links'
     ]
   },
 ]
