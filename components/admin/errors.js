@@ -12,9 +12,9 @@ export const FailedToLoad = ({ color }) => {
 }
 
 // loading error component
-export const Loading = ({ color }) => {
+export const Loading = ({ color, m }) => {
     return (
-        <div className={`flex items-center justify-center mt-10 ${color}`}>
+        <div className={`flex items-center justify-center mt-10 ${m} ${color}`}>
             <VscLoading className='animate-spin -z-20' size={20} />
             <p className='ml-3 text-lg'>Loading ...</p>
         </div>

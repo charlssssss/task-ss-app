@@ -1,24 +1,23 @@
-import Link from 'next/link'
+
 import useSWR from 'swr'
-import { useState } from 'react'
 import { useRouter } from "next/router"
-import { FiInbox } from 'react-icons/fi'
 import { useSession } from 'next-auth/react'
-import { FiChevronDown } from 'react-icons/fi'
-import { TbReportAnalytics } from 'react-icons/tb'
-import { MdClose, MdListAlt, MdOutlineSpaceDashboard } from 'react-icons/md'
-import { IconButton, SideNavButton, SideCategoryButton } from './buttons'
-import { BiStar, BiCalendarCheck, BiCalendar, BiPlus } from 'react-icons/bi'
+import { TbReportAnalytics, TbReportMoney } from 'react-icons/tb'
+import { MdClose } from 'react-icons/md'
+import { IconButton, SideNavButton } from './buttons'
+import { BiUser, BiWallet } from 'react-icons/bi'
+import { RiAdminLine } from 'react-icons/ri'
+import { VscFeedback } from 'react-icons/vsc'
 import { fetcher } from '../functions'
 import { FailedToLoad, Loading } from './errors'
 
 // side nav button data
 const sideNavTitle = [
-    {icon: MdOutlineSpaceDashboard, title: 'User Accounts', link: '/admin/useraccount'},
-    {icon: FiInbox, title: 'Admin Accounts', link: '/admin/adminaccount'},
-    {icon: BiStar, title: 'Subscriptions', link: '/admin/#'},
-    {icon: MdListAlt, title: 'Sales Reports', link: '/admin/#'},
-    {icon: TbReportAnalytics, title: 'Productivity Reports', link: '/admin/#'},
+    {icon: BiUser, title: 'User Accounts', link: '/admin/useraccounts'},
+    {icon: RiAdminLine, title: 'Admin Accounts', link: '/admin/adminaccounts'},
+    {icon: VscFeedback, title: 'User Feedbacks', link: '/admin/userfeedbacks'},
+    {icon: BiWallet, title: 'Subscriptions', link: '/admin/subscriptions'},
+    {icon: TbReportAnalytics, title: 'Reports', link: '/admin/reports'},
 ]
 
 const SideNavbar = ({ isToggled, toggleHandler }) => {
@@ -70,7 +69,7 @@ export const SideNavProfile = () => {
     const userName = `${data?.data?.firstname} ${data?.data?.lastname}`
 
     if (error) return <FailedToLoad color='text-task-ss-white-100' />
-    if (isLoading) return <Loading color='text-task-ss-white-100' />
+    if (isLoading) return <Loading color='text-task-ss-white-100' m='mb-10' />
 
     return (
         <div className='flex justify-between items-center bg-task-ss-white-100 max-w-max p-2 my-6 mx-auto rounded-full'>

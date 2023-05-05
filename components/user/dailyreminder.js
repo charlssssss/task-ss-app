@@ -68,7 +68,7 @@ const DailyReminder = ({ isReminderMdlClosed, reminderMdlCloseHandler }) => {
                         </div>
                     </div>
                     <div className={listStyles[activeTab].style}></div>
-                    <div className='py-5 px-8'>
+                    <div className='py-5 px-8 h-[50vh] overflow-y-auto'>
                     {
                         selectedTab?.data.length > 0 ?
                             selectedTab?.data.slice(0,5).map((task, idx, arr) => {
@@ -129,7 +129,10 @@ const DailyReminder = ({ isReminderMdlClosed, reminderMdlCloseHandler }) => {
                             type='pmry' 
                             title='Okay, Thanks!' 
                             eventType='button'
-                            event={reminderMdlCloseHandler}
+                            event={() => {
+                                if(localStorage.getItem('firstLogin') == 'true') localStorage.setItem('firstLogin', 'false')
+                                reminderMdlCloseHandler()
+                            }}
                         />
                     </div>
             </div>
@@ -137,7 +140,10 @@ const DailyReminder = ({ isReminderMdlClosed, reminderMdlCloseHandler }) => {
             {/* clear all input when clicking the background or exiting modal */}
             <div 
                 className={`justify-center items-center absolute top-0 left-0 w-screen h-screen`} 
-                onClick={reminderMdlCloseHandler}
+                onClick={() => {
+                    if(localStorage.getItem('firstLogin') == 'true') localStorage.setItem('firstLogin', 'false')
+                    reminderMdlCloseHandler()
+                }}
             ></div>
         </div>
     )
@@ -149,7 +155,7 @@ const TabButton = ({ name, tabNum, data, activeTab, setActiveTab, setSelectedTab
             className={`${activeTab == tabNum && 'bg-task-ss-white-100 drop-shadow-md'}`} 
             onClick={() => { setActiveTab(tabNum), setSelectedTab(data) }}
         >
-            <p className='px-6 md:py-5 md:px-8 text-xs md:text-[15px]'>{name}</p>
+            <p className='py-3 px-6 md:py-5 md:px-8 text-xs md:text-[15px]'>{name}</p>
         </button>
     )
 }

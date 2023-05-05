@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Rubik } from '@next/font/google'
 import Topbar from "../components/user/topbar"
 import SideNavbar from "../components/user/sidenavbar"
@@ -30,8 +30,17 @@ const AppLayout = ({ children }) => {
     const [taskType, setTaskType] = useState('')
 
     // add website blocker modal
+    let firstLogin
+    if (typeof window !== 'undefined') firstLogin = localStorage.getItem('firstLogin')
+    
     const [isReminderMdlClosed, setIsReminderMdlClosed] = useState(true)
     const reminderMdlCloseHandler = () => setIsReminderMdlClosed(!isReminderMdlClosed)
+
+    useEffect(() => {
+        if(firstLogin == 'true') {
+            setIsReminderMdlClosed(false)
+        }
+    },[])
 
     return (
         <>

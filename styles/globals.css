@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Rubik&display=swap');
 
 :root {
   --bg-color: #eeeeee;
@@ -32,6 +33,15 @@ select {
 .rbc-toolbar-label {
   font-size: 18px;
   margin: 15px 0;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
 }
 
 @layer components {

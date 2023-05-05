@@ -40,6 +40,7 @@ const Topbar = ({ toggleHandler, taskMdlCloseHandler, blockMdlCloseHandler, remi
             headers: { 'Authorization': 'Bearer ' + userToken }
         })
         if(res) {
+            localStorage.clear()
             signOut({ redirect: false })
             .then(() => router.push("/"))
         }

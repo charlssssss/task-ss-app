@@ -9,6 +9,7 @@ export function truncate(str, n) {
 export const fetcher = ([url, token]) => 
     axios.get(url, { headers: { 'Authorization': 'Bearer ' + token } }).then(res => res.data)
 
+export const fetcher2 = url => fetch(url).then(r => r.json())
 
 // add category function
 export const handleAddCategory =  async (e, dataValues, token, router, clearHandler) => {
@@ -138,4 +139,8 @@ export const currDate = () => {
     const day = String(currentDate.getDate()).padStart(2, '0')
 
     return `${year}-${month}-${day}`
+}
+
+export const capFirst = (str) => {
+    return str != null ? str.charAt(0).toUpperCase() + str.slice(1) : ''
 }

@@ -26,7 +26,7 @@ export const getServerSideProps = async (context) => {
   if (session && session.user.role_id == 2) {
     return {
       redirect: {
-        destination: "/admin/dashboard",
+        destination: "/admin/useraccounts",
         permanent: false,
       }
     }
@@ -62,6 +62,7 @@ const LogIn = () => {
         else {
           router.push('/login')
         }
+        localStorage.setItem('firstLogin', 'true')
       }
       else {
         setIsError(true)
@@ -121,7 +122,7 @@ const LogIn = () => {
             {/* login form */}
             <form method="post" onSubmit={handleLogin}>
               <div className='flex flex-col my-2'>
-                <label htmlFor='username' className='text-sm font-medium'>Username</label>
+                <label htmlFor='username' className='text-sm font-medium'>Email</label>
                 <input type="text" id="username" required
                       className={`px-3 py-1 border outline-none border-soc-med-google rounded-md transition-all ${isError ? 'border-task-ss-red-200' : 'focus:border-task-ss-purple'}`}
                       name='username'

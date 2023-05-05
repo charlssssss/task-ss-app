@@ -13,7 +13,7 @@ import { BsBellFill, BsGearFill, BsCheckCircle, BsSearch } from 'react-icons/bs'
 import { MdOutlineAccountCircle, MdOutlineBlock, MdListAlt } from 'react-icons/md'
 
 const settingsTitle = [
-    {icon: <MdOutlineAccountCircle />, title: 'Account', link: '/admin/#'},
+    {icon: <MdOutlineAccountCircle />, title: 'Account', link: '/admin/account'},
     {icon: <TbLogout />, title: 'Logout'}
 ]
 
@@ -57,7 +57,7 @@ const Topbar = ({ toggleHandler }) => {
                         />
                         <IconButton 
                             icon={<ImHome className='text-task-ss-dark-blue-300' size={18} />}
-                            link='/admin/useraccount'
+                            link='/admin/useraccounts'
                             hover={true}
                         />
                     </div>
@@ -73,7 +73,7 @@ const Topbar = ({ toggleHandler }) => {
                                 event={null}
                                 hover={true}
                             />
-                            <div className={`absolute top-10 right-[32px] pt-6  ${hoverSetting ? '' : 'hidden' }`}>
+                            <div className={`absolute top-10 right-[32px] z-10 pt-6  ${hoverSetting ? '' : 'hidden' }`}>
                                 <div className='bg-task-ss-white-100 rounded-xl py-3 w-72 drop-shadow-md'>
                                     {/* account button */}
                                     <SettingsButton

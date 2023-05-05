@@ -15,7 +15,7 @@ import WebsiteBlocker from '../../components/user/websiteblocker'
 export const getServerSideProps = async (context) => {
     const res = await getSession(context)
     try {
-        const[recent, upcomingTasks, completedCount, blockedkWebCount] = await Promise.all([
+        const[recent, upcomingTasks, completedCount, blockedkWebCount, overdueTasks] = await Promise.all([
             axios.get('http://127.0.0.1:8000/api/user/tasks/sortfilter/updated_at/desc', 
             { headers: { 'Authorization': 'Bearer ' + res.user.token } }),
             axios.get('http://127.0.0.1:8000/api/user/tasks/sortfilter/end_date/asc', 
@@ -24,6 +24,8 @@ export const getServerSideProps = async (context) => {
             { headers: { 'Authorization': 'Bearer ' + res.user.token } }),
             axios.get('http://127.0.0.1:8000/api/user/blockwebsites/includes', 
             { headers: { 'Authorization': 'Bearer ' + res.user.token } }),
+            axios.get('http://127.0.0.1:8000/api/user/tasks/sortfilter?status=overdue', 
+            { headers: { 'Authorization': 'Bearer ' + res.user.token } }),
         ])
         return { 
             props: { 
@@ -31,6 +33,7 @@ export const getServerSideProps = async (context) => {
                 upcomingTasks: upcomingTasks.data.data,
                 completedCount: completedCount.data.data.length,
                 blockedkWebCount: blockedkWebCount.data.data.length,
+                overdueTasks: overdueTasks.data.data,
             } 
         }
     
@@ -40,7 +43,8 @@ export const getServerSideProps = async (context) => {
     }
 }
 
-const Dashboard = ({recent, upcomingTasks, completedCount, blockedkWebCount }) => {
+const Dashboard = ({recent, upcomingTasks, completedCount, blockedkWebCount, overdueTasks }) => {
+    console.log("hoy",overdueTasks)
     // add task modal
     const [isTaskMdlClosed, setIsTaskMdlClosed] = useState(true)
     const taskMdlCloseHandler = () => setIsTaskMdlClosed(!isTaskMdlClosed)
@@ -177,23 +181,28 @@ const Dashboard = ({recent, upcomingTasks, completedCount, blockedkWebCount }) =
 
                         <div className='bg-task-ss-red-200 h-2'></div>
                         <div className='flex flex-col bg-task-ss-white-100 px-5 py-3'>
-                            {/* <p className='text-xs font-medium mt-2 mb-1'>March 4, 2023</p>
-                            
-                            <TaskRow
-                                name={'hello'}
-                                category={'sadasd'}
-                                time={'hello'}
-                                priority={'P4'}
-                            />
-
-                        */}
-                            <Empty3
-                                title='Recent Tasks'
-                                img='/illustration_5.png'
-                                size='h-[50px]'
-                                m='my-5'
-                            />
-                        </div> 
+                            {
+                                overdueTasks.length > 0 ?
+                                overdueTasks.slice(0, 5).map((task, idx) => {
+                                    return (
+                                        <TaskRow2
+                                            key={idx.toString()}
+                                            name={task.task_name}
+                                            category={task.category}
+                                            date={task.end_date ? `${task.end_date} ${task.end_time}` : null}
+                                            priority={task.priority}
+                                        />
+                                    )
+                                })
+                                :
+                                <Empty3
+                                    title='Recent Tasks'
+                                    img='/illustration_6.png'
+                                    size='h-[50px]'
+                                    m='my-5'
+                                />
+                            } 
+                        </div>
                     </div>
 
                     {/* Recent Tasks panel */}

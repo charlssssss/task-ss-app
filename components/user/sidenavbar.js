@@ -20,16 +20,19 @@ const sideNavTitle = [
     {icon: MdListAlt, title: 'To Do List', link: '/user/todolist'},
     {icon: BiCalendarCheck, title: 'To Be Done', link: '/user/tobedone'},
     {icon: BiCalendar, title: 'Calendar', link: '/user/calendar'},
-    {icon: TbReportAnalytics, title: 'Productivity Reports', link: '/user/reports'},
+    {icon: TbReportAnalytics, title: 'Productivity Reports', link: '/user/prodreports'},
 ]
 
 const SideNavbar = ({ isToggled, toggleHandler, catMdlCloseHandler }) => {
-    // for redirecting
     const router = useRouter()
+    const { data: session } = useSession()
+    let userToken
+    if(session) { userToken = session.user.token }
 
     // close action variables
     const [isCatClosed, setIsCatClosed] = useState(false)
     const catCloseHandler = () => setIsCatClosed(!isCatClosed)
+    const { data: proPlan } = useSWR(['http://localhost:8000/api/user/subscriptions/currentplan', userToken], fetcher)
 
     return (
         <div className={`bg-task-ss-dark-blue-300 drop-shadow-xl fixed h-full transition-all pb-10 -translate-x-[100%] overflow-x-hidden lg:relative overflow-y-hidden hover:overflow-y-auto z-10 ${isToggled ? null : 'translate-x-[0px]' }`}
@@ -44,7 +47,13 @@ const SideNavbar = ({ isToggled, toggleHandler, catMdlCloseHandler }) => {
                 </div>
 
                 {/* logo section */}
-                <img src='/task_ss_logo.png' className='w-28 mx-auto my-8'/>
+                <Link href='/'>
+                    {proPlan?.data ? 
+                        <img src='/task_ss_pro_logo.png' className='w-36 mx-auto my-8'/>
+                    :
+                        <img src='/task_ss_logo.png' className='w-28 mx-auto my-8'/>
+                    }
+                </Link>
 
                 {/* user side nav profile section */}
                 <SideNavProfile />
@@ -100,6 +109,7 @@ export const SideNavProfile = () => {
     if(session) { userToken = session.user.token }
 
     const { data, error, isLoading } = useSWR(['http://localhost:8000/api/user/profile', userToken], fetcher)
+    const { data: proPlan } = useSWR(['http://localhost:8000/api/user/subscriptions/currentplan', userToken], fetcher)
 
     const userName = `${data?.data?.firstname} ${data?.data?.lastname}`
 
@@ -108,8 +118,8 @@ export const SideNavProfile = () => {
 
     return (
         <div className='flex justify-between items-center bg-task-ss-white-100 max-w-max p-2 my-6 mx-auto rounded-full'>
-            <div className=' bg-task-ss-dark-blue-200 w-10 h-10 rounded-full flex justify-center items-center'>
-                <h1 className='text-lg text-task-ss-white-100 font-medium'>{data?.data?.firstname.charAt(0)}</h1>
+            <div className={`${proPlan?.data ? 'bg-task-ss-yellow' : 'bg-task-ss-dark-blue-200'} w-10 h-10 rounded-full flex justify-center items-center`}>
+                <h1 className={`text-lg font-medium ${proPlan?.data ?? 'text-task-ss-dark-blue-100'}`}>{data?.data?.firstname.charAt(0)}</h1>
             </div>
             {status == 'loading' ? (
                 <p className='ml-4 mr-6 text-lg font-medium'>loading...</p>

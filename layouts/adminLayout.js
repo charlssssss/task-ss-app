@@ -21,21 +21,23 @@ const AdminLayout = ({ children }) => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <div className={rubik.className}>
-                <div className='flex w-screen h-screen'>
-                <SideNavbar 
-                    isToggled={isToggled} 
-                    toggleHandler={toggleHandler} 
-                />
-                <div className={`w-full transition-all ${isToggled ? null : 'lg:w-[calc(100%-20rem)]' }`} >
-                    <Topbar 
-                        toggleHandler={toggleHandler}
+                <div className='font-rubik'>
+                    <div className='flex w-screen h-screen'>
+                    <SideNavbar 
+                        isToggled={isToggled} 
+                        toggleHandler={toggleHandler} 
                     />
-                    <div className='h-[calc(100vh-3.5rem)] overflow-y-auto'>
-                        <main className='container mx-auto px-10 py-5 lg:px-32 lg:py-14 '>
-                        {children}
-                        </main>
+                    <div className={`w-full transition-all ${isToggled ? null : 'lg:w-[calc(100%-20rem)]' }`} >
+                        <Topbar 
+                            toggleHandler={toggleHandler}
+                        />
+                        <div className='h-[calc(100vh-3.5rem)] overflow-y-auto'>
+                            <main className='container mx-auto px-10 py-5 lg:px-32 lg:py-14 '>
+                            {children}
+                            </main>
+                        </div>
                     </div>
-                </div>
+                    </div>
                 </div>
             </div>
         </>
