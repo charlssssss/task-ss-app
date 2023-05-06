@@ -114,7 +114,7 @@ const Dashboard = ({recent, upcomingTasks, completedCount, blockedkWebCount, ove
                         <h4 className='text-lg font-medium mb-2'>Upcoming Deadlines</h4>
                         
                         <div className='bg-task-ss-yellow h-2'></div>
-                        <div className='flex flex-col bg-task-ss-white-100 px-5 py-3'>
+                        <div className='flex flex-col bg-task-ss-white-100 px-5 py-3 rounded-b-lg drop-shadow-lg'>
                             {
                                 totalTasks.length > 0 ?
                                     totalTasks.map((task, idx, arr) => {
@@ -180,7 +180,7 @@ const Dashboard = ({recent, upcomingTasks, completedCount, blockedkWebCount, ove
                         <h4 className='text-lg font-medium mb-2'>Overdue Tasks</h4>
 
                         <div className='bg-task-ss-red-200 h-2'></div>
-                        <div className='flex flex-col bg-task-ss-white-100 px-5 py-3'>
+                        <div className='flex flex-col bg-task-ss-white-100 px-5 py-3 rounded-b-lg drop-shadow-md'>
                             {
                                 overdueTasks.length > 0 ?
                                 overdueTasks.slice(0, 5).map((task, idx) => {
@@ -210,7 +210,7 @@ const Dashboard = ({recent, upcomingTasks, completedCount, blockedkWebCount, ove
                         <h4 className='text-lg font-medium mb-2'>Recent Tasks</h4>
 
                         <div className='bg-task-ss-category-200 h-2'></div>
-                        <div className='flex flex-col bg-task-ss-white-100 px-5 py-3'>
+                        <div className='flex flex-col bg-task-ss-white-100 px-5 py-3 rounded-b-lg drop-shadow-md'>
                             {
                                 recent.length > 0 ?
                                 recent.slice(0, 5).map((task, idx) => {
@@ -322,7 +322,7 @@ const TaskRow2 = ({ name, category, date, priority }) => {
 
 const AddTaskCard = ({ taskMdlCloseHandler, setTaskType }) => {
     return (
-        <button className='flex flex-col justify-center items-center bg-task-ss-dark-blue-200 text-task-ss-white-100 w-32 h-28 mr-3 transition-all active:scale-95'
+        <button className='flex flex-col justify-center items-center bg-task-ss-dark-blue-200 text-task-ss-white-100 w-32 h-28 mr-3 drop-shadow-md rounded-xl transition-all active:scale-95'
             onClick={() => { taskMdlCloseHandler(); setTaskType('1') }}
         >
             <GoPlus className='text-[45px] mb-3'/>
@@ -335,7 +335,7 @@ const SmallCard = ({ title, count, link, event }) => {
 
     if(event) {
         return (
-            <div className='flex flex-col items-center justify-between w-32 h-28 py-4 mr-3 text-task-ss-dark-blue-200 bg-task-ss-white-100 cursor-default'>
+            <div className='flex flex-col items-center justify-between w-32 h-28 py-4 mr-3 text-task-ss-dark-blue-200 bg-task-ss-white-100 drop-shadow-md rounded-xl cursor-default'>
                 <p className='text-[11px] text-task-ss-dark-blue-500'>{title}</p>
                 <p className='text-[30px]'>{count}</p>
                 <button onClick={event} className='text-[9px] align-bottom hover:underline'>View full list</button>
@@ -344,7 +344,7 @@ const SmallCard = ({ title, count, link, event }) => {
     }
 
     return (
-        <div className='flex flex-col items-center justify-between w-32 h-28 py-4 mr-3 text-task-ss-dark-blue-200 bg-task-ss-white-100 cursor-default'>
+        <div className='flex flex-col items-center justify-between w-32 h-28 py-4 mr-3 text-task-ss-dark-blue-200 bg-task-ss-white-100 drop-shadow-md rounded-xl cursor-default'>
             <p className='text-[11px] text-task-ss-dark-blue-500'>{title}</p>
             <p className='text-[30px]'>{count}</p>
             <Link href={link} className='text-[9px] align-bottom hover:underline'>View full list</Link>
