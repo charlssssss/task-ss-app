@@ -12,25 +12,22 @@ const LineChartComp = dynamic(() => import('../../components/chart/linechart'), 
 export const getServerSideProps = async (context) => {
     const res = await getSession(context)
     try {
-        const[recent, upcomingTasks, completedCount, blockedkWebCount, overdueTasks] = await Promise.all([
-            axios.get('http://127.0.0.1:8000/api/user/tasks/sortfilter/updated_at/desc', 
-            { headers: { 'Authorization': 'Bearer ' + res.user.token } }),
+        const[upcomingTasks, completedCount, blockedkWebCount, categories] = await Promise.all([
             axios.get('http://127.0.0.1:8000/api/user/tasks/sortfilter/end_date/asc', 
             { headers: { 'Authorization': 'Bearer ' + res.user.token } }),
             axios.get('http://127.0.0.1:8000/api/user/tasks/sortfilter?status=completed', 
             { headers: { 'Authorization': 'Bearer ' + res.user.token } }),
             axios.get('http://127.0.0.1:8000/api/user/blockwebsites/includes', 
             { headers: { 'Authorization': 'Bearer ' + res.user.token } }),
-            axios.get('http://127.0.0.1:8000/api/user/tasks/sortfilter?status=overdue', 
+            axios.get('http://127.0.0.1:8000/api/user/categories', 
             { headers: { 'Authorization': 'Bearer ' + res.user.token } }),
         ])
         return { 
             props: { 
-                recent: recent.data.data, 
                 upcomingTasks: upcomingTasks.data.data,
                 completedCount: completedCount.data.data.length,
                 blockedkWebCount: blockedkWebCount.data.data.length,
-                overdueTasks: overdueTasks.data.data,
+                categories: categories.data.data,
             } 
         }
     
@@ -40,9 +37,29 @@ export const getServerSideProps = async (context) => {
     }
 }
 
-const ProductivityReports = ({recent, upcomingTasks, completedCount, blockedkWebCount, overdueTasks }) => {
+const ProductivityReports = ({upcomingTasks, completedCount, blockedkWebCount, categories }) => {
     const totalTasks = upcomingTasks.filter(task => task.end_date != null)
-    
+    const pendingTasks = upcomingTasks.filter(task => task.status == 'pending')
+    const overdueTasks = upcomingTasks.filter(task => task.status == 'overdue')
+
+
+    const barColor = {
+        "100": '#f5774f',
+        "200": '#4f91f5',
+        "300": '#4ff5a9',
+        "400": '#f5dc4f',
+        "500": '#f5534f',
+    }
+    const colors = ['#8884d8', '#82ca9d', '#ffc658'];
+
+    const categoryTask = categories.map(cat => ({
+        category_name: cat.category_name,
+        task_count: cat.tasks.length,
+        fill: barColor[cat.color],
+    }))
+
+    console.log(categoryTask)
+    console.log("Asd", categories)
     return (
         <>
             <Head>
@@ -63,7 +80,7 @@ const ProductivityReports = ({recent, upcomingTasks, completedCount, blockedkWeb
                         />
                         <SmallCard 
                             title='Pending Tasks' 
-                            count={99} 
+                            count={pendingTasks.length.toString().padStart(2, '0')} 
                             link='/user/inbox' 
                         />
                         <SmallCard 
@@ -73,12 +90,12 @@ const ProductivityReports = ({recent, upcomingTasks, completedCount, blockedkWeb
                         />
                         <SmallCard 
                             title='Overdue Tasks' 
-                            count={'99'} 
-                            link='/user/inbox' 
+                            count={overdueTasks.length.toString().padStart(2, '0')} 
+                            link='/user/dashboard' 
                         />
                         <SmallCard 
                             title='Categories' 
-                            count={'99'} 
+                            count={categories.length.toString().padStart(2, '0')} 
                             link='/user/categories' 
                         />
                         <SmallCard 
@@ -101,26 +118,62 @@ const ProductivityReports = ({recent, upcomingTasks, completedCount, blockedkWeb
                                     </tr>
                                 </thead>
                                 <tbody className='text-xs'>
-                                            <tr 
-                                                className={`bg-task-ss-white-200 bg-opacity-50 border-b border-task-ss-white-300 hover:bg-task-ss-white-200 hover:bg-opacity-75 cursor-pointer`}
-                                            >
-                                                <td className="px-6 py-4">0123</td>
-                                                <td className="px-6 py-4">Category 1</td>
-                                                <td className="px-6 py-4">Completed</td>
-                                                <td className="px-6 py-4">312</td>
-                                            </tr>
+                                    <tr 
+                                        className={`bg-task-ss-white-200 bg-opacity-50 border-b border-task-ss-white-300 hover:bg-task-ss-white-200 hover:bg-opacity-75 cursor-pointer`}
+                                    >
+                                        <td className="px-6 py-4">0123</td>
+                                        <td className="px-6 py-4">Category 1</td>
+                                        <td className="px-6 py-4">Completed</td>
+                                        <td className="px-6 py-4">312</td>
+                                    </tr>
+
+                                    <tr 
+                                        className={`bg-task-ss-white-200 bg-opacity-50 border-b border-task-ss-white-300 hover:bg-task-ss-white-200 hover:bg-opacity-75 cursor-pointer`}
+                                    >
+                                        <td className="px-6 py-4">0123</td>
+                                        <td className="px-6 py-4">Category 1</td>
+                                        <td className="px-6 py-4">Completed</td>
+                                        <td className="px-6 py-4">312</td>
+                                    </tr>
+
+                                    <tr 
+                                        className={`bg-task-ss-white-200 bg-opacity-50 border-b border-task-ss-white-300 hover:bg-task-ss-white-200 hover:bg-opacity-75 cursor-pointer`}
+                                    >
+                                        <td className="px-6 py-4">0123</td>
+                                        <td className="px-6 py-4">Category 1</td>
+                                        <td className="px-6 py-4">Completed</td>
+                                        <td className="px-6 py-4">312</td>
+                                    </tr>
+
+                                    <tr 
+                                        className={`bg-task-ss-white-200 bg-opacity-50 border-b border-task-ss-white-300 hover:bg-task-ss-white-200 hover:bg-opacity-75 cursor-pointer`}
+                                    >
+                                        <td className="px-6 py-4">0123</td>
+                                        <td className="px-6 py-4">Category 1</td>
+                                        <td className="px-6 py-4">Completed</td>
+                                        <td className="px-6 py-4">312</td>
+                                    </tr>
+
+                                    <tr 
+                                        className={`bg-task-ss-white-200 bg-opacity-50 border-b border-task-ss-white-300 hover:bg-task-ss-white-200 hover:bg-opacity-75 cursor-pointer`}
+                                    >
+                                        <td className="px-6 py-4">0123</td>
+                                        <td className="px-6 py-4">Category 1</td>
+                                        <td className="px-6 py-4">Completed</td>
+                                        <td className="px-6 py-4">312</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
 
                         <div className='w-full xl:w-[40%]'>
                             <div className='flex flex-col gap-5'>
-                                <div className='bg-task-ss-white-100 rounded-lg drop-shadow-md p-5'>
+                                <div className='bg-task-ss-white-100 rounded-lg drop-shadow-md p-5 pr-8'>
                                     <h2 className='font-medium text-xl mb-5'>Title Sample</h2>
-                                    <BarChartComp />
+                                    <BarChartComp data={categoryTask} />
                                 </div>
 
-                                <div className='bg-task-ss-white-100 rounded-lg drop-shadow-md p-5'>
+                                <div className='bg-task-ss-white-100 rounded-lg drop-shadow-md p-5 pr-8'>
                                     <h2 className='font-medium text-xl mb-5'>Title Sample</h2>
                                     <LineChartComp />
                                 </div>

@@ -50,7 +50,7 @@ const pricingCardOptions = [
     },
     btn: {
       type: 'pmry',
-      title: 'Subscribe Now'
+      title: 'Subscribe'
     },
     list: [
       'Unlimited categories',

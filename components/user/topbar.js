@@ -9,7 +9,7 @@ import { useRouter } from 'next/router'
 import { TbPuzzle, TbLogout } from 'react-icons/tb'
 import { useSession, signOut } from "next-auth/react"
 import { BiPalette, BiStar, BiCalendarCheck } from 'react-icons/bi'
-import { BsBellFill, BsGearFill, BsCheckCircle, BsSearch } from 'react-icons/bs'
+import { BsBellFill, BsGearFill, BsFillCalendarCheckFill, BsCheckCircle, BsSearch, BsCircleFill } from 'react-icons/bs'
 import { MdOutlineAccountCircle, MdOutlineBlock, MdListAlt } from 'react-icons/md'
 
 const settingsTitle = [
@@ -117,12 +117,19 @@ const Topbar = ({ toggleHandler, taskMdlCloseHandler, blockMdlCloseHandler, remi
                                 </div>
                             </div>
                         </div>
-
                         <IconButton 
-                            icon={<BsBellFill className='text-task-ss-dark-blue-300' size={18} />}
+                            icon={<BsFillCalendarCheckFill className='text-task-ss-dark-blue-300' size={18} />}
                             event={reminderMdlCloseHandler}
                             hover={true}
                         />
+
+                        <Link href='/user/notifications' className='outline-none'>
+                            <button className={`p-2 mr-2 rounded-md  hover:bg-task-ss-white-200 relative`}>
+                                <BsCircleFill className='text-task-ss-red-200 absolute top-1 right-1' size={8} />
+                                <BsBellFill className='text-task-ss-dark-blue-300' size={18} />
+                            </button>
+                        </Link>
+
                         <div 
                             onMouseEnter={()=> setHoverSetting(true)}
                             onMouseLeave={()=> setHoverSetting(false)}

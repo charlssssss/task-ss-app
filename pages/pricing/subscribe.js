@@ -1,7 +1,7 @@
 import GeneralLayout from '../../layouts/generalLayout'
 import Link from 'next/link'
 import Head from 'next/head'
-import { useSession } from 'next-auth/react'
+import { getSession, useSession } from 'next-auth/react'
 import { BsCheck } from 'react-icons/bs'
 import { RegularButton } from '../../components/user/buttons'
 import { useEffect, useState } from 'react'
@@ -22,7 +22,26 @@ const bill = {
   'yearly': { price: '₱2,880' }, 
 }
 
-const Subscribe = () => {
+export const getServerSideProps = async (context) => {
+  const res = await getSession(context)
+  try {
+      const[currentPlan] = await Promise.all([
+          axios.get('http://localhost:8000/api/user/subscriptions/currentplan', 
+          { headers: { 'Authorization': 'Bearer ' + res.user.token } }),
+      ])
+      return { 
+          props: { 
+            currentPlan: currentPlan.data.data
+          } 
+      }
+  
+  } catch (error) {
+      console.log(error)
+      return { props: { currentPlan: null }  }
+  }
+}
+
+const Subscribe = ({ currentPlan }) => {
   const { data: session } = useSession()
   let user
   if(session) { user = session.user }
@@ -35,10 +54,6 @@ const Subscribe = () => {
     token: "",
     email: "",
     plan: "monthly",
-    cardNo: "",
-    mm: "",
-    yy: "",
-    cvc: "",
   })
 
   useEffect(() => {
@@ -87,8 +102,8 @@ const Subscribe = () => {
         <div className='w-screen bg-task-ss-white-100 md:w-[60%] rounded-md drop-shadow-lg px-8 py-6'>
           <h3 className='mb-2'>Plan</h3>
 
-          <div className='flex justify-between flex-wrap'>
-            <label className={`flex flex-col cursor-pointer border ${subscribeData.plan === 'monthly' ? 'border-task-ss-purple' : 'border-task-ss-white-300'}  px-6 py-4 rounded-md w-full mb-4 transition-all md:w-[48%] hover:bg-task-ss-white-200`}>
+          <div className='flex justify-between flex-wrap mb-5'>
+            <label className={`flex flex-col cursor-pointer border ${subscribeData.plan === 'monthly' ? 'border-task-ss-purple bg-task-ss-white-200' : 'border-task-ss-white-300'}  px-6 py-4 rounded-md w-full mb-4 transition-all md:w-[48%] hover:bg-task-ss-white-200`}>
               <div className='flex mb-1 justify-between'>
                 <p className='text-xs'>Pay monthly</p>
                 <input 
@@ -103,7 +118,7 @@ const Subscribe = () => {
               <h3 className='font-medium'>₱300/month</h3>
             </label>
 
-            <label className={`flex flex-col cursor-pointer border ${subscribeData.plan === 'yearly' ? 'border-task-ss-purple' : 'border-task-ss-white-300'}  px-6 py-4 rounded-md w-full mb-4 transition-all md:w-[48%] hover:bg-task-ss-white-200`}>
+            <label className={`flex flex-col cursor-pointer border ${subscribeData.plan === 'yearly' ? 'border-task-ss-purple bg-task-ss-white-200' : 'border-task-ss-white-300'}  px-6 py-4 rounded-md w-full mb-4 transition-all md:w-[48%] hover:bg-task-ss-white-200`}>
               <div className='flex mb-1 justify-between'>
                 <p className='text-xs'>Pay yearly</p>
                 <input 
@@ -117,47 +132,6 @@ const Subscribe = () => {
               </div>
               <h3 className='font-medium'>₱240/month</h3>
             </label> 
-          </div>
-
-          <div className='flex flex-col mb-10'>
-            <label htmlFor='card_details' className='mb-2'>Card details</label>
-            <div className='flex flex-wrap justify-between gap-2'>
-              <input 
-                type='number'
-                name='cardNo'
-                className='px-3 py-2 border outline-none transition-all border-task-ss-white-300 rounded-md focus:border-task-ss-purple w-full sm:w-auto'
-                placeholder='Card Number'
-                maxLength={5}
-                onChange={e => onChange(e)}
-                required
-              />
-              <div className='ml-auto flex gap-2'>
-                <input 
-                  type='number'
-                  name='mm'
-                  className='px-3 py-2 border outline-none transition-all border-task-ss-white-300 rounded-md focus:border-task-ss-purple w-14'
-                  placeholder='MM'
-                  onChange={e => onChange(e)}
-                  required
-                />
-                <input 
-                  type='number'
-                  name='yy'
-                  className='px-3 py-2 border outline-none transition-all border-task-ss-white-300 rounded-md focus:border-task-ss-purple w-14'
-                  placeholder='YY'
-                  onChange={e => onChange(e)}
-                  required
-                />
-                <input 
-                  type='number'
-                  name='cvc'
-                  className='px-3 py-2 border outline-none transition-all border-task-ss-white-300 rounded-md focus:border-task-ss-purple w-20'
-                  placeholder='CVC'
-                  onChange={e => onChange(e)}
-                  required
-                />
-              </div>
-            </div>
           </div>
 
           <div className='flex flex-col items-end'>
@@ -175,8 +149,13 @@ const Subscribe = () => {
               <RegularButton 
                 type='pmry'
                 title='Verify Payement'
-                event={cnfrmPymntCloseHandler}
-                disabled={subscribeData.cardNo == "" || subscribeData.mm == "" || subscribeData.yy == "" || subscribeData.cvc == ""}
+                event={() => {
+                  if(currentPlan) {
+                    alert('Already Subscribed to a Plan!')
+                  } else {
+                    cnfrmPymntCloseHandler()
+                  }
+                }}
                 m='my-4'
               />
             </div>

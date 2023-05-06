@@ -2,20 +2,20 @@ import axios from "axios"
 import { capFirst } from "../functions"
 import { RegularButton } from "./buttons"
 import { useRouter } from "next/router"
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js"
 
 const bill = {
-    'monthly': { price: '300', quantity: '1', subId: '1' },
-    'yearly': { price: '240', quantity: '12', subId: '2' }, 
+    'monthly': { price: '300.00', quantity: '1', subId: '1' },
+    'yearly': { price: '240.00', quantity: '12', subId: '2' }, 
 }
 
 const ConfirmPayment = ({ isCnfrmPymntClosed, cnfrmPymntCloseHandler, subscribeData }) => {
     const router = useRouter()
-    console.log(subscribeData.token)
+    console.log(subscribeData.plan)
 
     const total = parseInt(bill[subscribeData.plan].price) * parseInt(bill[subscribeData.plan].quantity)
 
-    const handleSubscribe = async (e) => {
-        e.preventDefault()
+    const handleSubscribe = async () => {
         await axios('http://127.0.0.1:8000/api/user/subscriptions/subscribe', {
           method: 'POST',
           headers: { 
@@ -41,6 +41,27 @@ const ConfirmPayment = ({ isCnfrmPymntClosed, cnfrmPymntCloseHandler, subscribeD
         })
     }
 
+    const clientId = "AYBVKmEXoo9m7JWgyEruUjSJ3UoQcS3Yu1kseK1WKh8v0-VoJGXaPocao6OPEMi3U-IH3hdHtSTOHrEd"
+
+    const createOrder = (data, actions) => {
+        return actions.order.create({
+            purchase_units: [
+            {
+                amount: {
+                    value: bill[subscribeData.plan].price,
+                },
+            },
+            ],
+        })
+    }
+    
+    const onApprove = (data, actions) => {
+      return actions.order.capture().then((details) => {
+        console.log(details)
+        handleSubscribe()
+      })
+    }
+    
     return (
         <div 
             className={`justify-center items-center absolute top-0 left-0 w-screen h-screen bg-task-ss-dark-blue-600 bg-opacity-50 z-20 ${isCnfrmPymntClosed ? ' hidden ' : ' flex '}`} 
@@ -73,7 +94,7 @@ const ConfirmPayment = ({ isCnfrmPymntClosed, cnfrmPymntCloseHandler, subscribeD
                 </div>
                 
                 <div className='mt-5 flex flex-col'>
-                    <div className='flex flex-col items-center sm:items-start gap-2 text-center sm:text-start'>
+                    <div className='flex flex-col items-center sm:items-start gap-2 text-center sm:text-start mb-5'>
                         <div className='flex justify-between flex-col sm:flex-row sm:gap-3 text-sm'>
                         <p>Full Name</p>
                         <p className='font-semibold'>{subscribeData.fullName}</p>
@@ -83,24 +104,15 @@ const ConfirmPayment = ({ isCnfrmPymntClosed, cnfrmPymntCloseHandler, subscribeD
                         <p>Email Address</p>
                         <p className='font-semibold'>{subscribeData.email}</p>
                         </div>
-
-                        <div className='flex justify-between flex-col sm:flex-row sm:gap-3 text-sm'>
-                        <p>Payment Method</p>
-                        <p className='font-semibold'>VISA {subscribeData.cardNo.replace(/\d(?=\d{4})/g, "*")}</p>
-                        </div>
                     </div>
 
-                    <RegularButton
-                        type='pmry'
-                        title='Confirm Payment'
-                        event={handleSubscribe}
-                        m='mt-6'
-                    />
+                    <PayPalScriptProvider options={{ "client-id": clientId }}>
+                        <PayPalButtons style={{ layout: "vertical" }} createOrder={createOrder} onApprove={onApprove} />
+                    </PayPalScriptProvider>
 
                     <RegularButton
                         type='sndry'
                         title='Cancel'
-                        m='mt-2'
                         event={cnfrmPymntCloseHandler}
                     />
                 </div>

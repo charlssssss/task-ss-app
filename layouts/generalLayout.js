@@ -13,7 +13,9 @@ const GeneralLayout = ({ children }) => {
                     <link rel="icon" href="/favicon.ico" />
                 </Head>
             <div className={rubik.className}>
-                {children}
+                <div className='font-rubik'>
+                    {children}
+                </div>
             </div>
         </>
     )
