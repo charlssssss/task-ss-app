@@ -86,13 +86,13 @@ const WebsiteBlocker = ({ isBlockMdlClosed, blockMdlCloseHandler }) => {
                 {/* add website form */}
                 <div>
                     <div className='flex items-center py-3 px-5'>
-                        <h2 className='font-semibold text-lg'>{proPlan.data ? 'Edit Website Blocker' : 'Need a website blocker?'}</h2>
+                        <h2 className='font-semibold text-lg'>{proPlan?.data ? 'Edit Website Blocker' : 'Need a website blocker?'}</h2>
                     </div>
                     <hr className='text-task-ss-white-300'/>
                 </div>
                 
                 {/* input fields */}
-                {proPlan.data && 
+                {proPlan?.data && 
                     <form method='POST' 
                         onSubmit={e => { handleAddWebsite(e); clearInputsHandler()}} 
                         className='py-2 px-5 flex flex-col'
@@ -129,7 +129,7 @@ const WebsiteBlocker = ({ isBlockMdlClosed, blockMdlCloseHandler }) => {
                     </form>
                 }
                 
-                {!proPlan.data && 
+                {!proPlan?.data && 
                     <div className='p-5'>
                         <div className='flex flex-col items-center bg-task-ss-white-200 rounded-lg p-4'>
                             <img src='/illustration_2.png' className='my-5 w-40' />
@@ -146,7 +146,7 @@ const WebsiteBlocker = ({ isBlockMdlClosed, blockMdlCloseHandler }) => {
                     </div>     
                 }
                 
-                {proPlan.data && 
+                {proPlan?.data && 
                     <div className='py-2 px-5 flex flex-col'>
                     <h2 className='text-sm font-medium'>Websites to be Blocked ({data.data.length - excludedWebsite.length})</h2>
 
@@ -200,7 +200,7 @@ const WebsiteBlocker = ({ isBlockMdlClosed, blockMdlCloseHandler }) => {
                     <div className='flex flex-wrap md:flex-nowrap items-center justify-end py-3 px-5'>
                         <p className='text-[10px]'><b>NOTE:</b> The Task SS Website Blocker is only available through the Task SS Official Website Blocker Chrome Extension.</p>
 
-                        {proPlan.data ? 
+                        {proPlan?.data ? 
                             <RegularButton 
                                 type='snd' 
                                 title='Close' 

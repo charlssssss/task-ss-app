@@ -14,7 +14,7 @@ const proList = [
   'Website Blocker',
   'Notifications pop-ups',
   'Recurring Tasks',
-  'Scheduled auto-generated links'
+  // 'Scheduled auto-generated links'
 ]
 
 const bill = {

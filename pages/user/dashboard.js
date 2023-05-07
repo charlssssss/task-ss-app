@@ -44,7 +44,6 @@ export const getServerSideProps = async (context) => {
 }
 
 const Dashboard = ({recent, upcomingTasks, completedCount, blockedkWebCount, overdueTasks }) => {
-    console.log("hoy",overdueTasks)
     // add task modal
     const [isTaskMdlClosed, setIsTaskMdlClosed] = useState(true)
     const taskMdlCloseHandler = () => setIsTaskMdlClosed(!isTaskMdlClosed)
@@ -55,7 +54,6 @@ const Dashboard = ({recent, upcomingTasks, completedCount, blockedkWebCount, ove
     const blockMdlCloseHandler = () => setIsBlockMdlClosed(!isBlockMdlClosed)
 
     // recent tasks variables
-    const [showRecent, setShowRecent] = useState(false)
     const totalTasks = upcomingTasks.filter(task => task.end_date != null)
 
     console.log(recent)
@@ -97,7 +95,7 @@ const Dashboard = ({recent, upcomingTasks, completedCount, blockedkWebCount, ove
                             />
                             <SmallCard 
                                 title='Overdue Tasks' 
-                                count={'99'} 
+                                count={overdueTasks.length.toString().padStart(2, '0')} 
                                 link='/user/inbox' 
                             />
                             <SmallCard 
@@ -213,7 +211,7 @@ const Dashboard = ({recent, upcomingTasks, completedCount, blockedkWebCount, ove
                         <div className='flex flex-col bg-task-ss-white-100 px-5 py-3 rounded-b-lg drop-shadow-md'>
                             {
                                 recent.length > 0 ?
-                                recent.slice(0, 5).map((task, idx) => {
+                                recent.slice(0, 10).map((task, idx) => {
                                     return (
                                         <TaskRow2
                                             key={idx.toString()}
@@ -235,12 +233,12 @@ const Dashboard = ({recent, upcomingTasks, completedCount, blockedkWebCount, ove
                         </div>
                     </div>
 
-                    <div className='flex flex-col my-5 w-full'>
+                    {/* <div className='flex flex-col my-5 w-full'>
                         <ProdReport title='Last Week' time='Mar4-Mar9' />
                         <ProdReport title='Last Month' time={months[lastMonth]} />
                         <ProdReport title='Last Year' time={lastYear} />
 
-                    </div>
+                    </div> */}
 
                 </div>
             </div>

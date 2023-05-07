@@ -8,6 +8,7 @@ import TitleHeader from '../../components/user/titleheader'
 
 const BarChartComp = dynamic(() => import('../../components/chart/barchart'), { ssr: false })
 const LineChartComp = dynamic(() => import('../../components/chart/linechart'), { ssr: false })
+const PieChartComp = dynamic(() => import('../../components/chart/piechart'), { ssr: false })
 
 export const getServerSideProps = async (context) => {
     const res = await getSession(context)
@@ -41,7 +42,7 @@ const ProductivityReports = ({upcomingTasks, completedCount, blockedkWebCount, c
     const totalTasks = upcomingTasks.filter(task => task.end_date != null)
     const pendingTasks = upcomingTasks.filter(task => task.status == 'pending')
     const overdueTasks = upcomingTasks.filter(task => task.status == 'overdue')
-
+    const completedTasks = upcomingTasks.filter(task => task.status == 'completed')
 
     const barColor = {
         "100": '#f5774f',
@@ -50,16 +51,23 @@ const ProductivityReports = ({upcomingTasks, completedCount, blockedkWebCount, c
         "400": '#f5dc4f',
         "500": '#f5534f',
     }
-    const colors = ['#8884d8', '#82ca9d', '#ffc658'];
 
     const categoryTask = categories.map(cat => ({
+        cat_id: cat.id,
         category_name: cat.category_name,
         task_count: cat.tasks.length,
         fill: barColor[cat.color],
     }))
 
-    console.log(categoryTask)
-    console.log("Asd", categories)
+
+    const pieTasks = [
+        { name: "Pending", count: pendingTasks.length, fill: "#F5D04F" },
+        { name: "Overdue", count: overdueTasks.length, fill: "#E44545" },
+        { name: "Completed", count: completedTasks.length, fill: "#4f91f5" },
+    ]
+    console.log("p", pendingTasks, "o", overdueTasks, "c", completedTasks)
+    console.log(pieTasks)
+
     return (
         <>
             <Head>
@@ -105,81 +113,45 @@ const ProductivityReports = ({upcomingTasks, completedCount, blockedkWebCount, c
                         />
                     </div>
 
-                    <div className='flex flex-col-reverse xl:flex-row gap-5'>
-
-                        <div className='w-full xl:w-[60%]'>
-                            <table className="table-auto bg-task-ss-white-100 w-full rounded-lg drop-shadow-md">
-                                <thead className="text-xs">
-                                    <tr className="border-b border-task-ss-white-300">
-                                        <th className="px-6 py-5 text-left">ID</th>
-                                        <th className="px-6 py-5 text-left">CATEGORY NAME</th>
-                                        <th className="px-6 py-5 text-left">STATUS</th>
-                                        <th className="px-6 py-5 text-left">NO. OF TASKS</th>
-                                    </tr>
-                                </thead>
-                                <tbody className='text-xs'>
-                                    <tr 
-                                        className={`bg-task-ss-white-200 bg-opacity-50 border-b border-task-ss-white-300 hover:bg-task-ss-white-200 hover:bg-opacity-75 cursor-pointer`}
-                                    >
-                                        <td className="px-6 py-4">0123</td>
-                                        <td className="px-6 py-4">Category 1</td>
-                                        <td className="px-6 py-4">Completed</td>
-                                        <td className="px-6 py-4">312</td>
-                                    </tr>
-
-                                    <tr 
-                                        className={`bg-task-ss-white-200 bg-opacity-50 border-b border-task-ss-white-300 hover:bg-task-ss-white-200 hover:bg-opacity-75 cursor-pointer`}
-                                    >
-                                        <td className="px-6 py-4">0123</td>
-                                        <td className="px-6 py-4">Category 1</td>
-                                        <td className="px-6 py-4">Completed</td>
-                                        <td className="px-6 py-4">312</td>
-                                    </tr>
-
-                                    <tr 
-                                        className={`bg-task-ss-white-200 bg-opacity-50 border-b border-task-ss-white-300 hover:bg-task-ss-white-200 hover:bg-opacity-75 cursor-pointer`}
-                                    >
-                                        <td className="px-6 py-4">0123</td>
-                                        <td className="px-6 py-4">Category 1</td>
-                                        <td className="px-6 py-4">Completed</td>
-                                        <td className="px-6 py-4">312</td>
-                                    </tr>
-
-                                    <tr 
-                                        className={`bg-task-ss-white-200 bg-opacity-50 border-b border-task-ss-white-300 hover:bg-task-ss-white-200 hover:bg-opacity-75 cursor-pointer`}
-                                    >
-                                        <td className="px-6 py-4">0123</td>
-                                        <td className="px-6 py-4">Category 1</td>
-                                        <td className="px-6 py-4">Completed</td>
-                                        <td className="px-6 py-4">312</td>
-                                    </tr>
-
-                                    <tr 
-                                        className={`bg-task-ss-white-200 bg-opacity-50 border-b border-task-ss-white-300 hover:bg-task-ss-white-200 hover:bg-opacity-75 cursor-pointer`}
-                                    >
-                                        <td className="px-6 py-4">0123</td>
-                                        <td className="px-6 py-4">Category 1</td>
-                                        <td className="px-6 py-4">Completed</td>
-                                        <td className="px-6 py-4">312</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                    <div className='flex flex-col gap-3 xl:gap-0 xl:flex-row justify-between'>
+                        <div className='w-full xl:w-[49%]'>
+                            <div className='bg-task-ss-white-100 rounded-lg drop-shadow-md p-5 pr-8'>
+                                <h2 className='font-medium text-xl mb-5'>Task Count by Status</h2>
+                                <PieChartComp data={pieTasks} />
+                            </div>
                         </div>
 
-                        <div className='w-full xl:w-[40%]'>
-                            <div className='flex flex-col gap-5'>
-                                <div className='bg-task-ss-white-100 rounded-lg drop-shadow-md p-5 pr-8'>
-                                    <h2 className='font-medium text-xl mb-5'>Title Sample</h2>
-                                    <BarChartComp data={categoryTask} />
-                                </div>
-
-                                <div className='bg-task-ss-white-100 rounded-lg drop-shadow-md p-5 pr-8'>
-                                    <h2 className='font-medium text-xl mb-5'>Title Sample</h2>
-                                    <LineChartComp />
-                                </div>
+                        <div className='w-full xl:w-[49%]'>
+                            <div className='bg-task-ss-white-100 rounded-lg drop-shadow-md p-5 pr-8'>
+                                <h2 className='font-medium text-xl mb-5'>Tasks Count by Category</h2>
+                                <BarChartComp data={categoryTask} />
                             </div>
                         </div>
                     </div>
+
+                    <table className="table-auto bg-task-ss-white-100 w-full rounded-lg drop-shadow-md mt-8">
+                        <thead className="text-xs">
+                            <tr className="border-b border-task-ss-white-300">
+                                <th className="px-6 py-5 text-left">ID</th>
+                                <th className="px-6 py-5 text-left">CATEGORY NAME</th>
+                                <th className="px-6 py-5 text-left">STATUS</th>
+                                <th className="px-6 py-5 text-left">NO. OF TASKS</th>
+                            </tr>
+                        </thead>
+                        <tbody className='text-xs'>
+                            {categoryTask.map((cat, idx) => (
+                                <tr 
+                                    className={`${idx % 2 == 0 ? 'bg-task-ss-white-200 bg-opacity-50' : '' } border-b border-task-ss-white-300 hover:bg-task-ss-white-200 hover:bg-opacity-75 cursor-pointer`}
+                                    key={idx.toString()}
+                                >
+                                    <td className="px-6 py-4">{cat.cat_id}</td>
+                                    <td className="px-6 py-4">{cat.category_name}</td>
+                                    <td className="px-6 py-4">Completed</td>
+                                    <td className="px-6 py-4">{cat.task_count}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </>
