@@ -1,4 +1,5 @@
 import axios from 'axios'
+import useSWR from 'swr'
 import Link from 'next/link'
 import { useState } from 'react'
 import { IconButton } from './buttons'
@@ -11,13 +12,14 @@ import { useSession, signOut } from "next-auth/react"
 import { BiPalette, BiStar, BiCalendarCheck } from 'react-icons/bi'
 import { BsBellFill, BsGearFill, BsFillCalendarCheckFill, BsCheckCircle, BsSearch, BsCircleFill } from 'react-icons/bs'
 import { MdOutlineAccountCircle, MdOutlineBlock, MdListAlt } from 'react-icons/md'
+import { fetcher } from '../functions'
 
 const settingsTitle = [
     {icon: <MdOutlineAccountCircle />, title: 'Account', link: '/user/account'},
     {icon: <MdOutlineBlock />, title: 'Website Blocker'},
-    {icon: BiPalette, title: 'Customize Theme', link: '/#'},
+    // {icon: BiPalette, title: 'Customize Theme', link: '/#'},
     {icon: BsCheckCircle, title: 'Completed Tasks', link: '/user/completed'},
-    {icon: TbPuzzle, title: 'Link to Google', link: '/#'},
+    // {icon: TbPuzzle, title: 'Link to Google', link: '/#'},
     {icon: BiStar, title: 'Pro Subscription', link: '/pricing/subscribe'},
     {icon: <TbLogout />, title: 'Logout'}
 ]
@@ -31,6 +33,10 @@ const Topbar = ({ toggleHandler, taskMdlCloseHandler, blockMdlCloseHandler, remi
     const { data: session } = useSession()
     let userToken
     if(session) { userToken = session.user.token }
+
+    const { data: notifs } = useSWR(['http://localhost:8000/api/user/notifications', userToken], fetcher)
+
+    const hasNotifs = notifs?.data?.filter(notif => notif.status == 0 && notif.display == 1)
 
     // logout function (destroy token then session)
     const handleLogout =  (e) => {
@@ -62,11 +68,13 @@ const Topbar = ({ toggleHandler, taskMdlCloseHandler, blockMdlCloseHandler, remi
                             hover={true}
                             event={toggleHandler}
                         />
+                        <div className='hidden sm:inline-block'>
                         <IconButton 
                             icon={<ImHome className='text-task-ss-dark-blue-300' size={18} />}
                             link='/user/dashboard'
                             hover={true}
                         />
+                        </div>
                         <IconButton 
                             icon={<BsSearch className='text-task-ss-dark-blue-300' size={18} />} 
                             hover={true}
@@ -117,15 +125,19 @@ const Topbar = ({ toggleHandler, taskMdlCloseHandler, blockMdlCloseHandler, remi
                                 </div>
                             </div>
                         </div>
-                        <IconButton 
-                            icon={<BsFillCalendarCheckFill className='text-task-ss-dark-blue-300' size={18} />}
-                            event={reminderMdlCloseHandler}
-                            hover={true}
-                        />
+                        <div className='hidden sm:block'>
+                            <IconButton 
+                                icon={<BsFillCalendarCheckFill className='text-task-ss-dark-blue-300' size={18} />}
+                                event={reminderMdlCloseHandler}
+                                hover={true}
+                            />
+                        </div>
 
                         <Link href='/user/notifications' className='outline-none'>
                             <button className={`p-2 mr-2 rounded-md  hover:bg-task-ss-white-200 relative`}>
-                                <BsCircleFill className='text-task-ss-red-200 absolute top-1 right-1' size={8} />
+                                {hasNotifs?.length > 0 &&
+                                    <BsCircleFill className='text-task-ss-red-200 absolute top-1 right-1' size={8} />
+                                }
                                 <BsBellFill className='text-task-ss-dark-blue-300' size={18} />
                             </button>
                         </Link>

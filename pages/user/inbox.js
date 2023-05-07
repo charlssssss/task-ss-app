@@ -14,6 +14,7 @@ const Inbox = () => {
     }
 
     const [sortBy, setSortBy] = useState('created_at')
+    const [taskStatus, setTaskStatus] = useState('completed')
     const [orderBy, setOrderBy] = useState('desc')
     
     if (status === "loading") return <Loading />
@@ -28,13 +29,16 @@ const Inbox = () => {
                 sortBy={sortBy}
                 setSortBy={setSortBy} 
                 orderBy={orderBy}
-                setOrderBy={setOrderBy}   
+                setOrderBy={setOrderBy} 
+                taskStatus={taskStatus}
+                setTaskStatus={setTaskStatus}
             />
 
             <TaskList 
                 api={`http://localhost:8000/api/user/tasks/sortfilter/${sortBy}/${orderBy}`} 
                 token={userToken} 
                 url='inbox'
+                status={taskStatus}
                 showCategory={true}
             />
         </>

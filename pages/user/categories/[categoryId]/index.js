@@ -36,6 +36,7 @@ const CategoryDetail = ({ category, userToken }) => {
     const [hover, setHover] = useState(false)
 
     const [sortBy, setSortBy] = useState('created_at')
+    const [taskStatus, setTaskStatus] = useState('completed')
     const [orderBy, setOrderBy] = useState('desc')
 
     return (
@@ -78,6 +79,16 @@ const CategoryDetail = ({ category, userToken }) => {
                 <div className='flex flex-wrap ml-auto justify-end text-sm'>
                     <select 
                         className='rounded-md py-2 ml-3 mt-2'
+                        value={taskStatus}
+                        onChange={e => setTaskStatus(e.target.value)}
+                    >
+                        <option value='pending'>Pending</option>
+                        <option value='overdue'>Overdue</option>
+                        <option value='completed'>All</option>
+                    </select>
+
+                    <select 
+                        className='rounded-md py-2 ml-3 mt-2'
                         value={sortBy}
                         onChange={e => setSortBy(e.target.value)}
                     >
@@ -86,6 +97,7 @@ const CategoryDetail = ({ category, userToken }) => {
                         <option value='end_date'>End date</option>
                         <option value='created_at'>Date added</option>
                         <option value='priority'>Priority</option>
+                        <option value='status'>Status</option>
                         <option value='task_type_id'>Task Type</option>
                     </select>
 
@@ -105,6 +117,7 @@ const CategoryDetail = ({ category, userToken }) => {
                 api={`http://localhost:8000/api/user/tasks/sortfilter/${sortBy}/${orderBy}?category_id=${category.id}`} 
                 token={userToken} 
                 url={`${category.id}`}
+                status={taskStatus}
             />
 
             <EditCategory 

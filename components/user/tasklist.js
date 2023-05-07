@@ -19,7 +19,7 @@ const priorityStyles = {
 }
    
 // component for task list
-const TaskList = ({ api, token, url, showCategory }) => {
+const TaskList = ({ api, token, url, status, showCategory }) => {
     const router = useRouter()
 
     const { data: session } = useSession()
@@ -72,7 +72,7 @@ const TaskList = ({ api, token, url, showCategory }) => {
     if (error) return <FailedToLoad />
     if (isLoading) return <Loading />
     
-    const filteredTasks = data.data.filter(task => task.status == 'pending')
+    const filteredTasks = data.data.filter(task => (status == 'completed' || status == null) ? task.status != 'completed' : task.status == status)
     
     if(filteredTasks.length == 0) return <Empty user={session.user.firstname} title={`${url} tasks`} img='/illustration_1.png' />
 
@@ -129,7 +129,11 @@ const TaskList = ({ api, token, url, showCategory }) => {
                                     <div className='flex justify-between h-8'>
                                         <div className='flex items-center'>
                                             {task.is_starred == 1 ? <AiFillStar className='text-task-ss-yellow pr-[5px]' size={20}/> : null}
-                                            <p className='text-md'>{truncate(task.task_name, 70)}</p>
+                                            <p 
+                                                className={`text-md ${task.status == 'overdue' && 'text-task-ss-red-200'}`}
+                                            >
+                                                {truncate(task.task_name, 70)}
+                                            </p>
                                         </div>
                                         {/* edit, delete part */}
                                         <div className={`flex items-center text-task-ss-white-400 ${(hover &&  current == task.id) ? '' : 'hidden'}`}>

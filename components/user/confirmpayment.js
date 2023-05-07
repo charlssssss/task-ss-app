@@ -3,6 +3,7 @@ import { capFirst } from "../functions"
 import { RegularButton } from "./buttons"
 import { useRouter } from "next/router"
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js"
+import { useSession } from "next-auth/react"
 
 const bill = {
     'monthly': { price: '300.00', quantity: '1', subId: '1' },
@@ -13,6 +14,10 @@ const ConfirmPayment = ({ isCnfrmPymntClosed, cnfrmPymntCloseHandler, subscribeD
     const router = useRouter()
     console.log(subscribeData.plan)
 
+    const { data: session } = useSession()
+    let userToken
+    if(session) { userToken = session.user.token }
+
     const total = parseInt(bill[subscribeData.plan].price) * parseInt(bill[subscribeData.plan].quantity)
 
     const handleSubscribe = async () => {
@@ -21,7 +26,7 @@ const ConfirmPayment = ({ isCnfrmPymntClosed, cnfrmPymntCloseHandler, subscribeD
           headers: { 
             'Accept': 'application/json', 
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + subscribeData.token
+            'Authorization': 'Bearer ' + userToken
           
           },
           data: JSON.stringify({
