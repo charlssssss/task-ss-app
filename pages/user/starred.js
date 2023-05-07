@@ -14,6 +14,7 @@ const Starred = () => {
     }
     
     const [sortBy, setSortBy] = useState('created_at')
+    const [taskStatus, setTaskStatus] = useState('completed')
     const [orderBy, setOrderBy] = useState('desc')
 
     if (status === "loading") return <Loading />
@@ -29,13 +30,16 @@ const Starred = () => {
                 sortBy={sortBy}
                 setSortBy={setSortBy} 
                 orderBy={orderBy}
-                setOrderBy={setOrderBy}   
+                setOrderBy={setOrderBy} 
+                taskStatus={taskStatus}
+                setTaskStatus={setTaskStatus}
             />
 
             <TaskList 
                 api={`http://localhost:8000/api/user/tasks/sortfilter/${sortBy}/${orderBy}?is_starred=1`} 
                 token={userToken}
                 url='starred'
+                status={taskStatus}
                 showCategory={true}
             />
         </>
