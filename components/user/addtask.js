@@ -37,6 +37,9 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
     const [isStarred, setIsStarred] = useState(0)
     const [priority, setPriority] = useState('P4')
     const [status, setStatus] = useState('pending')
+    const [repeatType, setRepeatType] = useState('none')
+
+    console.log(repeatType)
 
     // const today = new Date().toLocaleDateString('en-US')
     // today.setDate(today.getDate() + 3) 
@@ -68,6 +71,8 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
 
     const [priorClose, setPriorClose] = useState(true)
 
+    const [confirmed, setConfirmed] = useState(false)
+
     // clear all input fields
     const clearHandler = () => {
         taskMdlCloseHandler()
@@ -81,6 +86,7 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
         setEndDate(currDate)
         setStartTime(currTime)
         setEndTime('23:59:00')
+        setRepeatType('none')
         setPriorClose(true)
         setStartClose(true)
         setEndClose(true)
@@ -111,7 +117,9 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
                 "start_date"   : startDate,
                 "end_date"     : endDate,
                 "start_time"   : startTime,
-                "end_time"     : endTime
+                "end_time"     : endTime,
+                "repeat_type"  : repeatType,
+                "confirmed"    : confirmed,
             }),
         })
         .then(res => {
@@ -120,12 +128,16 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
                 clearHandler()
                 router.push(`/user/categories/${taskCategory}`)
                 alert(res.data.message)
+                setConfirmed(false)
             } else { alert(res.data.message) }
         })
         .catch(error => {
             const errorMsg = JSON.parse(error.request.response)
             console.log(errorMsg.errors)
-            alert("Failed to Add Task: " + errorMsg.message + "\n")
+
+            if (confirm("Failed to Add Task: " + errorMsg.message + "\n") == true) {
+                setConfirmed(true)
+            }
         })
     }
 
@@ -217,7 +229,7 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
                                     <select 
                                         value={taskCategory} 
                                         onChange={(e) => setTaskCategory(e.target.value)}
-                                        className='rounded-lg py-3 pr-8 text-xs border transition-all border-task-ss-white-300 w-full md:w-auto active:scale-[0.98]'
+                                        className='rounded-lg py-3 pr-8 text-xs border mb-2 md:mb-0 md:mr-2 transition-all border-task-ss-white-300 w-full md:w-auto active:scale-[0.98]'
                                     >
                                         {!categories && <option>Loading...</option>}
                                         {categories?.data?.map((category, idx) => (
@@ -230,6 +242,18 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
                                         ))}
                                     </select>
                                     
+                                    {taskType == 1 &&
+                                        <select 
+                                            value={repeatType} 
+                                            onChange={(e) => setRepeatType(e.target.value)}
+                                            className='rounded-lg py-3 pr-8 text-xs border transition-all border-task-ss-white-300 w-full md:w-auto active:scale-[0.98]'
+                                        >
+                                            <option value="none">None</option>
+                                            <option value="daily">Daily</option>
+                                            <option value="weekly">Weekly</option>
+                                            <option value="monthly">Monthly</option>
+                                        </select>
+                                    }
                                 </div>
 
                                 {/* starred and priority button*/}

@@ -55,7 +55,6 @@ const pricingCardOptions = [
     list: [
       'Unlimited categories',
       'Website Blocker',
-      'Notifications pop-ups',
       'Recurring Tasks',
     ]
   },

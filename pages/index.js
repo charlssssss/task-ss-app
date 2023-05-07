@@ -24,13 +24,7 @@ const featureContent = [
     header: 'Helpful productivity reports',
     img: '/illustration_6.png', 
     content: 'Nam sodales ut arcu sit amet sodales. Nulla euismod est et felis luctus, sed venenatis est sodales. Nam semper ac leo ac tincidunt. Donec in sem sed elit luctus pulvinar. Nulla malesuada sem ac mattis auctor. Aliquam feugiat luctus ex. Donec a libero nisi.'
-  },
-  {
-    color: 'bg-task-ss-white-100', 
-    header: 'Google Calendar integration',
-    img: '/illustration_7.png', 
-    content: 'Nam sodales ut arcu sit amet sodales. Nulla euismod est et felis luctus, sed venenatis est sodales. Nam semper ac leo ac tincidunt. Donec in sem sed elit luctus pulvinar. Nulla malesuada sem ac mattis auctor. Aliquam feugiat luctus ex. Donec a libero nisi.'
-  },
+  }
 ]
 
 const proponents = [

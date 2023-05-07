@@ -53,9 +53,8 @@ const ProductivityReports = ({upcomingTasks, completedCount, blockedkWebCount, c
     }
 
     const categoryTask = categories.map(cat => ({
-        cat_id: cat.id,
-        category_name: cat.category_name,
-        task_count: cat.tasks.length,
+        name: cat.category_name,
+        count: cat.tasks.length,
         fill: barColor[cat.color],
     }))
 

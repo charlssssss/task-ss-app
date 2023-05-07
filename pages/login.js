@@ -84,13 +84,13 @@ const LogIn = () => {
         {/* right side panel */}
         <div className='flex flex-col w-full py-10 px-14 lg:w-[70%] xl:w-[60%] xl:px-20'>
             {/* header */}
-            <div className='mb-8'>
+            <div className='mb-4'>
               <h1 className='font-bold text-2xl text-task-ss-dark-blue-400'>Welcome to Task SS!</h1>
               <h3 className='text-sm text-task-ss-white-400'>We are so excited to see you!</h3>
             </div>
 
             {/* other login options button */}
-            <button className='px-10 py-2 mb-2 border rounded-full w-full bg-soc-med-facebook text-task-ss-white-100 border-soc-med-facebook transition-all active:scale-[0.98]'>
+            {/* <button className='px-10 py-2 mb-2 border rounded-full w-full bg-soc-med-facebook text-task-ss-white-100 border-soc-med-facebook transition-all active:scale-[0.98]'>
               <div className='flex items-center justify-center'>
                   <BsFacebook size={13} />
                   <p className='text-xs ml-2'>CONTINUE WITH FACEBOOK</p>
@@ -102,14 +102,14 @@ const LogIn = () => {
                   <ImGoogle3 size={13} />
                   <p className='text-xs ml-2'>CONTINUE WITH GOOGLE</p>
               </div>
-            </button>
+            </button> */}
 
             {/* or section */}
-            <div className='flex items-center mb-3'>
+            {/* <div className='flex items-center mb-3'>
               <span className='bg-task-ss-white-300 w-full h-[1px]'></span>
               <p className='text-xs font-medium px-7'>OR</p>
               <span className='bg-task-ss-white-300 w-full h-[1px]'></span>
-            </div>
+            </div> */}
 
             {/* error message */}
             <div 
