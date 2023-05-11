@@ -12,7 +12,6 @@ import ConfirmPayment from '../../components/user/confirmpayment'
 const proList = [
   'Unlimited categories',
   'Website Blocker',
-  'Notifications pop-ups',
   'Recurring Tasks',
   // 'Scheduled auto-generated links'
 ]
@@ -148,7 +147,7 @@ const Subscribe = ({ currentPlan }) => {
 
               <RegularButton 
                 type='pmry'
-                title='Verify Payement'
+                title='Verify Payment'
                 event={() => {
                   if(currentPlan) {
                     alert('Already Subscribed to a Plan!')

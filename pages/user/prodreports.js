@@ -53,6 +53,7 @@ const ProductivityReports = ({upcomingTasks, completedCount, blockedkWebCount, c
     }
 
     const categoryTask = categories.map(cat => ({
+        cat_id: cat.id,
         name: cat.category_name,
         count: cat.tasks.length,
         fill: barColor[cat.color],
@@ -133,7 +134,6 @@ const ProductivityReports = ({upcomingTasks, completedCount, blockedkWebCount, c
                             <tr className="border-b border-task-ss-white-300">
                                 <th className="px-6 py-5 text-left">ID</th>
                                 <th className="px-6 py-5 text-left">CATEGORY NAME</th>
-                                <th className="px-6 py-5 text-left">STATUS</th>
                                 <th className="px-6 py-5 text-left">NO. OF TASKS</th>
                             </tr>
                         </thead>
@@ -144,9 +144,8 @@ const ProductivityReports = ({upcomingTasks, completedCount, blockedkWebCount, c
                                     key={idx.toString()}
                                 >
                                     <td className="px-6 py-4">{cat.cat_id}</td>
-                                    <td className="px-6 py-4">{cat.category_name}</td>
-                                    <td className="px-6 py-4">Completed</td>
-                                    <td className="px-6 py-4">{cat.task_count}</td>
+                                    <td className="px-6 py-4">{cat.name}</td>
+                                    <td className="px-6 py-4 font-bold">{cat.count}</td>
                                 </tr>
                             ))}
                         </tbody>

@@ -7,6 +7,7 @@ import { truncate } from '../../components/functions'
 import { getSession } from 'next-auth/react'
 import TitleHeader from '../../components/user/titleheader'
 import { useRouter } from 'next/router'
+import { Empty3 } from '../../components/user/errors'
 
 export const getServerSideProps = async (context) => {
     const res = await getSession(context)
@@ -85,68 +86,76 @@ const Notifications = ({ notifs, token }) => {
             <TitleHeader title='Notifications' />
             
             <div className='flex flex-col bg-task-ss-white-100 rounded-xl drop-shadow-md '>
-                {notifs.map((notif, idx) => {
-                    if(notif.status == 0) {
-                        return (
-                            <div 
-                                className='flex flex-col'
-                                key={idx.toString()}
-                            >
-                                <div className='flex flex-wrap justify-between py-5 px-6 bg-task-ss-white-100 hover:drop-shadow-md'>
-                                    <div className='flex items-center gap-5'>
-                                        <BsFillCircleFill className='text-task-ss-dark-blue-200 hidden md:block' size={30} />
-            
-                                        <div className='flex flex-col md:flex-row gap-0 md:gap-3 items-start md:items-center'>
-                                            <h2 className='font-medium text-md'>Reminder</h2>
-                                            <p className='text-sm font-light'>{notif.description}</p>
+                {notifs.length > 0 ?
+                    notifs.map((notif, idx) => {
+                        if(notif.status == 0) {
+                            return (
+                                <div 
+                                    className='flex flex-col'
+                                    key={idx.toString()}
+                                >
+                                    <div className='flex flex-wrap justify-between py-5 px-6 bg-task-ss-white-100 hover:drop-shadow-md'>
+                                        <div className='flex items-center gap-5'>
+                                            <BsFillCircleFill className='text-task-ss-dark-blue-200 hidden md:block' size={30} />
+                
+                                            <div className='flex flex-col md:flex-row gap-0 md:gap-3 items-start md:items-center'>
+                                                <h2 className='font-medium text-md'>Reminder</h2>
+                                                <p className='text-sm font-light'>{notif.description}</p>
+                                            </div>
+                
                                         </div>
-            
-                                    </div>
-                                    
-                                    <div className='flex gap-5 ml-auto'>
-                                        <button onClick={(e) => handleMarkAsRead(e, notif.id)}>
-                                            <BsEnvelopeOpen size={20} />
-                                        </button>                    
-                                        <button onClick={(e) => handleDeleteNotification(e, notif.id)}>
-                                            <BsTrash size={20} />
-                                        </button>                    
-                                    </div>
-                                </div>
-                                <hr className='text-task-ss-white-300'/>
-                            </div>
-                        )
-                    }
-                    else {
-                        return (
-                            <div 
-                                className='flex flex-col'
-                                key={idx.toString()}
-                            >
-                                <div className='flex flex-wrap justify-between py-5 px-6 bg-task-ss-white-200 hover:drop-shadow-md'>
-                                    <div className='flex items-center gap-5'>
-                                        <BsFillCircleFill className='text-task-ss-dark-blue-200 hidden md:block' size={30} />
-            
-                                        <div className='flex flex-col md:flex-row gap-0 md:gap-3 items-start md:items-center'>
-                                            <h2 className='text-md'>Reminder</h2>
-                                            <p className='text-sm font-light'>{notif.description}</p>
+                                        
+                                        <div className='flex gap-5 ml-auto'>
+                                            <button onClick={(e) => handleMarkAsRead(e, notif.id)}>
+                                                <BsEnvelopeOpen size={20} />
+                                            </button>                    
+                                            <button onClick={(e) => handleDeleteNotification(e, notif.id)}>
+                                                <BsTrash size={20} />
+                                            </button>                    
                                         </div>
-            
                                     </div>
-                                    
-                                    <div className='flex gap-5 ml-auto'>
-                                        <button>
-                                            <BsEnvelope size={20} />
-                                        </button>                    
-                                        <button onClick={(e) => handleDeleteNotification(e, notif.id)}>
-                                            <BsTrash size={20} />
-                                        </button>                    
-                                    </div>
+                                    <hr className='text-task-ss-white-300'/>
                                 </div>
-                                <hr className='text-task-ss-white-300'/>
-                            </div>
-                        )
-                    }
-                })}
+                            )
+                        }
+                        else {
+                            return (
+                                <div 
+                                    className='flex flex-col'
+                                    key={idx.toString()}
+                                >
+                                    <div className='flex flex-wrap justify-between py-5 px-6 bg-task-ss-white-200 hover:drop-shadow-md'>
+                                        <div className='flex items-center gap-5'>
+                                            <BsFillCircleFill className='text-task-ss-dark-blue-200 hidden md:block' size={30} />
+                
+                                            <div className='flex flex-col md:flex-row gap-0 md:gap-3 items-start md:items-center'>
+                                                <h2 className='text-md'>Reminder</h2>
+                                                <p className='text-sm font-light'>{notif.description}</p>
+                                            </div>
+                
+                                        </div>
+                                        
+                                        <div className='flex gap-5 ml-auto'>
+                                            <button>
+                                                <BsEnvelope size={20} />
+                                            </button>                    
+                                            <button onClick={(e) => handleDeleteNotification(e, notif.id)}>
+                                                <BsTrash size={20} />
+                                            </button>                    
+                                        </div>
+                                    </div>
+                                    <hr className='text-task-ss-white-300'/>
+                                </div>
+                            )
+                        }
+                    })
+                :
+                    <Empty3
+                        title='Notifications'
+                        img='/illustration_1.png'
+                        size='h-16 w-16'
+                    />
+                }
             </div>
         </>
     )
