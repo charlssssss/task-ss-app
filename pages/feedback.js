@@ -9,7 +9,7 @@ import axios from 'axios'
 export const getServerSideProps = async () => {
   try {
       const[feedbacks] = await Promise.all([
-          axios.get('http://127.0.0.1:8000/api/feedbacks/all'),
+          axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/feedbacks/all`),
       ])
       return { 
           props: { 
@@ -143,7 +143,7 @@ const Feedback = ({ feedbacks }) => {
             <hr className='border border-task-ss-white-300 my-10' />
 
             <FeedbackList
-              api='http://127.0.0.1:8000/api/feedbacks/all'
+              api={`${process.env.NEXT_PUBLIC_API_BASE_URL}/feedbacks/all`}
               token={userToken}
               url='feedback'
               userId={session?.user?.id}

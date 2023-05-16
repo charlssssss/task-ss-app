@@ -28,7 +28,7 @@ const FeedbackList = ({ api, token, url, userId }) => {
     const handleDeleteFeedback =  async (e, id) => {
         if(confirm(`Are you sure u want to delete feedback no.${id}?`) ) {
             e.preventDefault()
-            await axios(`http://127.0.0.1:8000/api/user/feedbacks/${id}`, { 
+            await axios(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/feedbacks/${id}`, { 
                 method: 'DELETE',
                 headers: {
                     'Accept': 'application/json', 
@@ -38,7 +38,7 @@ const FeedbackList = ({ api, token, url, userId }) => {
             })
             .then(res => {
                 if(res.data.success) {
-                    mutate('http://127.0.0.1:8000/api/user/feedbacks')
+                    mutate(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/feedbacks`)
                     alert(res.data.message)
                     router.push(url)
                 } else { alert(res.data.message) }

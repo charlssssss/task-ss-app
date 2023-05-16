@@ -14,7 +14,7 @@ export const getServerSideProps = async (context) => {
   const res = await getSession(context)
   try {
       const[profile] = await Promise.all([
-          axios.get('http://localhost:8000/api/user/profile', 
+          axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/profile`, 
           { headers: { 'Authorization': 'Bearer ' + res.user.token } }),
       ])
       return { 
@@ -46,7 +46,7 @@ const Account = ({ user, userToken }) => {
     // add category function
     const handleEditUser =  async (e) => {
       e.preventDefault()
-      const { data } = await axios(`http://127.0.0.1:8000/api/user/profile`, { 
+      const { data } = await axios(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/profile`, { 
           method: 'PATCH',
           headers: {
               'Accept': 'application/json', 
@@ -70,7 +70,7 @@ const Account = ({ user, userToken }) => {
     e.preventDefault()
     // confirmation
     if(confirm(`Are you sure you want to delete your account, ${user?.firstname}? \nAll of your data will be lost.`) ) {
-        await axios(`http://127.0.0.1:8000/api/user/deleteUser/${user.id}`, { 
+        await axios(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/deleteUser/${user.id}`, { 
             method: 'DELETE',
             headers: { 'Authorization': 'Bearer ' + userToken }
         })

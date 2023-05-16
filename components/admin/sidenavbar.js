@@ -64,7 +64,7 @@ export const SideNavProfile = () => {
     let userToken
     if(session) { userToken = session.user.token }
 
-    const { data, error, isLoading } = useSWR(['http://localhost:8000/api/user/profile', userToken], fetcher)
+    const { data, error, isLoading } = useSWR([`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/profile`, userToken], fetcher)
 
     const userName = `${data?.data?.firstname} ${data?.data?.lastname}`
 

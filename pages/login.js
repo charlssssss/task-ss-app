@@ -62,7 +62,8 @@ const LogIn = () => {
         else {
           router.push('/login')
         }
-        localStorage.setItem('firstLogin', 'true')
+        localStorage?.setItem('firstLogin', 'true')
+        localStorage?.setItem('hasAudioPlayed', 'false')
       }
       else {
         setIsError(true)

@@ -9,7 +9,7 @@ const Calendar = () => {
 
     return (
         <CalendarView
-            api='http://localhost:8000/api/user/tasks/sortfilter?status=pending'
+            api={`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/tasks/sortfilter?status=pending`}
             token={userToken}
         />
     )

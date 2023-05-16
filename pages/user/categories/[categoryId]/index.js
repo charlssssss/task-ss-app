@@ -13,7 +13,7 @@ import { BsCircleFill } from 'react-icons/bs'
 export const getServerSideProps = async (context) => {
     const id = context.params.categoryId
     const res = await getSession(context)
-    const { data } = await axios.get(`http://localhost:8000/api/user/categories/${id}`, 
+    const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/categories/${id}`, 
         { headers: { 'Authorization': 'Bearer ' + res.user.token } })
 
     if(!data) {
@@ -114,7 +114,7 @@ const CategoryDetail = ({ category, userToken }) => {
 
             {/* user's list of tasks section */}
             <TaskList 
-                api={`http://localhost:8000/api/user/tasks/sortfilter/${sortBy}/${orderBy}?category_id=${category.id}`} 
+                api={`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/tasks/sortfilter/${sortBy}/${orderBy}?category_id=${category.id}`} 
                 token={userToken} 
                 url={`${category.id}`}
                 status={taskStatus}

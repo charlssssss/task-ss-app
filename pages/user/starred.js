@@ -36,7 +36,7 @@ const Starred = () => {
             />
 
             <TaskList 
-                api={`http://localhost:8000/api/user/tasks/sortfilter/${sortBy}/${orderBy}?is_starred=1`} 
+                api={`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/tasks/sortfilter/${sortBy}/${orderBy}?is_starred=1`} 
                 token={userToken}
                 url='starred'
                 status={taskStatus}

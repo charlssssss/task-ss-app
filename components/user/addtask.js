@@ -21,7 +21,7 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
     let userToken
     if(session) { userToken = session.user.token }
 
-    const { data:categories } = useSWR(['http://localhost:8000/api/user/categories', userToken], fetcher)
+    const { data:categories } = useSWR([`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/categories`, userToken], fetcher)
 
     // add task variables
     const [taskCategory, setTaskCategory] = useState('')
@@ -38,8 +38,6 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
     const [priority, setPriority] = useState('P4')
     const [status, setStatus] = useState('pending')
     const [repeatType, setRepeatType] = useState('none')
-
-    console.log(repeatType)
 
     // const today = new Date().toLocaleDateString('en-US')
     // today.setDate(today.getDate() + 3) 
@@ -99,7 +97,7 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
     const handleAddTask =  async (e) => {
         e.preventDefault()
         
-        await axios('http://127.0.0.1:8000/api/user/tasks', { 
+        await axios(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/tasks`, { 
             method: 'POST',
             headers: {
                 'Accept': 'application/json', 
@@ -124,7 +122,7 @@ const AddTask = ({ isTaskMdlClosed, taskMdlCloseHandler, taskType, setTaskType }
         })
         .then(res => {
             if(res.data.success) {
-                mutate('http://127.0.0.1:8000/api/user/tasks')
+                mutate(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/tasks`)
                 clearHandler()
                 router.push(`/user/categories/${taskCategory}`)
                 alert(res.data.message)

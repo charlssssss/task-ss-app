@@ -44,7 +44,7 @@ export const SideCategoryButton = ({ router }) => {
     if(session) { userToken = session.user.token }
     
     // fetch data
-    const { data, error, isLoading } = useSWR(['http://localhost:8000/api/user/categories', userToken], fetcher)
+    const { data, error, isLoading } = useSWR([`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/categories`, userToken], fetcher)
     
     // handle errors
     if (error) return <FailedToLoad color='text-task-ss-white-100' />

@@ -16,15 +16,15 @@ export const getServerSideProps = async (context) => {
     const res = await getSession(context)
     try {
         const[recent, upcomingTasks, completedCount, blockedkWebCount, overdueTasks] = await Promise.all([
-            axios.get('http://127.0.0.1:8000/api/user/tasks/sortfilter/updated_at/desc', 
+            axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/tasks/sortfilter/updated_at/desc`, 
             { headers: { 'Authorization': 'Bearer ' + res.user.token } }),
-            axios.get('http://127.0.0.1:8000/api/user/tasks/sortfilter/end_date/asc', 
+            axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/tasks/sortfilter/end_date/asc`, 
             { headers: { 'Authorization': 'Bearer ' + res.user.token } }),
-            axios.get('http://127.0.0.1:8000/api/user/tasks/sortfilter?status=completed', 
+            axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/tasks/sortfilter?status=completed`, 
             { headers: { 'Authorization': 'Bearer ' + res.user.token } }),
-            axios.get('http://127.0.0.1:8000/api/user/blockwebsites/includes', 
+            axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/blockwebsites/includes`, 
             { headers: { 'Authorization': 'Bearer ' + res.user.token } }),
-            axios.get('http://127.0.0.1:8000/api/user/tasks/sortfilter?status=overdue', 
+            axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/tasks/sortfilter?status=overdue`, 
             { headers: { 'Authorization': 'Bearer ' + res.user.token } }),
         ])
         return { 

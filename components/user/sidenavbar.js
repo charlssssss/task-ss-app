@@ -15,10 +15,10 @@ import { FailedToLoad, Loading } from './errors'
 // side nav button data
 const sideNavTitle = [
     {icon: MdOutlineSpaceDashboard, title: 'Dashboard', link: '/user/dashboard'},
-    {icon: FiInbox, title: 'Inbox', link: '/user/inbox'},
+    {icon: FiInbox, title: 'Task Manager', link: '/user/taskmanager'},
     {icon: BiStar, title: 'Starred', link: '/user/starred'},
-    {icon: MdListAlt, title: 'To Do List', link: '/user/todolist'},
-    {icon: BiCalendarCheck, title: 'To Be Done', link: '/user/tobedone'},
+    // {icon: MdListAlt, title: 'To Do List', link: '/user/todolist'},
+    // {icon: BiCalendarCheck, title: 'To Be Done', link: '/user/tobedone'},
     {icon: BiCalendar, title: 'Calendar', link: '/user/calendar'},
     {icon: TbReportAnalytics, title: 'Productivity Reports', link: '/user/prodreports'},
 ]
@@ -32,7 +32,7 @@ const SideNavbar = ({ isToggled, toggleHandler, catMdlCloseHandler }) => {
     // close action variables
     const [isCatClosed, setIsCatClosed] = useState(false)
     const catCloseHandler = () => setIsCatClosed(!isCatClosed)
-    const { data: proPlan } = useSWR(['http://localhost:8000/api/user/subscriptions/currentplan', userToken], fetcher)
+    const { data: proPlan } = useSWR([`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/subscriptions/currentplan`, userToken], fetcher)
 
     return (
         <div className={`bg-task-ss-dark-blue-300 drop-shadow-xl fixed h-full transition-all pb-10 -translate-x-[100%] overflow-x-hidden lg:relative overflow-y-hidden hover:overflow-y-auto z-10 ${isToggled ? null : 'translate-x-[0px]' }`}
@@ -107,12 +107,11 @@ export const SideNavProfile = () => {
     const { data: session, status } = useSession()
     let userToken
     if(session) { userToken = session.user.token }
-
-    const { data, error, isLoading } = useSWR(['http://localhost:8000/api/user/profile', userToken], fetcher)
-    const { data: proPlan } = useSWR(['http://localhost:8000/api/user/subscriptions/currentplan', userToken], fetcher)
+    const { data, error, isLoading } = useSWR([`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/profile`, userToken], fetcher)
+    const { data: proPlan } = useSWR([`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/subscriptions/currentplan`, userToken], fetcher)
 
     const userName = `${data?.data?.firstname} ${data?.data?.lastname}`
-
+    
     if (error) return <FailedToLoad color='text-task-ss-white-100' />
     if (isLoading) return <Loading color='text-task-ss-white-100' m='mb-10' />
 

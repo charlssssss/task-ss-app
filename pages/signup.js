@@ -32,7 +32,7 @@ const SignUp = () => {
   // signup function
   const handleSignup = async (e) => {
     e.preventDefault()
-    const res = await fetch('http://127.0.0.1:8000/api/user/auth/register', {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/auth/register`, {
         method: 'POST',
         headers: {
           'Accept': 'application/json', 

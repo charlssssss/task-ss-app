@@ -9,7 +9,7 @@ export const getServerSideProps = async (context) => {
     const res = await getSession(context)
     try {
         const[admins] = await Promise.all([
-            axios.get('http://127.0.0.1:8000/api/user/users', 
+            axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/users`, 
             { headers: { 'Authorization': 'Bearer ' + res.user.token } }),
         ])
         return { 

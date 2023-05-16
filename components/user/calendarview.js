@@ -22,12 +22,12 @@ const CalendarView = ({ api, token }) => {
 
     const messages = {
         agenda: 'Task',
-        day: 'Day',
-        month: 'Month',
+        day: 'Daily',
+        month: 'Monthly',
         previous: 'Prev',
         next: 'Next',
         today: 'Today',
-        week: 'Week',
+        week: 'Weekly',
         date: 'Date',
         time: 'Time',
         event: 'Task Name',

@@ -32,7 +32,7 @@ const priorityStyles = {
 // fetching all categories and single category
 export const getServerSideProps = async (context) => {
     const res = await getSession(context)
-    const { data } = await axios.get('http://127.0.0.1:8000/api/user/tasks/filter?status=completed', 
+    const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/tasks/filter?status=completed`, 
         { headers: { 'Authorization': 'Bearer ' + res.user.token } })
 
     if(!data) {
@@ -52,7 +52,7 @@ const Completed = ({ completed, token, user }) => {
 
     const handleUndoTask =  async (e, task) => {
         e.preventDefault()
-        await axios(`http://127.0.0.1:8000/api/user/tasks/${task.id}`, { 
+        await axios(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/tasks/${task.id}`, { 
             method: 'PUT',
             headers: {
                 'Accept': 'application/json', 

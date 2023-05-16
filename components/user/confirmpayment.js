@@ -21,7 +21,7 @@ const ConfirmPayment = ({ isCnfrmPymntClosed, cnfrmPymntCloseHandler, subscribeD
     const total = parseInt(bill[subscribeData.plan].price) * parseInt(bill[subscribeData.plan].quantity)
 
     const handleSubscribe = async () => {
-        await axios('http://127.0.0.1:8000/api/user/subscriptions/subscribe', {
+        await axios(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/subscriptions/subscribe`, {
           method: 'POST',
           headers: { 
             'Accept': 'application/json', 

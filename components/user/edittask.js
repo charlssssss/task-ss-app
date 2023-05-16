@@ -21,7 +21,7 @@ const EditTask = ({ isTaskMdlClosed, taskMdlCloseHandler, editTask, callbackUrl 
     let userToken
     if(session) { userToken = session.user.token }
 
-    const { data:categories } = useSWR(['http://localhost:8000/api/user/categories', userToken], fetcher)
+    const { data:categories } = useSWR([`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/categories`, userToken], fetcher)
 
     // edit task variables
     const [taskCategory, setTaskCategory] = useState('')
@@ -91,7 +91,7 @@ const EditTask = ({ isTaskMdlClosed, taskMdlCloseHandler, editTask, callbackUrl 
     // edit task function
     const handleEditTask =  async (e) => {
         e.preventDefault()
-        await axios(`http://127.0.0.1:8000/api/user/tasks/${editTask.id}`, { 
+        await axios(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/tasks/${editTask.id}`, { 
             method: 'PUT',
             headers: {
                 'Accept': 'application/json', 
@@ -117,7 +117,7 @@ const EditTask = ({ isTaskMdlClosed, taskMdlCloseHandler, editTask, callbackUrl 
             if(res.data.success) {
                 clearHandler()
                 router.push(callbackUrl)
-                mutate('http://127.0.0.1:8000/api/user/categories')
+                mutate(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/categories`)
                 alert(res.data.message)
             } else { alert(res.data.message) }
         })
