@@ -20,9 +20,9 @@ const DailyReminder = ({ isReminderMdlClosed, reminderMdlCloseHandler }) => {
     let userToken
     if(session) { userToken = session.user.token }
 
-    const { data:todayTasks } = useSWR([`http://127.0.0.1:8000/api/user/tasks/sortfilter?end_date=${currDate()}`, userToken], fetcher)
-    const { data:overdueTasks } = useSWR(['http://localhost:8000/api/user/tasks/sortfilter?status=overdue', userToken], fetcher)
-    const { data:pendingTasks } = useSWR(['http://localhost:8000/api/user/tasks?status=pending', userToken], fetcher)
+    const { data:todayTasks } = useSWR([`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/tasks/sortfilter?end_date=${currDate()}`, userToken], fetcher)
+    const { data:overdueTasks } = useSWR([`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/tasks/sortfilter?status=overdue`, userToken], fetcher)
+    const { data:pendingTasks } = useSWR([`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/tasks?status=pending`, userToken], fetcher)
 
     const [selectedTab, setSelectedTab] = useState(todayTasks)
     const [activeTab, setActiveTab] = useState(0)

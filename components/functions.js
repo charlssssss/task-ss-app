@@ -7,14 +7,14 @@ export function truncate(str, n) {
 
 // fetcher function for useSWR hook
 export const fetcher = ([url, token]) => 
-    axios.get(url, { headers: { 'Authorization': 'Bearer ' + token } }).then(res => res.data)
+    axios.get(url, { headers: { 'Authorization': 'Bearer ' + token, 'Cache-Control': 'no-cache' } }).then(res => res.data)
 
 export const fetcher2 = url => fetch(url).then(r => r.json())
 
 // add category function
 export const handleAddCategory =  async (e, dataValues, token, router, clearHandler) => {
     e.preventDefault()
-    await axios('http://127.0.0.1:8000/api/user/categories', { 
+    await axios(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/categories`, { 
         method: 'POST',
         headers: {
             'Accept': 'application/json', 
@@ -36,14 +36,14 @@ export const handleAddCategory =  async (e, dataValues, token, router, clearHand
         alert(errorMsg.message)
     })
 
-    mutate('http://127.0.0.1:8000/api/user/categories')
+    mutate(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/categories`)
 }
 
 export const handleDeleteCategory =  async (e, id, token, router) => {
     e.preventDefault()
     // confirmation
     if(confirm(`Are you sure u want to delete category no.${id}?`) ) {
-        await axios(`http://127.0.0.1:8000/api/user/categories/${id}`, { 
+        await axios(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/categories/${id}`, { 
             method: 'DELETE',
             headers: { 'Authorization': 'Bearer ' + token }
         })
@@ -59,7 +59,7 @@ export const handleDeleteCategory =  async (e, id, token, router) => {
             alert(errorMsg.message)
         })
 
-        mutate('http://127.0.0.1:8000/api/user/categories')
+        mutate(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/categories`)
     }
 }
 
@@ -67,7 +67,7 @@ export const handleDeleteTask =  async (e, id, token, url, router) => {
     e.preventDefault()
     // confirmation
     if(confirm(`Are you sure u want to delete task no.${id}?`) ) {
-        const { data } = await axios(`http://127.0.0.1:8000/api/user/tasks/${id}`, { 
+        const { data } = await axios(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/tasks/${id}`, { 
             method: 'DELETE',
             headers: { 'Authorization': 'Bearer ' + token }
         })
@@ -77,7 +77,7 @@ export const handleDeleteTask =  async (e, id, token, url, router) => {
             alert(data.message)
         } else { alert(data.message) }
 
-        mutate('http://127.0.0.1:8000/api/user/tasks')
+        mutate(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/tasks`)
     }
 }
 
@@ -85,7 +85,7 @@ export const handleDeleteWebsite =  async (e, id, token) => {
     e.preventDefault()
     // confirmation
     if(confirm(`Are you sure u want to delete website no.${id}?`) ) {
-        const { data } = await axios(`http://127.0.0.1:8000/api/user/blockwebsites/${id}`, { 
+        const { data } = await axios(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/blockwebsites/${id}`, { 
             method: 'DELETE',
             headers: { 'Authorization': 'Bearer ' + token }
         })
@@ -94,13 +94,13 @@ export const handleDeleteWebsite =  async (e, id, token) => {
             alert(data.message)
         } else { alert(data.message) }
 
-        mutate('http://127.0.0.1:8000/api/user/blockwebsites')
+        mutate(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/blockwebsites`)
     }
 }
 
 export const handleEditWebsite =  async (e, web, token) => {
     e.preventDefault()
-    const { data } = await axios(`http://127.0.0.1:8000/api/user/blockwebsites/${web.id}`, { 
+    const { data } = await axios(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/blockwebsites/${web.id}`, { 
         method: 'PUT',
         headers: {
             'Accept': 'application/json', 
@@ -118,7 +118,7 @@ export const handleEditWebsite =  async (e, web, token) => {
         alert(data.message)
     } else { alert(data.message) }
 
-    mutate('http://127.0.0.1:8000/api/user/blockwebsites')
+    mutate(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/blockwebsites`)
 }
 
 

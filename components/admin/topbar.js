@@ -30,7 +30,7 @@ const Topbar = ({ toggleHandler }) => {
     // logout function (destroy token then session)
     const handleLogout =  (e) => {
         e.preventDefault()
-        const res = axios('http://127.0.0.1:8000/api/user/auth/logout', { 
+        const res = axios(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/auth/logout`, { 
             method: 'POST',
             headers: { 'Authorization': 'Bearer ' + userToken }
         })

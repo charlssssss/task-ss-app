@@ -12,7 +12,6 @@ import ConfirmPayment from '../../components/user/confirmpayment'
 const proList = [
   'Unlimited categories',
   'Website Blocker',
-  'Notifications pop-ups',
   'Recurring Tasks',
   // 'Scheduled auto-generated links'
 ]
@@ -26,7 +25,7 @@ export const getServerSideProps = async (context) => {
   const res = await getSession(context)
   try {
       const[currentPlan] = await Promise.all([
-          axios.get('http://localhost:8000/api/user/subscriptions/currentplan', 
+          axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/subscriptions/currentplan`, 
           { headers: { 'Authorization': 'Bearer ' + res.user.token } }),
       ])
       return { 
@@ -130,7 +129,7 @@ const Subscribe = ({ currentPlan }) => {
                     onChange={e => onChange(e)} required 
                   />
               </div>
-              <h3 className='font-medium'>₱240/month</h3>
+              <h3 className='font-medium'>₱2,880/year</h3>
             </label> 
           </div>
 
@@ -148,7 +147,7 @@ const Subscribe = ({ currentPlan }) => {
 
               <RegularButton 
                 type='pmry'
-                title='Verify Payement'
+                title='Verify Payment'
                 event={() => {
                   if(currentPlan) {
                     alert('Already Subscribed to a Plan!')

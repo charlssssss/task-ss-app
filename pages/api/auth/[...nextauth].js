@@ -15,7 +15,7 @@ export const authOptions = {
             },
             async authorize(credentials) {
                 const { username, password } = credentials
-                const { data } = await axios('http://127.0.0.1:8000/api/user/auth/login', { 
+                const { data } = await axios(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/auth/login`, { 
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json', 

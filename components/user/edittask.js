@@ -21,7 +21,7 @@ const EditTask = ({ isTaskMdlClosed, taskMdlCloseHandler, editTask, callbackUrl 
     let userToken
     if(session) { userToken = session.user.token }
 
-    const { data:categories } = useSWR(['http://localhost:8000/api/user/categories', userToken], fetcher)
+    const { data:categories } = useSWR([`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/categories`, userToken], fetcher)
 
     // edit task variables
     const [taskCategory, setTaskCategory] = useState('')
@@ -31,6 +31,7 @@ const EditTask = ({ isTaskMdlClosed, taskMdlCloseHandler, editTask, callbackUrl 
     const [isStarred, setIsStarred] = useState(0)
     const [priority, setPriority] = useState('P4')
     const [status, setStatus] = useState('pending')
+    const [repeatType, setRepeatType] = useState('none')
 
     const currentDate = new Date();
     const year = currentDate.getFullYear();
@@ -64,6 +65,7 @@ const EditTask = ({ isTaskMdlClosed, taskMdlCloseHandler, editTask, callbackUrl 
         setStartTime(editTask.start_time)
         setEndDate(editTask.end_date)
         setEndTime(editTask.end_time)
+        setRepeatType(editTask.repeat_type)
 	}, [editTask])
 
     // clear all input fields
@@ -79,6 +81,7 @@ const EditTask = ({ isTaskMdlClosed, taskMdlCloseHandler, editTask, callbackUrl 
         setStartTime(editTask.start_time)
         setEndDate(editTask.end_date)
         setEndTime(editTask.end_time)
+        setRepeatType(editTask.repeat_type)
         setPriorClose(true)
         setStartClose(true)
         setEndClose(true)
@@ -88,7 +91,7 @@ const EditTask = ({ isTaskMdlClosed, taskMdlCloseHandler, editTask, callbackUrl 
     // edit task function
     const handleEditTask =  async (e) => {
         e.preventDefault()
-        await axios(`http://127.0.0.1:8000/api/user/tasks/${editTask.id}`, { 
+        await axios(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/tasks/${editTask.id}`, { 
             method: 'PUT',
             headers: {
                 'Accept': 'application/json', 
@@ -106,14 +109,15 @@ const EditTask = ({ isTaskMdlClosed, taskMdlCloseHandler, editTask, callbackUrl 
                 "start_date"   : startDate,
                 "end_date"     : endDate,
                 "start_time"   : startTime,
-                "end_time"     : endTime
+                "end_time"     : endTime,
+                "repeat_type"  : repeatType,
             }),
         })
         .then(res => {
             if(res.data.success) {
                 clearHandler()
                 router.push(callbackUrl)
-                mutate('http://127.0.0.1:8000/api/user/categories')
+                mutate(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/categories`)
                 alert(res.data.message)
             } else { alert(res.data.message) }
         })
@@ -209,7 +213,7 @@ const EditTask = ({ isTaskMdlClosed, taskMdlCloseHandler, editTask, callbackUrl 
                                 <select 
                                     value={taskCategory ?? ''} 
                                     onChange={(e) => setTaskCategory(e.target.value)}
-                                    className='rounded-lg py-3 px-4 text-xs text-task-ss-white-400 border transition-all border-task-ss-white-300 w-full md:w-auto active:scale-[0.98]'
+                                    className='rounded-lg py-3 pr-8 text-xs border mb-2 md:mb-0 md:mr-2 transition-all border-task-ss-white-300 w-full md:w-auto active:scale-[0.98]'
                                 >
                                     {!categories && <option>Loading...</option>}
                                     {categories?.data?.map((category, idx) => (
@@ -222,6 +226,18 @@ const EditTask = ({ isTaskMdlClosed, taskMdlCloseHandler, editTask, callbackUrl 
                                     ))}
                                 </select>
                                 
+                                {taskType == 1 &&
+                                    <select 
+                                        value={repeatType ?? ''} 
+                                        onChange={(e) => setRepeatType(e.target.value)}
+                                        className='rounded-lg py-3 pr-8 text-xs border transition-all border-task-ss-white-300 w-full md:w-auto active:scale-[0.98]'
+                                    >
+                                        <option value="none">None</option>
+                                        <option value="daily">Daily</option>
+                                        <option value="weekly">Weekly</option>
+                                        <option value="monthly">Monthly</option>
+                                    </select>
+                                }
                             </div>
 
                             {/* starred and priority button*/}

@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react'
 import { Loading } from '../../components/user/errors'
 import { useState } from 'react'
 
-const Inbox = () => {
+const TaskManager = () => {
     // get user token
     const { data: session, status } = useSession()
     let userToken
@@ -16,6 +16,7 @@ const Inbox = () => {
     const [sortBy, setSortBy] = useState('created_at')
     const [taskStatus, setTaskStatus] = useState('completed')
     const [orderBy, setOrderBy] = useState('desc')
+    const [taskType, setTaskType] = useState('all')
     
     if (status === "loading") return <Loading />
     return (
@@ -25,19 +26,21 @@ const Inbox = () => {
             </Head>
 
             <TitleHeader 
-                title='Inbox' 
+                title='Task Manager' 
                 sortBy={sortBy}
                 setSortBy={setSortBy} 
                 orderBy={orderBy}
                 setOrderBy={setOrderBy} 
                 taskStatus={taskStatus}
                 setTaskStatus={setTaskStatus}
+                taskType={taskType}
+                setTaskType={setTaskType}
             />
 
             <TaskList 
-                api={`http://localhost:8000/api/user/tasks/sortfilter/${sortBy}/${orderBy}`} 
+                api={taskType == 'all' ? `${process.env.NEXT_PUBLIC_API_BASE_URL}/user/tasks/sortfilter/${sortBy}/${orderBy}` : `${process.env.NEXT_PUBLIC_API_BASE_URL}/user/tasks/sortfilter/${sortBy}/${orderBy}?task_type_id=${taskType}`} 
                 token={userToken} 
-                url='inbox'
+                url='taskmanager'
                 status={taskStatus}
                 showCategory={true}
             />
@@ -45,4 +48,4 @@ const Inbox = () => {
     )
 }
  
-export default Inbox
+export default TaskManager

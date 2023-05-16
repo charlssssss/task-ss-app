@@ -34,7 +34,7 @@ const EditFeedback = ({ isFeedbackMdlClosed, feedbackMdlCloseHandler, editFeedba
     const handleEditFeedback =  async (e) => {
         e.preventDefault()
       
-        await axios(`http://127.0.0.1:8000/api/user/feedbacks/${editFeedback.id}`, { 
+        await axios(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/feedbacks/${editFeedback.id}`, { 
             method: 'PUT',
             headers: {
                 'Accept': 'application/json', 
@@ -48,7 +48,7 @@ const EditFeedback = ({ isFeedbackMdlClosed, feedbackMdlCloseHandler, editFeedba
         })
         .then(res => {
             if(res.data.success) {
-                mutate('http://127.0.0.1:8000/api/user/feedbacks')
+                mutate(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/feedbacks`)
                 clearHandler()
                 router.push(`/feedback`)
                 alert(res.data.message)

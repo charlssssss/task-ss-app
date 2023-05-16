@@ -18,7 +18,7 @@ const CategoryList = () => {
     if(session) { userToken = session.user.token }
 
     // fetch data
-    const { data, error, isLoading } = useSWR(['http://localhost:8000/api/user/categories', userToken], fetcher)
+    const { data, error, isLoading } = useSWR([`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/categories`, userToken], fetcher)
 
     // front end variables
     const [hover, setHover] = useState(false)

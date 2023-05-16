@@ -35,7 +35,7 @@ const Tobedone = () => {
             />
 
             <TaskList 
-                api={`http://localhost:8000/api/user/tasks/sortfilter/${sortBy}/${orderBy}?task_type_id=2`} 
+                api={`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/tasks/sortfilter/${sortBy}/${orderBy}?task_type_id=2`} 
                 token={userToken} 
                 url='tobedone'
                 status={taskStatus}

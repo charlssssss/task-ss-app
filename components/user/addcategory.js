@@ -32,8 +32,8 @@ const AddCategory = ({ isCatMdlClosed, catMdlCloseHandler }) => {
     let userToken
     if(session) { userToken = session.user.token }
 
-    const { data: proPlan } = useSWR(['http://localhost:8000/api/user/subscriptions/currentplan', userToken], fetcher)
-    const { data: categoryCount } = useSWR(['http://localhost:8000/api/user/categories', userToken], fetcher)
+    const { data: proPlan } = useSWR([`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/subscriptions/currentplan`, userToken], fetcher)
+    const { data: categoryCount } = useSWR([`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/categories`, userToken], fetcher)
 
     // add category variables
     const [catName, setCatName] = useState('')

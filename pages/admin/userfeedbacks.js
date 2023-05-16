@@ -13,7 +13,7 @@ export const getServerSideProps = async (context) => {
     const res = await getSession(context)
     try {
         const[feedbacks] = await Promise.all([
-            axios.get('http://127.0.0.1:8000/api/feedbacks/all'),
+            axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/feedbacks/all`),
         ])
         return { 
             props: { 
@@ -34,7 +34,7 @@ const UserFeedbacks = ({ feedbacks, token }) => {
     const handleDeleteFeedback =  async (e, id) => {
         if(confirm(`Are you sure u want to delete feedback no.${id}?`) ) {
             e.preventDefault()
-            await axios(`http://127.0.0.1:8000/api/user/feedbacks/${id}`, { 
+            await axios(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/feedbacks/${id}`, { 
                 method: 'DELETE',
                 headers: {
                     'Accept': 'application/json', 

@@ -31,7 +31,7 @@ const AppLayout = ({ children }) => {
 
     // add website blocker modal
     let firstLogin
-    if (typeof window !== 'undefined') firstLogin = localStorage.getItem('firstLogin')
+    if (typeof window !== 'undefined') firstLogin = localStorage?.getItem('firstLogin')
     
     const [isReminderMdlClosed, setIsReminderMdlClosed] = useState(true)
     const reminderMdlCloseHandler = () => setIsReminderMdlClosed(!isReminderMdlClosed)
@@ -67,7 +67,7 @@ const AppLayout = ({ children }) => {
                             setTaskType={setTaskType}
                         />
                         <div className='h-[calc(100vh-3.5rem)] overflow-y-auto'>
-                            <main className='container mx-auto px-10 py-5 lg:px-32 lg:py-14 '>
+                            <main className='container mx-auto px-10 py-5 lg:px-20 lg:py-14 '>
                             {children}
                             </main>
                         </div>

@@ -41,7 +41,7 @@ const TaskList = ({ api, token, url, status, showCategory }) => {
     // complete task function
     const handleCompleteTask =  async (e, task) => {
         e.preventDefault()
-        await axios(`http://127.0.0.1:8000/api/user/tasks/${task.id}`, { 
+        await axios(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/tasks/${task.id}`, { 
             method: 'PUT',
             headers: {
                 'Accept': 'application/json', 
@@ -56,7 +56,7 @@ const TaskList = ({ api, token, url, status, showCategory }) => {
         })
         .then(res => {
             if(res.data.success) {
-                mutate('http://127.0.0.1:8000/api/user/tasks')
+                mutate(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/tasks`)
                 alert("Task successfully completed!")
                 router.push(url)
             } else { alert(res.data.message) }

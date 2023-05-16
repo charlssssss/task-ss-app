@@ -1,4 +1,3 @@
-import useSWR, { mutate } from 'swr'
 import axios from 'axios'
 import { useEffect, useState } from "react"
 import { useRouter } from 'next/router'
@@ -30,7 +29,7 @@ const AddFeedback = ({ isFeedbackMdlClosed, feedbackMdlCloseHandler }) => {
     const handleAddFeedback = async (e) => {
         e.preventDefault()
     
-        await axios('http://127.0.0.1:8000/api/user/feedbacks', { 
+        await axios(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/feedbacks`, { 
             method: 'POST',
             headers: {
                 'Accept': 'application/json', 

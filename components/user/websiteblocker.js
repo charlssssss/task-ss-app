@@ -29,8 +29,8 @@ const WebsiteBlocker = ({ isBlockMdlClosed, blockMdlCloseHandler }) => {
     const [webURLName, setWebURLName] = useState('')
     const [validURL, setValidURL] = useState(false)
 
-    const { data, error, isLoading } = useSWR(['http://localhost:8000/api/user/blockwebsites', userToken], fetcher)
-    const { data: proPlan } = useSWR(['http://localhost:8000/api/user/subscriptions/currentplan', userToken], fetcher)
+    const { data, error, isLoading } = useSWR([`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/blockwebsites`, userToken], fetcher)
+    const { data: proPlan } = useSWR([`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/subscriptions/currentplan`, userToken], fetcher)
 
     // clear and close modal
     const clearHandler = () => {
@@ -49,7 +49,7 @@ const WebsiteBlocker = ({ isBlockMdlClosed, blockMdlCloseHandler }) => {
     const handleAddWebsite =  async (e) => {
         e.preventDefault()
         
-        await axios('http://127.0.0.1:8000/api/user/blockwebsites', { 
+        await axios(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/blockwebsites`, { 
             method: 'POST',
             headers: {
                 'Accept': 'application/json', 
@@ -63,7 +63,7 @@ const WebsiteBlocker = ({ isBlockMdlClosed, blockMdlCloseHandler }) => {
             }),
         })
         .then(res => {
-            mutate('http://127.0.0.1:8000/api/user/blockwebsites')
+            mutate(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/blockwebsites`)
             console.log(res.data.message)
             alert(res.data.message)
         })

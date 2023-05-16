@@ -14,13 +14,13 @@ export const getServerSideProps = async (context) => {
     const res = await getSession(context)
     try {
         const[upcomingTasks, completedCount, blockedkWebCount, categories] = await Promise.all([
-            axios.get('http://127.0.0.1:8000/api/user/tasks/sortfilter/end_date/asc', 
+            axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/tasks/sortfilter/end_date/asc`, 
             { headers: { 'Authorization': 'Bearer ' + res.user.token } }),
-            axios.get('http://127.0.0.1:8000/api/user/tasks/sortfilter?status=completed', 
+            axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/tasks/sortfilter?status=completed`, 
             { headers: { 'Authorization': 'Bearer ' + res.user.token } }),
-            axios.get('http://127.0.0.1:8000/api/user/blockwebsites/includes', 
+            axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/blockwebsites/includes`, 
             { headers: { 'Authorization': 'Bearer ' + res.user.token } }),
-            axios.get('http://127.0.0.1:8000/api/user/categories', 
+            axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/categories`, 
             { headers: { 'Authorization': 'Bearer ' + res.user.token } }),
         ])
         return { 
@@ -54,8 +54,8 @@ const ProductivityReports = ({upcomingTasks, completedCount, blockedkWebCount, c
 
     const categoryTask = categories.map(cat => ({
         cat_id: cat.id,
-        category_name: cat.category_name,
-        task_count: cat.tasks.length,
+        name: cat.category_name,
+        count: cat.tasks.length,
         fill: barColor[cat.color],
     }))
 
@@ -65,8 +65,6 @@ const ProductivityReports = ({upcomingTasks, completedCount, blockedkWebCount, c
         { name: "Overdue", count: overdueTasks.length, fill: "#E44545" },
         { name: "Completed", count: completedTasks.length, fill: "#4f91f5" },
     ]
-    console.log("p", pendingTasks, "o", overdueTasks, "c", completedTasks)
-    console.log(pieTasks)
 
     return (
         <>
@@ -74,7 +72,7 @@ const ProductivityReports = ({upcomingTasks, completedCount, blockedkWebCount, c
                 <title>Productivity Reports: Task SS</title>
             </Head>
 
-            <TitleHeader title='Productivity Reports' />
+            <TitleHeader title='Productivity Reports' generateReport={true} />
 
             <div className='flex flex-wrap justify-between mb-8'>
                 {/* left/top panel */}
@@ -134,7 +132,6 @@ const ProductivityReports = ({upcomingTasks, completedCount, blockedkWebCount, c
                             <tr className="border-b border-task-ss-white-300">
                                 <th className="px-6 py-5 text-left">ID</th>
                                 <th className="px-6 py-5 text-left">CATEGORY NAME</th>
-                                <th className="px-6 py-5 text-left">STATUS</th>
                                 <th className="px-6 py-5 text-left">NO. OF TASKS</th>
                             </tr>
                         </thead>
@@ -145,9 +142,8 @@ const ProductivityReports = ({upcomingTasks, completedCount, blockedkWebCount, c
                                     key={idx.toString()}
                                 >
                                     <td className="px-6 py-4">{cat.cat_id}</td>
-                                    <td className="px-6 py-4">{cat.category_name}</td>
-                                    <td className="px-6 py-4">Completed</td>
-                                    <td className="px-6 py-4">{cat.task_count}</td>
+                                    <td className="px-6 py-4">{cat.name}</td>
+                                    <td className="px-6 py-4 font-bold">{cat.count}</td>
                                 </tr>
                             ))}
                         </tbody>

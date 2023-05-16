@@ -44,7 +44,7 @@ const EditCategory = ({ isCatMdlClosed, catMdlCloseHandler, editCat, callbackUrl
     // add category function
     const handleEditCategory =  async (e) => {
         e.preventDefault()
-        const { data } = await axios(`http://127.0.0.1:8000/api/user/categories/${editCat.id}`, { 
+        const { data } = await axios(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/categories/${editCat.id}`, { 
             method: 'PUT',
             headers: {
                 'Accept': 'application/json', 
@@ -61,7 +61,7 @@ const EditCategory = ({ isCatMdlClosed, catMdlCloseHandler, editCat, callbackUrl
         if(data.success) {
             clearHandler()
             router.push(callbackUrl)
-            mutate('http://127.0.0.1:8000/api/user/categories')
+            mutate(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/categories`)
             alert(data.message)
         } else { alert(data.message) }
     }

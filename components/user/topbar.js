@@ -1,7 +1,7 @@
 import axios from 'axios'
-import useSWR from 'swr'
+import useSWR, { mutate } from 'swr'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { IconButton } from './buttons'
 import { GrAdd } from 'react-icons/gr'
 import { FaBars } from 'react-icons/fa'
@@ -34,19 +34,39 @@ const Topbar = ({ toggleHandler, taskMdlCloseHandler, blockMdlCloseHandler, remi
     let userToken
     if(session) { userToken = session.user.token }
 
-    const { data: notifs } = useSWR(['http://localhost:8000/api/user/notifications', userToken], fetcher)
+    let hasAudioPlayed
+    if (typeof window !== 'undefined') hasAudioPlayed = localStorage?.getItem('hasAudioPlayed')
+
+    const { data: notifs } = useSWR([`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/notifications`, userToken], fetcher)
 
     const hasNotifs = notifs?.data?.filter(notif => notif.status == 0 && notif.display == 1)
+
+    const handlePlayAudio = () => {
+        const audio = new Audio('/sounds/ring_sound_effects.mp3')
+        audio.play()
+    }
+
+    useEffect(() => {
+        mutate(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/notifications`)
+        if(hasNotifs?.length > 0 && hasAudioPlayed == 'false') {
+            handlePlayAudio()
+            localStorage?.setItem('hasAudioPlayed', 'true')
+        }
+
+        if(hasNotifs?.length == 0) {
+            localStorage?.setItem('hasAudioPlayed', 'false')
+        }
+    }, [hasNotifs])
 
     // logout function (destroy token then session)
     const handleLogout =  (e) => {
         e.preventDefault()
-        const res = axios('http://127.0.0.1:8000/api/user/auth/logout', { 
+        const res = axios(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/auth/logout`, { 
             method: 'POST',
             headers: { 'Authorization': 'Bearer ' + userToken }
         })
         if(res) {
-            localStorage.clear()
+            localStorage?.clear()
             signOut({ redirect: false })
             .then(() => router.push("/"))
         }
